@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Owl</string>
+
+    <string name="common_login">登录</string>
+    <string name="common_history">历史记录</string>
+    <string name="common_delete">删除</string>
+    <string name="common_cancel">取消</string>
+    <string name="common_ok">确定</string>
+    <string name="common_about">关于</string>
+    <string name="common_facebook">Facebook</string>
+    <string name="common_twitter">Twitter</string>
+    <string name="common_settings">设置</string>
+    <string name="common_share">分享</string>
+    <string name="common_over">完结</string>
+    <string name="common_feedback">反馈</string>
+    <string name="common_network_error">网络开小差了，请点击重试</string>
+    <string name="common_slogan">让阅读更有趣</string>
+    <string name="common_empty">这里什么也没有呢~</string>
+
+    <string name="feedback_app_version">版本 V%1$s</string>
+    <string name="feedback_message">"设备:%1$s\r\n版本信息:%2$s\r\n-------------------\r\n"</string>
+    <string name="feedback_no_email_installed_txt">未监测到邮箱应用</string>
+
+    <string name="main_tab_home">首页</string>
+    <string name="main_tab_account">我</string>
+
+    <string name="user_info_title">关于我</string>
+    <string name="user_vip">VIP畅读</string>
+    <string name="user_history">历史记录</string>
+    <string name="user_writers">招募写手</string>
+
+    <string name="login_failed">登录失败</string>
+    <string name="login_with_facebook">使用Facebook登录</string>
+    <string name="login_with_twitter">使用Twitter登录</string>
+    <string name="login_agreed">登录代表您同意</string>
+    <string name="login_agreed_privacy">隐私政策</string>
+    <string name="login_out">退出账号</string>
+    <string name="login_needed">点击登录</string>
+
+    <string name="update_title">检查更新</string>
+    <string name="update_cancel">暂不更新</string>
+    <string name="update_ok">更新</string>
+    <string name="update_force_to_update">建议您更新到最新版本，否则将无法正常使用</string>
+
+</resources>

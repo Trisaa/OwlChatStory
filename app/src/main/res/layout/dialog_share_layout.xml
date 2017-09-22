@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingBottom="30dp"
+    android:paddingTop="6dp">
+
+    <TextView
+        android:id="@+id/share_facebook_txv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_weight="1"
+        android:drawablePadding="10dp"
+        android:drawableTop="@mipmap/share_facebook"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center_horizontal"
+        android:text="@string/common_facebook"
+        android:textColor="#ffffff"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/share_twitter_txv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_weight="1"
+        android:drawablePadding="10dp"
+        android:drawableTop="@mipmap/share_twitter"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center_horizontal"
+        android:text="@string/common_twitter"
+        android:textColor="#ffffff"
+        android:textSize="12sp" />
+
+</LinearLayout>

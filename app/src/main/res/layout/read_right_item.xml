@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/read_right_icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="16dp"
+        android:background="@mipmap/ic_launcher_round" />
+
+    <TextView
+        android:id="@+id/read_right_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/read_right_icon"
+        android:text="User2"
+        android:textColor="#888888" />
+
+    <TextView
+        android:id="@+id/read_right_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/read_right_name"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_toLeftOf="@id/read_right_icon"
+        android:background="@drawable/chat_right_bg"
+        android:gravity="left"
+        android:paddingBottom="6dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="20dp"
+        android:paddingTop="6dp"
+        android:text="Yes, I'm fine"
+        android:textColor="#fefefe" />
+
+</RelativeLayout>
