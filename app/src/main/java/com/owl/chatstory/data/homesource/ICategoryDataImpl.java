@@ -14,7 +14,6 @@ import com.owl.chatstory.data.chatsource.OnFictionListListener;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.homesource.model.CategoryModel;
 
-import java.lang.reflect.Type;
 import java.util.List;
 
 import rx.Subscriber;
@@ -92,14 +91,6 @@ public class ICategoryDataImpl implements ICategoryData {
             @Override
             public void onNext(List<FictionDetailModel> list) {
                 Log.i("Lebron", " size " + list.size());
-                for (int i = 0; i < 10; i++) {
-                    FictionDetailModel model = new FictionDetailModel();
-                    model.setId("1");
-                    model.setTitle("Title" + i);
-                    model.setSummary("Summary " + i);
-                    model.setViews(500);
-                    list.add(model);
-                }
                 if (listener != null) {
                     listener.onFictionList(list, refresh);
                 }

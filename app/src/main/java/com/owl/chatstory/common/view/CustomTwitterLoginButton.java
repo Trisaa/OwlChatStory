@@ -23,8 +23,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Build;
-import android.support.v7.widget.AppCompatButton;
 import android.util.AttributeSet;
+import android.widget.Button;
 
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.TwitterCore;
@@ -40,7 +40,7 @@ import java.lang.ref.WeakReference;
  * account. If successful, a {@link TwitterSession} is provided
  * in the {@link Callback#success(com.twitter.sdk.android.core.Result)}
  */
-public class CustomTwitterLoginButton extends AppCompatButton {
+public class CustomTwitterLoginButton extends Button {
 
     final static String TAG = TwitterCore.TAG;
     static final String ERROR_MSG_NO_ACTIVITY = "TwitterLoginButton requires an activity."
@@ -67,7 +67,7 @@ public class CustomTwitterLoginButton extends AppCompatButton {
         super(context, attrs, defStyle);
         this.activityRef = new WeakReference<>(getActivity());
         this.authClient = authClient;
-        setupButton();
+        //setupButton();
 
         checkTwitterCoreAndEnable();
     }
