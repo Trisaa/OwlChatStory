@@ -15,7 +15,7 @@
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <include
-        layout="@layout/common_empty_layout"
+        layout="@layout/common_error_layout"
         android:visibility="gone" />
 
 </RelativeLayout>

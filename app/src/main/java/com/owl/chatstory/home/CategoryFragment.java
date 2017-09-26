@@ -47,6 +47,7 @@ public class CategoryFragment extends BaseFragment implements CategoryContract.V
     private List<FictionDetailModel> mDatas = new ArrayList<>();
     private FictionListRequest mRequest;
     private View mLoadMoreView;
+    private int mPage = 1, mPrePage;
 
     public static CategoryFragment newInstance(String categoryId) {
         CategoryFragment fragment = new CategoryFragment();
@@ -109,8 +110,11 @@ public class CategoryFragment extends BaseFragment implements CategoryContract.V
                 mDatas.clear();
             }
         }
-        if (list.size() > 0 && mDatas.size() == 0) {
+        if (list.size() > 0) {
             mLoadMoreView.findViewById(R.id.loading_more_layout).setVisibility(View.VISIBLE);
+            mPage++;
+        } else {
+            mLoadMoreView.findViewById(R.id.loading_more_layout).setVisibility(View.GONE);
         }
         mDatas.addAll(list);
         mLoadMoreWrapper.notifyDataSetChanged();
@@ -139,15 +143,20 @@ public class CategoryFragment extends BaseFragment implements CategoryContract.V
     public void onRefresh() {
         if (mPresenter != null) {
             Log.i("Lebron", " onRefresh ");
-            mPresenter.getFictionList(getRequest(1), true);
+            mPage = 1;
+            mPrePage = 0;
+            mPresenter.getFictionList(getRequest(mPage), true);
         }
     }
 
     @Override
     public void onLoadMoreRequested() {
         if (mPresenter != null) {
-            Log.i("Lebron", " onLoadMoreRequested ");
-            mPresenter.getFictionList(getRequest(1), false);
+            Log.i("Lebron", " onLoadMoreRequested " + mPage + " " + mPrePage);
+            if (mPage != mPrePage) {
+                mPresenter.getFictionList(getRequest(mPage), false);
+                mPrePage = mPage;
+            }
         }
     }
 
@@ -155,8 +164,7 @@ public class CategoryFragment extends BaseFragment implements CategoryContract.V
         if (mRequest == null) {
             mRequest = new FictionListRequest();
         }
-        //request.setCategoryId(getArguments().getString(KEY_CATEGORY_ID));
-        mRequest.setCategoryId("1");
+        mRequest.setCategoryId(getArguments().getString(KEY_CATEGORY_ID));
         mRequest.setPage(page);
         mRequest.setCount(20);
         return mRequest;

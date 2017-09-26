@@ -47,6 +47,13 @@ public class LoginPresenter implements LoginContract.Presenter, ILoginData.OnAut
             mTwitterAuth = new TwitterAuth(customTwitterLoginButton);
         }
         mLoginData.auth(mTwitterAuth, this);
+        /*UserModel model = new UserModel();
+        model.setPlatform("twitter");
+        model.setGender(0);
+        model.setPlatformId("704614290976714752");
+        model.setName("Future");
+        model.setIcon("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1505930560108&di=125dafb4017534b6eb316e33cf6ce1d8&imgtype=0&src=http%3A%2F%2Fimg4.duitang.com%2Fuploads%2Fitem%2F201505%2F31%2F20150531181218_GnXtc.thumb.224_0.jpeg");
+        onAuthSuccess(model);*/
     }
 
     @Override

@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
-        android:elevation="1dp"
+        android:elevation="2dp"
         app:layout_scrollFlags="scroll|enterAlways|snap"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/ToolbarTheme"
@@ -29,8 +29,8 @@
 
     <ImageView
         android:id="@+id/user_img"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp"
         android:background="@mipmap/user_default_icon" />
@@ -79,7 +79,8 @@
             android:layout_marginRight="12dp"
             android:layout_toLeftOf="@id/goto_img"
             android:text="已开通"
-            android:textColor="@color/common_text_color" />
+            android:textColor="@color/common_text_color"
+            android:textSize="12sp" />
 
         <View
             android:layout_width="match_parent"
@@ -117,7 +118,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:layout_alignParentBottom="true"
             android:layout_marginStart="16dp"
             android:background="@color/common_gray_pressed" />
@@ -151,7 +152,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:layout_alignParentBottom="true"
             android:layout_marginStart="16dp"
             android:background="@color/common_gray_pressed" />
@@ -185,7 +186,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:layout_alignParentBottom="true"
             android:layout_marginStart="16dp"
             android:background="@color/common_gray_pressed" />

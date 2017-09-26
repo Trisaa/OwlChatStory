@@ -30,7 +30,7 @@ public class ILoginDataImpl implements ILoginData {
 
     @Override
     public void clearSubscriptions() {
-
+        mSubscriptions.clear();
     }
 
     @Override
@@ -65,7 +65,7 @@ public class ILoginDataImpl implements ILoginData {
             public void onNext(UserResponse userResponse) {
                 if (listener != null && userResponse != null) {
                     listener.onLoginSuccess(userResponse.getUserModel());
-                    Log.i("Lebron"," token "+userResponse.getToken());
+                    Log.i("Lebron", " token " + userResponse.getToken());
                     PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_TOKEN, userResponse.getToken());
                 }
             }
@@ -79,9 +79,11 @@ public class ILoginDataImpl implements ILoginData {
         userRequest.setGender(userModel.getGender());
         userRequest.setAvatar(userModel.getIcon());
         String token = System.currentTimeMillis() + "_" + userModel.getPlatform() + "_" + userModel.getPlatformId() + "_ifiction";
+        Log.i("Lebron", " request origin token " + token);
         String output2 = AES256.encrypt(token, TOKEN_SECRET);
         String output = Base64.encodeToString(output2.getBytes(), Base64.NO_WRAP);
         userRequest.setToken(output);
+        Log.i("Lebron", " request token " + output);
         return userRequest;
     }
 }

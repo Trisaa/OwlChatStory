@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,6 +51,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
     private HistoryContract.Presenter mPresenter;
     private FictionListRequest mRequest;
     private View mLoadMoreView, mEmptyView;
+    private int mPage = 1, mPrePage;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, HistoryActivity.class);
@@ -104,7 +106,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
         CommonAdapter<FictionDetailModel> mAdapter = new CommonAdapter<FictionDetailModel>(this, R.layout.story_category_item, mDatas) {
             @Override
             protected void convert(ViewHolder holder, FictionDetailModel fictionModel, int position) {
-                ImageLoaderUtils.getInstance().loadImage(HistoryActivity.this, fictionModel.getCover(), (ImageView) holder.getView(R.id.category_item_cover_img));
+                ImageLoaderUtils.getInstance().loadImage(HistoryActivity.this, fictionModel.getCover(), (ImageView) holder.getView(R.id.category_item_cover_img), R.mipmap.ic_launcher);
                 holder.setText(R.id.category_item_title_txv, fictionModel.getTitle());
                 holder.setText(R.id.category_item_description_txv, fictionModel.getSummary());
                 holder.setText(R.id.category_item_watchers_txv, fictionModel.getViews() + "");
@@ -140,7 +142,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
     @Override
     public void setPresenter(HistoryContract.Presenter presenter) {
         mPresenter = presenter;
-        mPresenter.getFictionList(getRequest(1), true);
+        mPresenter.getFictionList(getRequest(mPage), true);
     }
 
     @Override
@@ -151,8 +153,11 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
             }
             ((TextView) mEmptyView.findViewById(R.id.empty_txv)).setText(R.string.common_empty);
         }
-        if (list.size() > 0 && mDatas.size() == 0) {
+        if (list.size() > 0) {
             mLoadMoreView.findViewById(R.id.loading_more_layout).setVisibility(View.VISIBLE);
+            mPage++;
+        } else {
+            mLoadMoreView.findViewById(R.id.loading_more_layout).setVisibility(View.GONE);
         }
         mDatas.addAll(list);
         mLoadMoreWrapper.notifyDataSetChanged();
@@ -185,6 +190,10 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
 
     @Override
     public void onLoadMoreRequested() {
-        mPresenter.getFictionList(getRequest(1), false);
+        Log.i("Lebron", " onLoadMoreRequested " + mPage + " " + mPrePage);
+        if (mPage != mPrePage) {
+            mPresenter.getFictionList(getRequest(mPage), false);
+            mPrePage = mPage;
+        }
     }
 }

@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
-    android:foreground="?attr/selectableItemBackground">
+    android:foreground="?attr/selectableItemBackground"
+    app:cardElevation="2dp">
 
     <android.support.percent.PercentRelativeLayout
         android:layout_width="match_parent"

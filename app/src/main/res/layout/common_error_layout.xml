@@ -16,5 +16,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/common_empty" />
+        android:text="@string/common_network_error" />
 </LinearLayout>
