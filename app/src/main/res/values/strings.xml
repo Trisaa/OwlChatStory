@@ -24,7 +24,7 @@
     <string name="main_tab_home">Home</string>
     <string name="main_tab_account">Me</string>
 
-    <string name="user_info_title">About me</string>
+    <string name="user_info_title">Me</string>
     <string name="user_vip">VIP</string>
     <string name="user_history">Readed</string>
     <string name="user_writers">Writers</string>

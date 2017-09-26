@@ -25,7 +25,7 @@
     <string name="main_tab_home">首页</string>
     <string name="main_tab_account">我</string>
 
-    <string name="user_info_title">关于我</string>
+    <string name="user_info_title">我</string>
     <string name="user_vip">VIP畅读</string>
     <string name="user_history">历史记录</string>
     <string name="user_writers">招募写手</string>

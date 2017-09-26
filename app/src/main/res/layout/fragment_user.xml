@@ -9,12 +9,12 @@
         android:id="@+id/common_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="2dp"
+        android:background="@color/colorPrimary"
+        android:elevation="1dp"
         app:layout_scrollFlags="scroll|enterAlways|snap"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/ToolbarTheme"
-        app:titleTextColor="@color/colorPrimaryDark">
+        app:titleTextColor="@color/common_toolbar_color">
 
         <TextView
             android:id="@+id/toolbar_title"
@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/user_info_title"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/common_toolbar_color"
             android:textSize="20sp" />
     </android.support.v7.widget.Toolbar>
 
@@ -79,11 +79,11 @@
             android:layout_marginRight="12dp"
             android:layout_toLeftOf="@id/goto_img"
             android:text="已开通"
-            android:textColor="#eeeeee" />
+            android:textColor="@color/common_text_color" />
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:layout_alignParentBottom="true"
             android:layout_marginStart="16dp"
             android:background="@color/common_gray_pressed" />

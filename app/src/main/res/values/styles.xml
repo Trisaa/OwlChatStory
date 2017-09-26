@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/colorPrimary</item>
     </style>
 
     <style name="TabLayoutTextStyle" parent="TextAppearance.Design.Tab">
@@ -13,9 +14,9 @@
     </style>
 
     <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Light">
-        <item name="android:textColor">@color/colorPrimaryDark</item>
-        <item name="actionMenuTextColor">@color/colorPrimaryDark</item>
-        <item name="colorControlNormal">@color/colorPrimaryDark</item>
+        <item name="android:textColor">@color/common_toolbar_color</item>
+        <item name="actionMenuTextColor">@color/common_toolbar_color</item>
+        <item name="colorControlNormal">@color/common_toolbar_color</item>
     </style>
 
     <style name="NoBackGroundDialog" parent="@android:style/Theme.Holo.Light.Dialog">

@@ -66,7 +66,7 @@ public class CategoryFragment extends BaseFragment implements CategoryContract.V
         CommonAdapter<FictionDetailModel> mAdapter = new CommonAdapter<FictionDetailModel>(getActivity(), R.layout.story_category_item, mDatas) {
             @Override
             protected void convert(ViewHolder holder, FictionDetailModel fictionModel, int position) {
-                ImageLoaderUtils.getInstance().loadImage(getActivity(), fictionModel.getCover(), (ImageView) holder.getView(R.id.category_item_cover_img));
+                ImageLoaderUtils.getInstance().loadImage(getActivity(), fictionModel.getCover(), (ImageView) holder.getView(R.id.category_item_cover_img), R.mipmap.ic_launcher);
                 holder.setText(R.id.category_item_title_txv, fictionModel.getTitle());
                 holder.setText(R.id.category_item_description_txv, fictionModel.getSummary());
                 holder.setText(R.id.category_item_watchers_txv, fictionModel.getViews() + "");
@@ -89,7 +89,7 @@ public class CategoryFragment extends BaseFragment implements CategoryContract.V
         mLoadMoreWrapper.setLoadMoreView(mLoadMoreView);
         mLoadMoreWrapper.setOnLoadMoreListener(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.addItemDecoration(new CommonVerticalItemDecoration(32));
+        mRecyclerView.addItemDecoration(new CommonVerticalItemDecoration(24));
         mRecyclerView.setAdapter(mLoadMoreWrapper);
         mRefreshLayout.setOnRefreshListener(this);
 

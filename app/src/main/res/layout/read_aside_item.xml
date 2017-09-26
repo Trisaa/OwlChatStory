@@ -17,5 +17,6 @@
         android:paddingRight="16dp"
         android:paddingTop="6dp"
         android:text="5 minutes later"
-        android:textColor="@color/colorPrimaryDark" />
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="14sp" />
 </RelativeLayout>

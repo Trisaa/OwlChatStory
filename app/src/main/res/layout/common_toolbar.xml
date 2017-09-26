@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
     android:background="?attr/colorPrimary"
-    android:elevation="2dp"
+    android:elevation="1dp"
     app:layout_scrollFlags="scroll|enterAlways|snap"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
     app:theme="@style/ToolbarTheme"
-    app:titleTextColor="@color/colorPrimaryDark" />
+    app:titleTextColor="@color/common_toolbar_color" />

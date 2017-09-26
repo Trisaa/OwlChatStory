@@ -15,7 +15,8 @@
             android:id="@+id/category_item_cover_img"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@mipmap/ic_launcher"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/ic_launcher"
             app:layout_aspectRatio="200%"
             app:layout_widthPercent="100%" />
 
