@@ -42,4 +42,6 @@
     <string name="update_ok">更新</string>
     <string name="update_force_to_update">建议您更新到最新版本，否则将无法正常使用</string>
 
+    <string name="share_content">我发现了一个不错的对话小说App，快来一起体验吧～</string>
+
 </resources>

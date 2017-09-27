@@ -34,7 +34,7 @@ public class DialogUtils {
             @Override
             public void onClick(View v) {
                 ShareModel shareModel = new ShareModel();
-                shareModel.setContent("Test");
+                shareModel.setContent(activity.getString(R.string.share_content));
                 ShareUtils.shareToFacebook(activity, null, shareModel);
                 alertDialog.dismiss();
             }
@@ -43,7 +43,7 @@ public class DialogUtils {
             @Override
             public void onClick(View v) {
                 ShareModel shareModel = new ShareModel();
-                shareModel.setContent("Test\n");
+                shareModel.setContent(activity.getString(R.string.share_content) + "\n");
                 ShareUtils.shareToTwitter(activity, shareModel);
                 alertDialog.dismiss();
             }

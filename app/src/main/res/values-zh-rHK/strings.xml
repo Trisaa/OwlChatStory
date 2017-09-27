@@ -40,4 +40,6 @@
     <string name="update_cancel">暫不更新</string>
     <string name="update_ok">更新</string>
     <string name="update_force_to_update">建議您更新到最新版本，否則將無法正常使用</string>
+
+    <string name="share_content">我發現了一個不錯的對話小說App，快來一起體驗吧～</string>
 </resources>

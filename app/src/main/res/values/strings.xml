@@ -41,4 +41,6 @@
     <string name="update_cancel">Not Now</string>
     <string name="update_ok">Update Now</string>
     <string name="update_force_to_update">Suggest you update to the latest, unless you may not use it correctly</string>
+
+    <string name="share_content">I find a good chat-fiction app, let\'s enjoy reading</string>
 </resources>
