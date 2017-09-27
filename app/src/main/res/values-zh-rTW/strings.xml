@@ -1,4 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="common_login">登錄</string>
+    <string name="common_history">歷史記錄</string>
+    <string name="common_delete">刪除</string>
+    <string name="common_cancel">取消</string>
+    <string name="common_ok">確定</string>
+    <string name="common_about">關於</string>
+    <string name="common_facebook">Facebook</string>
+    <string name="common_twitter">Twitter</string>
+    <string name="common_settings">設置</string>
+    <string name="common_share">分享</string>
+    <string name="common_over">完結</string>
+    <string name="common_feedback">反饋</string>
+    <string name="common_network_error">網絡開小差了，請點擊重試</string>
+    <string name="common_slogan">讓閱讀更有趣</string>
+    <string name="common_empty">這裡什麼也沒有呢~</string>
 
+    <string name="feedback_app_version">版本 V%1$s</string>
+    <string name="feedback_message">"設備:%1$s\r\n版本信息:%2$s\r\n-------------------\r\n"</string>
+    <string name="feedback_no_email_installed_txt">未監測到郵箱應用</string>
+
+    <string name="main_tab_home">首頁</string>
+    <string name="main_tab_account">我</string>
+
+    <string name="user_info_title">我</string>
+    <string name="user_vip">VIP暢讀</string>
+    <string name="user_history">歷史記錄</string>
+    <string name="user_writers">招募寫手</string>
+
+    <string name="login_failed">登錄失敗</string>
+    <string name="login_with_facebook">使用Facebook登錄</string>
+    <string name="login_with_twitter">使用Twitter登錄</string>
+    <string name="login_agreed">登錄代表您同意</string>
+    <string name="login_agreed_privacy">隱私政策</string>
+    <string name="login_out">退出賬號</string>
+    <string name="login_needed">點擊登錄</string>
+
+    <string name="update_title">檢查更新</string>
+    <string name="update_cancel">暫不更新</string>
+    <string name="update_ok">更新</string>
+    <string name="update_force_to_update">建議您更新到最新版本，否則將無法正常使用</string>
 </resources>
