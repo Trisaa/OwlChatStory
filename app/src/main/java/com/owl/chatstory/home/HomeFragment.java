@@ -46,6 +46,12 @@ public class HomeFragment extends BaseFragment implements HomeContract.View {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPresenter.unsubscribe();
+    }
+
+    @Override
     public void showCategoryList(List<CategoryModel> list) {
         mHomePagerAdapter = new HomePagerAdapter(getActivity().getSupportFragmentManager(), list);
         mViewPager.setAdapter(mHomePagerAdapter);

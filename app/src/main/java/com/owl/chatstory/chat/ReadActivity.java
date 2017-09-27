@@ -109,6 +109,12 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.unsubscribe();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.read_menu, menu);
         return super.onCreateOptionsMenu(menu);

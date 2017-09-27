@@ -98,6 +98,12 @@ public class CategoryFragment extends BaseFragment implements CategoryContract.V
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPresenter.unsubscribe();
+    }
+
+    @Override
     public void setPresenter(CategoryContract.Presenter presenter) {
         mPresenter = presenter;
         mPresenter.subscribe();

@@ -140,6 +140,12 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.unsubscribe();
+    }
+
+    @Override
     public void setPresenter(HistoryContract.Presenter presenter) {
         mPresenter = presenter;
         mPresenter.getFictionList(getRequest(mPage), true);
