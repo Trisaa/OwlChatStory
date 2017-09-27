@@ -10,10 +10,15 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -61,7 +66,7 @@ dependencies {
     //compile 'jp.wasabeef:glide-transformations:3.0.1'
     compile 'jp.wasabeef:glide-transformations:2.0.2'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0'
-
+    //fabric crashlytics
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;
     }
