@@ -157,7 +157,6 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
             if (mDatas != null) {
                 mDatas.clear();
             }
-            ((TextView) mEmptyView.findViewById(R.id.empty_txv)).setText(R.string.common_empty);
         }
         if (list.size() > 0) {
             mLoadMoreView.findViewById(R.id.loading_more_layout).setVisibility(View.VISIBLE);
@@ -171,6 +170,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
 
     @Override
     public void showErrorView() {
+        Toast.makeText(this, R.string.common_network_error, Toast.LENGTH_SHORT).show();
         ((TextView) mEmptyView.findViewById(R.id.empty_txv)).setText(R.string.common_network_error);
     }
 

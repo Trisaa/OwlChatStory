@@ -68,6 +68,7 @@ public class IHistoryDataImpl implements IHistoryData {
 
             @Override
             public void onNext(List<FictionDetailModel> list) {
+                Log.i("Lebron", " history list success " + list.size());
                 if (listener != null) {
                     listener.onFictionList(list, refresh);
                 }

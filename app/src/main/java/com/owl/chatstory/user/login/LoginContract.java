@@ -23,7 +23,6 @@ public interface LoginContract {
 
         /**
          * 登录Twitter
-         *
          */
         void signinWithTwitter(CustomTwitterLoginButton customTwitterLoginButton);
 
@@ -35,5 +34,7 @@ public interface LoginContract {
 
     interface View extends BaseView<Presenter> {
         void loginResult(UserModel userModel);
+
+        void showProgressBar(boolean show);
     }
 }

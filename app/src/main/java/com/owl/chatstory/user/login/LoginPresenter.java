@@ -28,17 +28,18 @@ public class LoginPresenter implements LoginContract.Presenter, ILoginData.OnAut
 
     @Override
     public void signinWithFacebook(FragmentActivity activity) {
-        /*if (mFacebookAuth == null) {
+        if (mFacebookAuth == null) {
             mFacebookAuth = new FacebookAuth(activity);
         }
-        mLoginData.auth(mFacebookAuth, this);*/
-        UserModel model = new UserModel();
+        mLoginData.auth(mFacebookAuth, this);
+        mView.showProgressBar(true);
+        /*UserModel model = new UserModel();
         model.setPlatform("facebook");
         model.setGender(1);
         model.setPlatformId("123465068394570");
         model.setName("Yong He");
         model.setIcon("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1505930560108&di=125dafb4017534b6eb316e33cf6ce1d8&imgtype=0&src=http%3A%2F%2Fimg4.duitang.com%2Fuploads%2Fitem%2F201505%2F31%2F20150531181218_GnXtc.thumb.224_0.jpeg");
-        onAuthSuccess(model);
+        onAuthSuccess(model);*/
     }
 
     @Override
@@ -47,6 +48,7 @@ public class LoginPresenter implements LoginContract.Presenter, ILoginData.OnAut
             mTwitterAuth = new TwitterAuth(customTwitterLoginButton);
         }
         mLoginData.auth(mTwitterAuth, this);
+        mView.showProgressBar(true);
         /*UserModel model = new UserModel();
         model.setPlatform("twitter");
         model.setGender(0);
@@ -80,6 +82,7 @@ public class LoginPresenter implements LoginContract.Presenter, ILoginData.OnAut
     public void onAuthError(String message) {
         if (mView != null) {
             mView.loginResult(null);
+            mView.showProgressBar(false);
         }
     }
 
@@ -87,6 +90,7 @@ public class LoginPresenter implements LoginContract.Presenter, ILoginData.OnAut
     public void onAuthCancel() {
         if (mView != null) {
             mView.loginResult(null);
+            mView.showProgressBar(false);
         }
     }
 
@@ -99,6 +103,7 @@ public class LoginPresenter implements LoginContract.Presenter, ILoginData.OnAut
     public void onLoginSuccess(UserModel model) {
         if (mView != null) {
             mView.loginResult(model);
+            mView.showProgressBar(false);
         }
     }
 
@@ -106,6 +111,7 @@ public class LoginPresenter implements LoginContract.Presenter, ILoginData.OnAut
     public void onLoginFailed() {
         if (mView != null) {
             mView.loginResult(null);
+            mView.showProgressBar(false);
         }
     }
 }

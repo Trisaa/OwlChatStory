@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -29,6 +31,8 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     Toolbar mToolbar;
     @BindView(R.id.login_twitter_btn)
     CustomTwitterLoginButton mTwitterButton;
+    @BindView(R.id.common_progressbar)
+    ProgressBar mProgressBar;
 
     private LoginContract.Presenter mPresenter;
 
@@ -103,5 +107,10 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
             Toast.makeText(this, R.string.login_failed, Toast.LENGTH_SHORT).show();
             finish();
         }
+    }
+
+    @Override
+    public void showProgressBar(boolean show) {
+        mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 }
