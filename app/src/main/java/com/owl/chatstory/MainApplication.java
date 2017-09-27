@@ -4,11 +4,14 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.facebook.FacebookSdk;
 import com.twitter.sdk.android.core.DefaultLogger;
 import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterConfig;
+
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by lebron on 2017/9/4.
@@ -27,6 +30,7 @@ public class MainApplication extends Application {
         context = getApplicationContext();
         initTwitter();
         FacebookSdk.sdkInitialize(getApplicationContext());
+        Fabric.with(this, new Crashlytics());
     }
 
     private void initTwitter() {

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "144805300391",
+    "firebase_url": "https://owl-android.firebaseio.com",
+    "project_id": "owl-android",
+    "storage_bucket": "owl-android.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:144805300391:android:27ab9ec897a3eaab",
+        "android_client_info": {
+          "package_name": "com.owl.chatstory"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "144805300391-qkp803pdor5c1ueshdmdfcq6vf0u0it6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJz8vOFQnk3l2NubZ1kRJdcwy8CkvcOhc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
