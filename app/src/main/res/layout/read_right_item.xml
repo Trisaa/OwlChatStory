@@ -10,7 +10,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="16dp"
-        android:background="@mipmap/ic_launcher_round" />
+        android:background="@mipmap/user_default_icon" />
 
     <TextView
         android:id="@+id/read_right_name"

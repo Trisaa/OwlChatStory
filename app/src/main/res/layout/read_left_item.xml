@@ -9,7 +9,7 @@
         android:layout_height="40dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="10dp"
-        android:background="@mipmap/ic_launcher_round" />
+        android:background="@mipmap/user_default_icon" />
 
     <TextView
         android:id="@+id/read_left_name"

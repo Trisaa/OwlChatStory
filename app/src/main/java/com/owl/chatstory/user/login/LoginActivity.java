@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.owl.chatstory.R;
 import com.owl.chatstory.base.BaseActivity;
+import com.owl.chatstory.common.util.JumpUtils;
 import com.owl.chatstory.common.util.PreferencesHelper;
 import com.owl.chatstory.common.view.CustomTwitterLoginButton;
 import com.owl.chatstory.data.usersource.model.UserModel;
@@ -20,6 +21,8 @@ import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static com.owl.chatstory.common.util.JumpUtils.PRIVACY_POLICY_URL;
 
 /**
  * Created by lebron on 2017/9/4.
@@ -88,7 +91,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
 
     @OnClick(R.id.login_privacy_txv)
     public void clickPrivacy() {
-
+        JumpUtils.jumpToBrowser(PRIVACY_POLICY_URL);
     }
 
     @Override

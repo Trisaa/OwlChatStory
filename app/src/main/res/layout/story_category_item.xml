@@ -6,6 +6,7 @@
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
     android:foreground="?attr/selectableItemBackground"
+    android:stateListAnimator="@drawable/category_item_selector"
     app:cardElevation="2dp">
 
     <android.support.percent.PercentRelativeLayout
