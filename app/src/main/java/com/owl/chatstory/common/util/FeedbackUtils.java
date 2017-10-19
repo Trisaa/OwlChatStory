@@ -16,7 +16,7 @@ import com.owl.chatstory.R;
 
 public class FeedbackUtils {
     private static final String MAILTO = "mailto:" + "";
-    private static final String EMAIL = "hypotato3@gmail.com";
+    private static final String EMAIL = "owlfiction3@gmail.com";
 
     public static void startFeedbackActivity(Context context) {
         try {

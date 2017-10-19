@@ -67,7 +67,7 @@ public class CategoryFragment extends BaseFragment implements CategoryContract.V
         CommonAdapter<FictionDetailModel> mAdapter = new CommonAdapter<FictionDetailModel>(getActivity(), R.layout.story_category_item, mDatas) {
             @Override
             protected void convert(ViewHolder holder, FictionDetailModel fictionModel, int position) {
-                ImageLoaderUtils.getInstance().loadImage(getActivity(), fictionModel.getCover(), (ImageView) holder.getView(R.id.category_item_cover_img), R.mipmap.ic_launcher);
+                ImageLoaderUtils.getInstance().loadImage(getActivity(), fictionModel.getCover(), (ImageView) holder.getView(R.id.category_item_cover_img), R.color.colorPrimaryDark);
                 holder.setText(R.id.category_item_title_txv, fictionModel.getTitle());
                 holder.setText(R.id.category_item_description_txv, fictionModel.getSummary());
                 holder.setText(R.id.category_item_watchers_txv, fictionModel.getViews() + "");
@@ -142,7 +142,7 @@ public class CategoryFragment extends BaseFragment implements CategoryContract.V
 
     @Override
     public void showErrorLayout(boolean show) {
-        mEmptyLayout.setVisibility(show ? View.VISIBLE : View.GONE);
+        mEmptyLayout.setVisibility(show && mDatas.size() <= 0 ? View.VISIBLE : View.GONE);
     }
 
     @Override

@@ -1,5 +1,9 @@
 package com.owl.chatstory.home;
 
+import android.widget.Toast;
+
+import com.owl.chatstory.MainApplication;
+import com.owl.chatstory.R;
 import com.owl.chatstory.common.util.network.request.FictionListRequest;
 import com.owl.chatstory.data.chatsource.OnFictionListListener;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
@@ -46,6 +50,8 @@ public class CategoryPresenter implements CategoryContract.Presenter, OnFictionL
 
     @Override
     public void onError() {
+        mView.showRefreshing(false);
         mView.showErrorLayout(true);
+        Toast.makeText(MainApplication.getAppContext(), R.string.common_network_error, Toast.LENGTH_SHORT).show();
     }
 }
