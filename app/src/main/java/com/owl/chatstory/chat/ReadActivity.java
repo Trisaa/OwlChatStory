@@ -27,8 +27,12 @@ import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import rx.Observable;
+import rx.Subscriber;
+import rx.Subscription;
 
 /**
  * Created by lebron on 2017/9/12.
@@ -52,6 +56,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
     private MultiItemTypeAdapter<MessageModel> mAdapter;
     private List<MessageModel> mDatas;
     private List<MessageModel> mShowDatas = new ArrayList<>();
+    private Subscription mSubscription;
 
     public static void start(Context context, String fictionId, String fictionName) {
         Intent intent = new Intent(context, ReadActivity.class);
@@ -63,12 +68,33 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
     private ChatNextDelegate.OnClickListener mNextListener = new ChatNextDelegate.OnClickListener() {
         @Override
         public void onClick() {
+            stopAutoRead();
             clickNext();
         }
 
         @Override
         public void onShareClick() {
             DialogUtils.showShareDialog(ReadActivity.this);
+        }
+
+        @Override
+        public void onLongClick() {
+            mSubscription = Observable.interval(1, TimeUnit.SECONDS).subscribe(new Subscriber<Long>() {
+                @Override
+                public void onCompleted() {
+
+                }
+
+                @Override
+                public void onError(Throwable e) {
+
+                }
+
+                @Override
+                public void onNext(Long aLong) {
+                    clickNext();
+                }
+            });
         }
     };
 
@@ -102,6 +128,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
         mRecyclerView.setBlankListener(new SpaceRecyclerView.BlankListener() {
             @Override
             public void onBlankClick() {
+                stopAutoRead();
                 clickNext();
             }
         });
@@ -111,6 +138,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        stopAutoRead();
         mPresenter.unsubscribe();
     }
 
@@ -132,7 +160,6 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
 
     private void clickNext() {
         int i = mShowDatas.size() - 1;
-        Log.i("Lebron", " onclick " + i);
         mProgressbar.setProgress(100 * i / mDatas.size());
         if (i < mDatas.size()) {
             mShowDatas.add(i, mDatas.get(i));
@@ -143,6 +170,12 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
             mShowDatas.get(i).setEnded(true);
             mAdapter.notifyItemChanged(i);
             mPresenter.addToHistory(getIntent().getStringExtra(EXTRA_FICTION_ID));
+        }
+    }
+
+    private void stopAutoRead() {
+        if (mSubscription != null) {
+            mSubscription.unsubscribe();
         }
     }
 

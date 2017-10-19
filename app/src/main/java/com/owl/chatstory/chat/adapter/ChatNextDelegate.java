@@ -30,14 +30,22 @@ public class ChatNextDelegate implements ItemViewDelegate<MessageModel> {
 
     @Override
     public void convert(ViewHolder holder, MessageModel messageModel, int position) {
-        holder.setVisible(R.id.read_over_txv, messageModel.isEnded());
-        holder.setVisible(R.id.read_share_txv, messageModel.isEnded());
+        holder.setVisible(R.id.read_over_layout, messageModel.isEnded());
         holder.getConvertView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mListener != null) {
                     mListener.onClick();
                 }
+            }
+        });
+        holder.getConvertView().setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mListener != null) {
+                    mListener.onLongClick();
+                }
+                return false;
             }
         });
         holder.setOnClickListener(R.id.read_share_txv, new View.OnClickListener() {
@@ -54,5 +62,7 @@ public class ChatNextDelegate implements ItemViewDelegate<MessageModel> {
         void onClick();
 
         void onShareClick();
+
+        void onLongClick();
     }
 }

@@ -63,7 +63,7 @@ public class HttpUtils {
                         Request originalRequest = chain.request();
                         HttpUrl originalHttpUrl = originalRequest.url();
                         HttpUrl url = originalHttpUrl.newBuilder()
-                                .addQueryParameter("type", "simplified")
+                                .addQueryParameter("type", getType())
                                 .build();
                         Request request = originalRequest.newBuilder()
                                 .url(url)
