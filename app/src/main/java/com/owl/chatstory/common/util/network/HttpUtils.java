@@ -22,6 +22,7 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -56,6 +57,10 @@ public class HttpUtils {
     }
 
     private OkHttpClient.Builder getHttpClientBuilder() {
+        //声明日志类
+        HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
+        //设定日志级别
+        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
         return new OkHttpClient.Builder()
                 .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
                 .addInterceptor(new Interceptor() {
@@ -72,7 +77,8 @@ public class HttpUtils {
                                 .build();
                         return chain.proceed(request);
                     }
-                });
+                })
+                .addInterceptor(httpLoggingInterceptor);
     }
 
     private String getType() {
