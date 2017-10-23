@@ -28,6 +28,7 @@
     <string name="user_vip">VIP</string>
     <string name="user_history">Readed</string>
     <string name="user_writers">Writers</string>
+    <string name="user_vip_status">Super Vip</string>
 
     <string name="login_failed">Log in failed</string>
     <string name="login_with_facebook">Log in with Facebook</string>

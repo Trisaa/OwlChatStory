@@ -28,6 +28,7 @@
     <string name="user_vip">VIP畅读</string>
     <string name="user_history">历史记录</string>
     <string name="user_writers">招募写手</string>
+    <string name="user_vip_status">已开通</string>
 
     <string name="login_failed">登录失败</string>
     <string name="login_with_facebook">使用Facebook登录</string>

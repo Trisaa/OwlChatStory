@@ -78,7 +78,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="12dp"
             android:layout_toLeftOf="@id/goto_img"
-            android:text="已开通"
+            android:text="@string/user_vip_status"
             android:textColor="@color/common_text_color"
             android:textSize="12sp" />
 

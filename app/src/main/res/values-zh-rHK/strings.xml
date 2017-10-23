@@ -27,6 +27,7 @@
     <string name="user_vip">VIP暢讀</string>
     <string name="user_history">歷史記錄</string>
     <string name="user_writers">招募寫手</string>
+    <string name="user_vip_status">已開通</string>
 
     <string name="login_failed">登錄失敗</string>
     <string name="login_with_facebook">使用Facebook登錄</string>
