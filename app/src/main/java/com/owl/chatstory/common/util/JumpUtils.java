@@ -17,7 +17,7 @@ public class JumpUtils {
     //浏览器应用市场跳转data
     public static final String WEB_APP_MARKET_INTENT_DATA = "https://play.google.com/store/apps/details?id=";
     //隐私政策链接
-    public static final String PRIVACY_POLICY_URL = "http://47.94.243.139:9090/more/protocol";
+    public static final String PRIVACY_POLICY_URL = "http://52.15.164.29:8080/more/protocol";
 
     /**
      * 跳转到应用市场中定指定app

@@ -36,7 +36,8 @@ import rx.schedulers.Schedulers;
  */
 
 public class HttpUtils {
-    private static final String BASE_URL = "http://47.94.243.139:8080/android/";
+    //private static final String BASE_URL = "http://47.94.243.139:8080/android/";
+    private static final String BASE_URL = "http://52.15.164.29:8080/android/";
     private static final int DEFAULT_TIMEOUT = 5;
 
     private Retrofit mRetrofit;
@@ -82,7 +83,7 @@ public class HttpUtils {
             } else if (country.equals("tw")) {
                 return "traditional";
             } else {
-                return "english";
+                return "traditional";
             }
         } catch (Exception e) {
             return "simplified";
