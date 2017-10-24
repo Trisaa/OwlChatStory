@@ -1,5 +1,6 @@
 package com.owl.chatstory.data.chatsource;
 
+import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
 
 /**
@@ -11,7 +12,11 @@ public interface IFictionData {
 
     void getFictionDetail(String id, OnFictionListener listener);
 
+    void getChapterDetail(String id, OnFictionListener listener);
+
     interface OnFictionListener {
         void onFiction(FictionModel model);
+
+        void onFictionDetail(FictionDetailModel model);
     }
 }

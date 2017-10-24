@@ -40,12 +40,19 @@ public interface ApiService {
     Observable<BaseArrayResponse<CategoryModel>> getCategoryList();
 
     /**
+     * 获取小说详情
+     */
+    @GET("ifiction/detail")
+    Observable<BaseResponse<FictionDetailModel>> getFictionDetail(@Query("id") String id);
+
+
+    /**
      * 获取小说具体内容
      *
      * @return
      */
     @GET("ifiction/chapter")
-    Observable<BaseResponse<FictionModel>> getFictionDetail(@Query("id") String id);
+    Observable<BaseResponse<FictionModel>> getChapterDetail(@Query("id") String id);
 
     /**
      * 获取分类下小说列表

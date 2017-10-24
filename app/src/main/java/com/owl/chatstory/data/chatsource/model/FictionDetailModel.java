@@ -24,6 +24,8 @@ public class FictionDetailModel {
     private int views;
     @SerializedName("writer")
     private UserModel writer;
+    @SerializedName("chapter")
+    private List<ChapterModel> chapters;
 
     public String getId() {
         return id;
@@ -79,5 +81,13 @@ public class FictionDetailModel {
 
     public void setWriter(UserModel writer) {
         this.writer = writer;
+    }
+
+    public List<ChapterModel> getChapters() {
+        return chapters;
+    }
+
+    public void setChapters(List<ChapterModel> chapters) {
+        this.chapters = chapters;
     }
 }

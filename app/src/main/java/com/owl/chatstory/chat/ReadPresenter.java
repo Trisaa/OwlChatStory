@@ -4,6 +4,7 @@ import com.owl.chatstory.data.chatsource.IFictionData;
 import com.owl.chatstory.data.chatsource.IFictionDataImpl;
 import com.owl.chatstory.data.chatsource.IHistoryData;
 import com.owl.chatstory.data.chatsource.IHistoryDataImpl;
+import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
 
 /**
@@ -45,5 +46,12 @@ public class ReadPresenter implements ReadContract.Presenter, IFictionData.OnFic
     @Override
     public void onFiction(FictionModel model) {
         mView.showFictionData(model);
+    }
+
+    @Override
+    public void onFictionDetail(FictionDetailModel model) {
+        if (model != null && model.getChapters() != null) {
+            mFictionData.getChapterDetail(model.getChapters().get(0).getChapterId(), this);
+        }
     }
 }

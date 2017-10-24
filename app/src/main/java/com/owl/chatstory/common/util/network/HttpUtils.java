@@ -147,9 +147,19 @@ public class HttpUtils {
         return subscription;
     }
 
-    public Subscription getFictionDetail(Subscriber<FictionModel> subscriber, String id) {
-        Subscription subscription = mApiService.getFictionDetail(id)
+    public Subscription getChapterDetail(Subscriber<FictionModel> subscriber, String id) {
+        Subscription subscription = mApiService.getChapterDetail(id)
                 .map(new BaseResponseFunc<FictionModel>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return subscription;
+    }
+
+    public Subscription getFictionDetail(Subscriber<FictionDetailModel> subscriber, String id) {
+        Subscription subscription = mApiService.getFictionDetail(id)
+                .map(new BaseResponseFunc<FictionDetailModel>())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
