@@ -2,6 +2,7 @@ package com.owl.chatstory.common.util.network;
 
 import android.util.Log;
 
+import com.owl.chatstory.BuildConfig;
 import com.owl.chatstory.common.util.PreferencesHelper;
 import com.owl.chatstory.common.util.network.request.UserRequest;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
@@ -37,7 +38,7 @@ import rx.schedulers.Schedulers;
  */
 
 public class HttpUtils {
-    //private static final String BASE_URL = "http://47.94.243.139:8080/android/";
+    private static final String BASE_TEST_URL = "http://47.94.243.139:8080/android/";
     private static final String BASE_URL = "http://52.15.164.29:8080/android/";
     private static final int DEFAULT_TIMEOUT = 5;
 
@@ -46,11 +47,12 @@ public class HttpUtils {
     private static HttpUtils mInstance;
 
     private HttpUtils() {
+        String url = BuildConfig.DEBUG ? BASE_TEST_URL : BASE_URL;
         mRetrofit = new Retrofit.Builder()
                 .client(getHttpClientBuilder().build())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .baseUrl(BASE_URL)
+                .baseUrl(url)
                 .build();
 
         mApiService = mRetrofit.create(ApiService.class);

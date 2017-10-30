@@ -6,7 +6,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,9 +20,13 @@ import com.owl.chatstory.chat.adapter.ChatRightDelegate;
 import com.owl.chatstory.common.util.CommonVerticalItemDecoration;
 import com.owl.chatstory.common.util.DialogUtils;
 import com.owl.chatstory.common.view.SpaceRecyclerView;
+import com.owl.chatstory.data.chatsource.model.ChapterModel;
+import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
 import com.owl.chatstory.data.chatsource.model.MessageModel;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
+
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +60,8 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
     private List<MessageModel> mDatas;
     private List<MessageModel> mShowDatas = new ArrayList<>();
     private Subscription mSubscription;
+    private FictionDetailModel mFictionDetailModel;
+    private String mLastChapterId;
 
     public static void start(Context context, String fictionId, String fictionName) {
         Intent intent = new Intent(context, ReadActivity.class);
@@ -151,11 +156,23 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.read_menu_share:
-                DialogUtils.showShareDialog(this);
+            case R.id.read_menu_directory:
+                if (mFictionDetailModel != null) {
+                    DirectoryActivity.start(this, mFictionDetailModel);
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Subscribe
+    public void onEvent(ChapterModel model) {
+        if (model != null) {
+            if (!mLastChapterId.equals(model.getChapterId()) && mPresenter != null) {
+                mPresenter.getChapterData(model.getChapterId());
+                mLoadingBar.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     private void clickNext() {
@@ -183,13 +200,22 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
 
     @Override
     public void showFictionData(FictionModel model) {
+        mLastChapterId = model.getId();
         mLoadingBar.setVisibility(View.GONE);
         mDatas = model.getList();
+        if (mShowDatas != null) {
+            mShowDatas.clear();
+        }
         MessageModel messageModel = new MessageModel();
         messageModel.setLocation("end");
         mShowDatas.add(mDatas.get(0));
         mShowDatas.add(messageModel);
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showFictionDetailData(FictionDetailModel model) {
+        mFictionDetailModel = model;
     }
 
     @Override

@@ -41,6 +41,11 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".chat.DirectoryActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/common_directory"/>
+
+        <activity
             android:name=".chat.HistoryActivity"
             android:label="@string/common_history"
             android:screenOrientation="portrait" />

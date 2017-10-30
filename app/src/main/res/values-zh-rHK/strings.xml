@@ -15,6 +15,7 @@
     <string name="common_network_error">網絡開小差了，請點擊重試</string>
     <string name="common_slogan">讓閱讀更有趣</string>
     <string name="common_empty">這裡什麼也沒有呢~</string>
+    <string name="common_directory">目錄</string>
 
     <string name="feedback_app_version">版本 V%1$s</string>
     <string name="feedback_message">"設備:%1$s\r\n版本信息:%2$s\r\n-------------------\r\n"</string>
@@ -41,6 +42,9 @@
     <string name="update_cancel">暫不更新</string>
     <string name="update_ok">更新</string>
     <string name="update_force_to_update">建議您更新到最新版本，否則將無法正常使用</string>
+
+    <string name="chapter_total_chapters">共%1$d章</string>
+    <string name="chapter_num">第%1$d章 %2$s</string>
 
     <string name="share_content">我發現了一個不錯的對話小說App，快來一起體驗吧～</string>
 </resources>

@@ -16,6 +16,7 @@
     <string name="common_network_error">Network error. Tap to load again.</string>
     <string name="common_slogan">Make Reading More Funny</string>
     <string name="common_empty">Nothing found here~</string>
+    <string name="common_directory">Directory</string>
 
     <string name="feedback_app_version">Version V%1$s</string>
     <string name="feedback_message">"DeviceModel:%1$s\r\nSystemVersion:%2$s\r\n-------------------\r\n"</string>
@@ -42,6 +43,9 @@
     <string name="update_cancel">Not Now</string>
     <string name="update_ok">Update Now</string>
     <string name="update_force_to_update">Suggest you update to the latest, unless you may not use it correctly</string>
+
+    <string name="chapter_total_chapters">Total %1$d chapters</string>
+    <string name="chapter_num">No.%1$d %2$s</string>
 
     <string name="share_content">I find a good chat-fiction app, let\'s enjoy reading</string>
 </resources>

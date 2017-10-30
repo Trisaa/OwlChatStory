@@ -1,23 +1,27 @@
 package com.owl.chatstory.data.chatsource.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 import com.owl.chatstory.data.usersource.model.UserModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by lebron on 2017/9/17.
  */
 
-public class FictionDetailModel {
+public class FictionDetailModel implements Parcelable {
     @SerializedName("id")
     private String id;
     @SerializedName("title")
     private String title;
     @SerializedName("cover")
     private String cover;
-    /*@SerializedName("tags")
-    private List<String> tags;*/
+    @SerializedName("tags")
+    private List<String> tags;
     @SerializedName("summary")
     private String summary;
     @SerializedName("views")
@@ -51,13 +55,13 @@ public class FictionDetailModel {
         this.cover = cover;
     }
 
-    /*public List<String> getTags() {
+    public List<String> getTags() {
         return tags;
     }
 
     public void setTags(List<String> tags) {
         this.tags = tags;
-    }*/
+    }
 
     public String getSummary() {
         return summary;
@@ -90,4 +94,48 @@ public class FictionDetailModel {
     public void setChapters(List<ChapterModel> chapters) {
         this.chapters = chapters;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeString(this.title);
+        dest.writeString(this.cover);
+        dest.writeStringList(this.tags);
+        dest.writeString(this.summary);
+        dest.writeInt(this.views);
+        dest.writeParcelable(this.writer, flags);
+        dest.writeList(this.chapters);
+    }
+
+    public FictionDetailModel() {
+    }
+
+    protected FictionDetailModel(Parcel in) {
+        this.id = in.readString();
+        this.title = in.readString();
+        this.cover = in.readString();
+        this.tags = in.createStringArrayList();
+        this.summary = in.readString();
+        this.views = in.readInt();
+        this.writer = in.readParcelable(UserModel.class.getClassLoader());
+        this.chapters = new ArrayList<ChapterModel>();
+        in.readList(this.chapters, ChapterModel.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<FictionDetailModel> CREATOR = new Parcelable.Creator<FictionDetailModel>() {
+        @Override
+        public FictionDetailModel createFromParcel(Parcel source) {
+            return new FictionDetailModel(source);
+        }
+
+        @Override
+        public FictionDetailModel[] newArray(int size) {
+            return new FictionDetailModel[size];
+        }
+    };
 }

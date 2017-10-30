@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffff">
+
+    <ImageView
+        android:id="@+id/chapter_header_cover_img"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        android:background="@mipmap/ic_launcher"
+        android:scaleType="centerCrop"
+        app:layout_aspectRatio="56%"
+        app:layout_widthPercent="30%" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/chapter_header_cover_img"
+        android:layout_alignTop="@id/chapter_header_cover_img"
+        android:layout_toRightOf="@id/chapter_header_cover_img"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/chapter_header_title_txv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Title"
+            android:textColor="@color/common_toolbar_color"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/chapter_header_author_txv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Lebron"
+            android:textColor="@color/common_text_color"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/chapter_header_describe_txv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:text="Life is short"
+            android:textColor="@color/common_text_color"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/chapter_header_tags_txv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="comedy"
+            android:textColor="@color/common_text_color"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/chapter_header_cover_img"
+        android:background="#ecedf1"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/chapter_header_chapters_txv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total 5 chapters"
+            android:textColor="@color/common_text_color" />
+    </RelativeLayout>
+
+</android.support.percent.PercentRelativeLayout>

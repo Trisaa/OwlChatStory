@@ -1,12 +1,15 @@
 package com.owl.chatstory.data.usersource.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by lebron on 2017/9/14.
  */
 
-public class UserModel {
+public class UserModel implements Parcelable {
     @SerializedName("id")
     private String id;//这个ID是注册成功后你那边生成的用户主键
     @SerializedName("platform")
@@ -77,4 +80,45 @@ public class UserModel {
     public void setGender(int gender) {
         this.gender = gender;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeString(this.platform);
+        dest.writeString(this.platformId);
+        dest.writeString(this.name);
+        dest.writeString(this.icon);
+        dest.writeInt(this.gender);
+        dest.writeInt(this.vipType);
+    }
+
+    public UserModel() {
+    }
+
+    protected UserModel(Parcel in) {
+        this.id = in.readString();
+        this.platform = in.readString();
+        this.platformId = in.readString();
+        this.name = in.readString();
+        this.icon = in.readString();
+        this.gender = in.readInt();
+        this.vipType = in.readInt();
+    }
+
+    public static final Parcelable.Creator<UserModel> CREATOR = new Parcelable.Creator<UserModel>() {
+        @Override
+        public UserModel createFromParcel(Parcel source) {
+            return new UserModel(source);
+        }
+
+        @Override
+        public UserModel[] newArray(int size) {
+            return new UserModel[size];
+        }
+    };
 }
