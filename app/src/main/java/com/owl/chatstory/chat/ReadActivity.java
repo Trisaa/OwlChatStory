@@ -159,17 +159,19 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
     }
 
     private void clickNext() {
-        int i = mShowDatas.size() - 1;
-        mProgressbar.setProgress(100 * i / mDatas.size());
-        if (i < mDatas.size()) {
-            mShowDatas.add(i, mDatas.get(i));
-            mAdapter.notifyItemInserted(i);
-            mRecyclerView.smoothScrollToPosition(i + 1);
-            mAppBarLayout.setExpanded(false);
-        } else {
-            mShowDatas.get(i).setEnded(true);
-            mAdapter.notifyItemChanged(i);
-            mPresenter.addToHistory(getIntent().getStringExtra(EXTRA_FICTION_ID));
+        if (mDatas != null) {
+            int i = mShowDatas.size() - 1;
+            mProgressbar.setProgress(100 * i / mDatas.size());
+            if (i < mDatas.size()) {
+                mShowDatas.add(i, mDatas.get(i));
+                mAdapter.notifyItemInserted(i);
+                mRecyclerView.smoothScrollToPosition(i + 1);
+                mAppBarLayout.setExpanded(false);
+            } else {
+                mShowDatas.get(i).setEnded(true);
+                mAdapter.notifyItemChanged(i);
+                mPresenter.addToHistory(getIntent().getStringExtra(EXTRA_FICTION_ID));
+            }
         }
     }
 
