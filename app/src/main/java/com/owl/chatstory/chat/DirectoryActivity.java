@@ -93,7 +93,7 @@ public class DirectoryActivity extends BaseActivity {
             CommonAdapter<ChapterModel> adapter = new CommonAdapter<ChapterModel>(this, R.layout.directory_chapter_item, mDatas) {
                 @Override
                 protected void convert(ViewHolder holder, final ChapterModel chapterModel, int position) {
-                    holder.setText(R.id.chapter_item_title_txv, getString(R.string.chapter_num, position + 1, chapterModel.getChapterName()));
+                    holder.setText(R.id.chapter_item_title_txv, getString(R.string.chapter_num, position, chapterModel.getChapterName()));
                     holder.getConvertView().setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
