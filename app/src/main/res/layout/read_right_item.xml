@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/read_right_name"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="60dp"
         android:layout_marginTop="10dp"
         android:layout_toLeftOf="@id/read_right_icon"
         android:background="@drawable/chat_right_bg"
