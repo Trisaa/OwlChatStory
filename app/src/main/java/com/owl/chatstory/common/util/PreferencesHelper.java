@@ -24,6 +24,8 @@ public class PreferencesHelper {
     public static final String KEY_TOKEN = "KEY_TOKEN";
     //首页分类数据
     public static final String KEY_CATEGORY_LIST = "KEY_CATEGORY_LIST";
+    //是否显示过阅读提示
+    public static final String KEY_CLICK_TIPS_SHOWED = "KEY_CLICK_TIPS_SHOWED";
 
     private final static SharedPreferences mPref = MainApplication.getAppContext().getSharedPreferences(SETTING, Context.MODE_PRIVATE);
     private static PreferencesHelper mInstance = null;

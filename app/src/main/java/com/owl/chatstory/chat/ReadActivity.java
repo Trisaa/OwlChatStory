@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.owl.chatstory.R;
 import com.owl.chatstory.base.BaseActivity;
@@ -34,6 +35,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
@@ -55,6 +57,8 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
     ProgressBar mProgressbar;
     @BindView(R.id.read_loading_progressbar)
     ProgressBar mLoadingBar;
+    @BindView(R.id.read_click_tips_txv)
+    View mClickTipsView;
 
     private ReadContract.Presenter mPresenter;
     private MultiItemTypeAdapter<MessageModel> mAdapter;
@@ -137,6 +141,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
 
     @Override
     protected void initViewsAndData() {
+        mClickTipsView.setVisibility(PreferencesHelper.getInstance().getBoolean(PreferencesHelper.KEY_CLICK_TIPS_SHOWED, false) ? View.GONE : View.VISIBLE);
         mAdapter = new MultiItemTypeAdapter<>(this, mShowDatas);
         mAdapter.addItemViewDelegate(new ChatLeftDelegate());
         mAdapter.addItemViewDelegate(new ChatRightDelegate());
@@ -212,6 +217,13 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
                 mLoadingBar.setVisibility(View.VISIBLE);
             }
         }
+    }
+
+    @OnClick(R.id.read_click_tips_txv)
+    public void clickTips() {
+        mClickTipsView.setVisibility(View.GONE);
+        PreferencesHelper.getInstance().setBoolean(PreferencesHelper.KEY_CLICK_TIPS_SHOWED, true);
+        clickNext();
     }
 
     private void clickNext() {

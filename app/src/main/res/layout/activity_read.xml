@@ -33,6 +33,29 @@
             android:layout_gravity="center"
             android:indeterminateTint="@color/colorPrimaryDark" />
 
+        <FrameLayout
+            android:id="@+id/read_click_tips_txv"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="?attr/actionBarSize">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/common_red_rectangle_bg"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:gravity="center"
+                android:paddingBottom="10dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="10dp"
+                android:text="@string/read_click_tips"
+                android:textColor="@color/common_red"
+                android:textSize="20sp" />
+        </FrameLayout>
+
     </FrameLayout>
 
     <ProgressBar

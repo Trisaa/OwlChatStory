@@ -49,6 +49,8 @@
     <string name="chapter_total_chapters">共%1$d章</string>
     <string name="chapter_num">第%1$d章 %2$s</string>
 
+    <string name="read_click_tips">点我试试</string>
+
     <string name="share_content">我发现了一个不错的对话小说App，快来一起体验吧～</string>
 
 </resources>
