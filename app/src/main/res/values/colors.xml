@@ -10,4 +10,5 @@
     <color name="common_gray_normal">#FFFFFF</color>
     <color name="common_text_color">#838383</color>
     <color name="common_toolbar_color">#4c4c4c</color>
+    <color name="common_red">#fe5058</color>
 </resources>

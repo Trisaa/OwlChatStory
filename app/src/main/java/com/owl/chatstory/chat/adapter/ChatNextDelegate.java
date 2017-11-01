@@ -32,7 +32,12 @@ public class ChatNextDelegate implements ItemViewDelegate<MessageModel> {
     @Override
     public void convert(ViewHolder holder, MessageModel messageModel, int position) {
         holder.setVisible(R.id.read_over_layout, messageModel.isEnded());
-        holder.setVisible(R.id.read_next_txv, !messageModel.isLastChapter());
+        holder.setVisible(R.id.read_next_chapter_layout, !messageModel.isLastChapter());
+        if (!messageModel.isLastChapter() && messageModel.getNextChapterModel() != null) {
+            holder.setText(R.id.read_next_fiction_name_txv, messageModel.getFictionName());
+            holder.setText(R.id.read_next_chapter_name_txv, MainApplication.getAppContext().getString(R.string.chapter_num,
+                    messageModel.getNextChapterModel().getNum(), messageModel.getNextChapterModel().getChapterName()));
+        }
         holder.setText(R.id.read_over_txv, messageModel.isLastChapter() ? MainApplication.getAppContext().getString(R.string.common_over) : MainApplication.getAppContext().getString(R.string.common_continue));
         holder.getConvertView().setOnClickListener(new View.OnClickListener() {
             @Override

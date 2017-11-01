@@ -18,6 +18,8 @@ public class MessageModel {
 
     private boolean ended;//当前章节是否阅读到底
     private boolean isLastChapter;//是否还有下一章节
+    private ChapterModel nextChapterModel;
+    private String fictionName;
 
     public String getActor() {
         return actor;
@@ -65,5 +67,21 @@ public class MessageModel {
 
     public void setLastChapter(boolean lastChapter) {
         isLastChapter = lastChapter;
+    }
+
+    public ChapterModel getNextChapterModel() {
+        return nextChapterModel;
+    }
+
+    public void setNextChapterModel(ChapterModel nextChapterModel) {
+        this.nextChapterModel = nextChapterModel;
+    }
+
+    public String getFictionName() {
+        return fictionName;
+    }
+
+    public void setFictionName(String fictionName) {
+        this.fictionName = fictionName;
     }
 }

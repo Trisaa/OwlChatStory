@@ -17,7 +17,7 @@ import com.owl.chatstory.chat.adapter.ChatAsideDelegate;
 import com.owl.chatstory.chat.adapter.ChatLeftDelegate;
 import com.owl.chatstory.chat.adapter.ChatNextDelegate;
 import com.owl.chatstory.chat.adapter.ChatRightDelegate;
-import com.owl.chatstory.common.util.CommonVerticalItemDecoration;
+import com.owl.chatstory.chat.adapter.ReadItemDecoration;
 import com.owl.chatstory.common.util.DialogUtils;
 import com.owl.chatstory.common.util.PreferencesHelper;
 import com.owl.chatstory.common.view.SpaceRecyclerView;
@@ -143,7 +143,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
         mAdapter.addItemViewDelegate(new ChatAsideDelegate());
         mAdapter.addItemViewDelegate(new ChatNextDelegate(mNextListener));
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.addItemDecoration(new CommonVerticalItemDecoration(24));
+        mRecyclerView.addItemDecoration(new ReadItemDecoration(24));
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setBlankListener(new SpaceRecyclerView.BlankListener() {
             @Override
@@ -221,8 +221,15 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
                 mAppBarLayout.setExpanded(false);
             } else {
                 mShowDatas.get(i).setEnded(true);
-                mShowDatas.get(i).setLastChapter(mCurrentChapterIndex + 1 == mFictionDetailModel.getChapters().size());
+                if (mCurrentChapterIndex + 1 == mFictionDetailModel.getChapters().size()) {
+                    mShowDatas.get(i).setLastChapter(true);
+                } else {
+                    mShowDatas.get(i).setLastChapter(false);
+                    mShowDatas.get(i).setNextChapterModel(mFictionDetailModel.getChapters().get(mCurrentChapterIndex + 1));
+                    mShowDatas.get(i).setFictionName(mFictionDetailModel.getTitle());
+                }
                 mAdapter.notifyItemChanged(i);
+                mRecyclerView.smoothScrollToPosition(i + 1);
                 mPresenter.addToHistory(getIntent().getStringExtra(EXTRA_FICTION_ID));
             }
         }
@@ -245,6 +252,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
         MessageModel messageModel = new MessageModel();
         messageModel.setLocation("end");
         int progress = mDatas.size() * Integer.valueOf(mProgressList.get(mCurrentChapterIndex)) / 100;
+        mProgressbar.setProgress(progress);
         mShowDatas.addAll(mDatas.subList(0, progress > 0 ? progress : 1));
         mShowDatas.add(messageModel);
         mAdapter.notifyDataSetChanged();

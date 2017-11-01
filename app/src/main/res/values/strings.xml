@@ -17,7 +17,7 @@
     <string name="common_slogan">Make Reading More Funny</string>
     <string name="common_empty">Nothing found here~</string>
     <string name="common_directory">Directory</string>
-    <string name="common_next">Next</string>
+    <string name="common_next">Continue Reading</string>
     <string name="common_continue">To be continued</string>
 
     <string name="feedback_app_version">Version V%1$s</string>
