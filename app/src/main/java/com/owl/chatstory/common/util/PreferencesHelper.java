@@ -6,6 +6,10 @@ import android.text.TextUtils;
 
 import com.owl.chatstory.MainApplication;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by lebron on 2017/8/31.
  */
@@ -72,5 +76,37 @@ public class PreferencesHelper {
 
     public boolean isLogined() {
         return !TextUtils.isEmpty(mPref.getString(KEY_USER_ID, ""));
+    }
+
+    public void setFictionProgressList(String key, List<String> list) {
+        String string = "";
+        for (int i = 0; i < list.size(); i++) {
+            string += list.get(i);
+            if (i != list.size() - 1) {
+                string += ",";
+            }
+        }
+        mPref.edit().putString(key, string).apply();
+    }
+
+    /**
+     * 获取小说章节的阅读进度
+     *
+     * @param fictionId
+     * @param size
+     * @return
+     */
+    public List<String> getFictionProgressList(String fictionId, int size) {
+        String temp = mPref.getString(fictionId, "");
+        if (!TextUtils.isEmpty(temp)) {
+            List<String> list = Arrays.asList(temp.split(","));
+            return list;
+        } else {
+            List<String> list = new ArrayList();
+            for (int i = 0; i < size; i++) {
+                list.add(String.valueOf(0));
+            }
+            return list;
+        }
     }
 }

@@ -19,6 +19,7 @@ import com.owl.chatstory.chat.adapter.ChatNextDelegate;
 import com.owl.chatstory.chat.adapter.ChatRightDelegate;
 import com.owl.chatstory.common.util.CommonVerticalItemDecoration;
 import com.owl.chatstory.common.util.DialogUtils;
+import com.owl.chatstory.common.util.PreferencesHelper;
 import com.owl.chatstory.common.view.SpaceRecyclerView;
 import com.owl.chatstory.data.chatsource.model.ChapterModel;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
@@ -62,6 +63,8 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
     private Subscription mSubscription;
     private FictionDetailModel mFictionDetailModel;
     private String mLastChapterId;
+    private int mCurrentChapterIndex;//当前阅读的章节
+    private List<String> mProgressList;//阅读进度
 
     public static void start(Context context, String fictionId, String fictionName) {
         Intent intent = new Intent(context, ReadActivity.class);
@@ -148,6 +151,16 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        if (mShowDatas != null && mDatas != null) {
+            int progress = (mShowDatas.size() - 1) * 100 / mDatas.size();
+            mProgressList.set(mCurrentChapterIndex, String.valueOf(progress));
+            PreferencesHelper.getInstance().setFictionProgressList(mFictionDetailModel.getId(), mProgressList);
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.read_menu, menu);
         return super.onCreateOptionsMenu(menu);
@@ -169,7 +182,17 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
     public void onEvent(ChapterModel model) {
         if (model != null) {
             if (!mLastChapterId.equals(model.getChapterId()) && mPresenter != null) {
+                for (int i = 0; i < mFictionDetailModel.getChapters().size(); i++) {
+                    if (mFictionDetailModel.getChapters().get(i).getChapterId().equals(model.getChapterId())) {
+                        mCurrentChapterIndex = i;
+                        break;
+                    }
+                }
                 mPresenter.getChapterData(model.getChapterId());
+                if (mShowDatas != null) {
+                    mShowDatas.clear();
+                }
+                mAdapter.notifyDataSetChanged();
                 mLoadingBar.setVisibility(View.VISIBLE);
             }
         }
@@ -208,7 +231,8 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
         }
         MessageModel messageModel = new MessageModel();
         messageModel.setLocation("end");
-        mShowDatas.add(mDatas.get(0));
+        int progress = mDatas.size() * Integer.valueOf(mProgressList.get(mCurrentChapterIndex)) / 100;
+        mShowDatas.addAll(mDatas.subList(0, progress > 0 ? progress : 1));
         mShowDatas.add(messageModel);
         mAdapter.notifyDataSetChanged();
     }
@@ -216,6 +240,8 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
     @Override
     public void showFictionDetailData(FictionDetailModel model) {
         mFictionDetailModel = model;
+        mProgressList = PreferencesHelper.getInstance().getFictionProgressList(mFictionDetailModel.getId(), mFictionDetailModel.getChapters().size());
+        mCurrentChapterIndex = 0;
     }
 
     @Override

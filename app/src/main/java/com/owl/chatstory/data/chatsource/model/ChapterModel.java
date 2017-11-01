@@ -18,6 +18,10 @@ public class ChapterModel implements Parcelable {
     private String chapterName;
     @SerializedName("vip")
     private int vip;
+    @SerializedName("updateline")
+    private long updateTime;
+    @SerializedName("createline")
+    private long createTime;
 
     public String getChapterId() {
         return chapterId;
@@ -51,6 +55,25 @@ public class ChapterModel implements Parcelable {
         this.vip = vip;
     }
 
+    public long getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(long updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
+    }
+
+    public ChapterModel() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -62,9 +85,8 @@ public class ChapterModel implements Parcelable {
         dest.writeInt(this.num);
         dest.writeString(this.chapterName);
         dest.writeInt(this.vip);
-    }
-
-    public ChapterModel() {
+        dest.writeLong(this.updateTime);
+        dest.writeLong(this.createTime);
     }
 
     protected ChapterModel(Parcel in) {
@@ -72,9 +94,11 @@ public class ChapterModel implements Parcelable {
         this.num = in.readInt();
         this.chapterName = in.readString();
         this.vip = in.readInt();
+        this.updateTime = in.readLong();
+        this.createTime = in.readLong();
     }
 
-    public static final Parcelable.Creator<ChapterModel> CREATOR = new Parcelable.Creator<ChapterModel>() {
+    public static final Creator<ChapterModel> CREATOR = new Creator<ChapterModel>() {
         @Override
         public ChapterModel createFromParcel(Parcel source) {
             return new ChapterModel(source);

@@ -18,6 +18,8 @@ import com.owl.chatstory.R;
 import com.owl.chatstory.base.BaseActivity;
 import com.owl.chatstory.common.util.DialogUtils;
 import com.owl.chatstory.common.util.ImageLoaderUtils;
+import com.owl.chatstory.common.util.PreferencesHelper;
+import com.owl.chatstory.common.util.TimeUtils;
 import com.owl.chatstory.data.chatsource.model.ChapterModel;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.zhy.adapter.recyclerview.CommonAdapter;
@@ -88,12 +90,15 @@ public class DirectoryActivity extends BaseActivity {
     @Override
     protected void initViewsAndData() {
         FictionDetailModel fictionDetailModel = getIntent().getParcelableExtra(EXTRA_FICTION_MODEL);
+        final List<String> list = PreferencesHelper.getInstance().getFictionProgressList(fictionDetailModel.getId(), fictionDetailModel.getChapters().size());
         if (fictionDetailModel != null) {
             mDatas = fictionDetailModel.getChapters();
             CommonAdapter<ChapterModel> adapter = new CommonAdapter<ChapterModel>(this, R.layout.directory_chapter_item, mDatas) {
                 @Override
                 protected void convert(ViewHolder holder, final ChapterModel chapterModel, int position) {
                     holder.setText(R.id.chapter_item_title_txv, getString(R.string.chapter_num, position, chapterModel.getChapterName()));
+                    holder.setText(R.id.chapter_item_progress_txv, list.get(position - 1) + "%");
+                    holder.setText(R.id.chapter_item_time_txv, TimeUtils.getTimeFormat(chapterModel.getCreateTime()));
                     holder.getConvertView().setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -105,12 +110,12 @@ public class DirectoryActivity extends BaseActivity {
             };
             mAdapter = new HeaderAndFooterWrapper<>(adapter);
             View view = getLayoutInflater().inflate(R.layout.directory_chapter_headerview, null);
-            ImageLoaderUtils.getInstance().loadImage(this, fictionDetailModel.getCover(), (ImageView) view.findViewById(R.id.chapter_header_cover_img));
+            ImageLoaderUtils.getInstance().loadImage(this, fictionDetailModel.getCover(), (ImageView) view.findViewById(R.id.chapter_header_cover_img), R.color.colorPrimaryDark);
             ((TextView) view.findViewById(R.id.chapter_header_title_txv)).setText(fictionDetailModel.getTitle());
             String author = TextUtils.isEmpty(fictionDetailModel.getWriter().getName()) ? getString(R.string.app_name) : fictionDetailModel.getWriter().getName();
             ((TextView) view.findViewById(R.id.chapter_header_author_txv)).setText(author);
             ((TextView) view.findViewById(R.id.chapter_header_describe_txv)).setText(fictionDetailModel.getSummary());
-            ((TextView) view.findViewById(R.id.chapter_header_tags_txv)).setText(fictionDetailModel.getTags().toString());
+            ((TextView) view.findViewById(R.id.chapter_header_tags_txv)).setText(fictionDetailModel.getTags().get(0));
             ((TextView) view.findViewById(R.id.chapter_header_chapters_txv)).setText(getString(R.string.chapter_total_chapters, fictionDetailModel.getChapters().size()));
             mAdapter.addHeaderView(view);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
