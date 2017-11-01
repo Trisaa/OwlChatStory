@@ -16,7 +16,8 @@ public class MessageModel {
     @SerializedName("word")
     private String word;
 
-    private boolean ended;
+    private boolean ended;//当前章节是否阅读到底
+    private boolean isLastChapter;//是否还有下一章节
 
     public String getActor() {
         return actor;
@@ -56,5 +57,13 @@ public class MessageModel {
 
     public void setEnded(boolean ended) {
         this.ended = ended;
+    }
+
+    public boolean isLastChapter() {
+        return isLastChapter;
+    }
+
+    public void setLastChapter(boolean lastChapter) {
+        isLastChapter = lastChapter;
     }
 }

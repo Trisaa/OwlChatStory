@@ -104,6 +104,18 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
                 }
             });
         }
+
+        @Override
+        public void onNextClick() {
+            mCurrentChapterIndex++;
+            String chapterId = mFictionDetailModel.getChapters().get(mCurrentChapterIndex).getChapterId();
+            mPresenter.getChapterData(chapterId);
+            if (mShowDatas != null) {
+                mShowDatas.clear();
+            }
+            mAdapter.notifyDataSetChanged();
+            mLoadingBar.setVisibility(View.VISIBLE);
+        }
     };
 
     @Override
@@ -209,6 +221,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
                 mAppBarLayout.setExpanded(false);
             } else {
                 mShowDatas.get(i).setEnded(true);
+                mShowDatas.get(i).setLastChapter(mCurrentChapterIndex + 1 == mFictionDetailModel.getChapters().size());
                 mAdapter.notifyItemChanged(i);
                 mPresenter.addToHistory(getIntent().getStringExtra(EXTRA_FICTION_ID));
             }

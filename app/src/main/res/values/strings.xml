@@ -17,6 +17,8 @@
     <string name="common_slogan">Make Reading More Funny</string>
     <string name="common_empty">Nothing found here~</string>
     <string name="common_directory">Directory</string>
+    <string name="common_next">Next</string>
+    <string name="common_continue">To be continued</string>
 
     <string name="feedback_app_version">Version V%1$s</string>
     <string name="feedback_message">"DeviceModel:%1$s\r\nSystemVersion:%2$s\r\n-------------------\r\n"</string>
