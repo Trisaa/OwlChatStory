@@ -186,6 +186,9 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
                     DirectoryActivity.start(this, mFictionDetailModel);
                 }
                 break;
+            case R.id.read_menu_share:
+                DialogUtils.showShareDialog(this);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -204,6 +207,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
                 if (mShowDatas != null) {
                     mShowDatas.clear();
                 }
+                mProgressbar.setProgress(0);
                 mAdapter.notifyDataSetChanged();
                 mLoadingBar.setVisibility(View.VISIBLE);
             }
@@ -243,6 +247,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
 
     @Override
     public void showFictionData(FictionModel model) {
+        mToolbar.setTitle(mFictionDetailModel.getTitle() + " (" + model.getWatchers() + ")");
         mLastChapterId = model.getId();
         mLoadingBar.setVisibility(View.GONE);
         mDatas = model.getList();
