@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.owl.chatstory.R;
 import com.owl.chatstory.base.BaseActivity;
@@ -59,6 +58,8 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
     ProgressBar mLoadingBar;
     @BindView(R.id.read_click_tips_txv)
     View mClickTipsView;
+    @BindView(R.id.read_loading_progressbar_layout)
+    View mLoadingView;
 
     private ReadContract.Presenter mPresenter;
     private MultiItemTypeAdapter<MessageModel> mAdapter;
@@ -111,14 +112,20 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
 
         @Override
         public void onNextClick() {
-            mCurrentChapterIndex++;
-            String chapterId = mFictionDetailModel.getChapters().get(mCurrentChapterIndex).getChapterId();
-            mPresenter.getChapterData(chapterId);
-            if (mShowDatas != null) {
-                mShowDatas.clear();
+            if (mCurrentChapterIndex < mProgressList.size()) {
+                mProgressList.set(mCurrentChapterIndex, String.valueOf(100));
+                PreferencesHelper.getInstance().setFictionProgressList(mFictionDetailModel.getId(), mProgressList);
             }
-            mAdapter.notifyDataSetChanged();
-            mLoadingBar.setVisibility(View.VISIBLE);
+            mCurrentChapterIndex++;
+            if (mCurrentChapterIndex < mFictionDetailModel.getChapters().size()) {
+                String chapterId = mFictionDetailModel.getChapters().get(mCurrentChapterIndex).getChapterId();
+                mPresenter.getChapterData(chapterId);
+                if (mShowDatas != null) {
+                    mShowDatas.clear();
+                }
+                mAdapter.notifyDataSetChanged();
+                mLoadingView.setVisibility(View.VISIBLE);
+            }
         }
     };
 
@@ -172,6 +179,9 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
         super.onPause();
         if (mShowDatas != null && mDatas != null) {
             int progress = (mShowDatas.size() - 1) * 100 / mDatas.size();
+            if (progress < 0) {
+                progress = 0;
+            }
             mProgressList.set(mCurrentChapterIndex, String.valueOf(progress));
             PreferencesHelper.getInstance().setFictionProgressList(mFictionDetailModel.getId(), mProgressList);
         }
@@ -214,7 +224,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
                 }
                 mProgressbar.setProgress(0);
                 mAdapter.notifyDataSetChanged();
-                mLoadingBar.setVisibility(View.VISIBLE);
+                mLoadingView.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -227,7 +237,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
     }
 
     private void clickNext() {
-        if (mDatas != null) {
+        if (mDatas != null && mShowDatas.size() > 0) {
             int i = mShowDatas.size() - 1;
             mProgressbar.setProgress(100 * i / mDatas.size());
             if (i < mDatas.size()) {
@@ -261,7 +271,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
     public void showFictionData(FictionModel model) {
         mToolbar.setTitle(mFictionDetailModel.getTitle() + " (" + model.getWatchers() + ")");
         mLastChapterId = model.getId();
-        mLoadingBar.setVisibility(View.GONE);
+        mLoadingView.setVisibility(View.GONE);
         mDatas = model.getList();
         if (mShowDatas != null) {
             mShowDatas.clear();
