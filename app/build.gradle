@@ -8,8 +8,8 @@ android {
         applicationId "com.owl.chatstory"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 3
-        versionName "1.0.2"
+        versionCode 4
+        versionName "1.1.0_debug"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -64,7 +64,6 @@ dependencies {
     compile 'com.android.support:multidex:1.0.1'
     //umeng
     compile 'com.umeng.analytics:analytics:latest.integration'
-    //glide
     //compile 'jp.wasabeef:glide-transformations:3.0.1'
     compile 'jp.wasabeef:glide-transformations:2.0.2'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0'
@@ -73,6 +72,8 @@ dependencies {
         transitive = true;
     }
     compile 'com.google.firebase:firebase-core:11.0.4'
+    //uCrop
+    compile 'com.github.yalantis:ucrop:2.2.1'
 
     testCompile 'junit:junit:4.12'
 }

@@ -8,6 +8,12 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/main_bottom_nav_add"
+        android:icon="@drawable/main_vector_add"
+        android:title="@string/common_create"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/main_bottom_nav_account"
         android:icon="@drawable/main_vector_mine"
         android:title="@string/main_tab_account"

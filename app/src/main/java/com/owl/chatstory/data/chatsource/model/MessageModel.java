@@ -1,12 +1,15 @@
 package com.owl.chatstory.data.chatsource.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by lebron on 2017/9/13.
  */
 
-public class MessageModel {
+public class MessageModel implements Parcelable {
     @SerializedName("actor")
     private String actor;
     @SerializedName("picture")
@@ -84,4 +87,47 @@ public class MessageModel {
     public void setFictionName(String fictionName) {
         this.fictionName = fictionName;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.actor);
+        dest.writeString(this.avatar);
+        dest.writeString(this.location);
+        dest.writeString(this.word);
+        dest.writeByte(this.ended ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isLastChapter ? (byte) 1 : (byte) 0);
+        dest.writeParcelable(this.nextChapterModel, flags);
+        dest.writeString(this.fictionName);
+    }
+
+    public MessageModel() {
+    }
+
+    protected MessageModel(Parcel in) {
+        this.actor = in.readString();
+        this.avatar = in.readString();
+        this.location = in.readString();
+        this.word = in.readString();
+        this.ended = in.readByte() != 0;
+        this.isLastChapter = in.readByte() != 0;
+        this.nextChapterModel = in.readParcelable(ChapterModel.class.getClassLoader());
+        this.fictionName = in.readString();
+    }
+
+    public static final Parcelable.Creator<MessageModel> CREATOR = new Parcelable.Creator<MessageModel>() {
+        @Override
+        public MessageModel createFromParcel(Parcel source) {
+            return new MessageModel(source);
+        }
+
+        @Override
+        public MessageModel[] newArray(int size) {
+            return new MessageModel[size];
+        }
+    };
 }

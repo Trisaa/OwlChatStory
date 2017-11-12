@@ -65,7 +65,7 @@ public class DeviceUtils {
     }
 
     public static boolean isAboveN() {
-        return Build.VERSION.SDK_INT > Build.VERSION_CODES.N;
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N;
     }
 
     public static String getUri(int res) {

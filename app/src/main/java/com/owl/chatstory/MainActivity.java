@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.owl.chatstory.base.BaseActivity;
 import com.owl.chatstory.common.util.DialogUtils;
 import com.owl.chatstory.common.view.UnScrollViewPager;
+import com.owl.chatstory.creation.MyCreationFragment;
 import com.owl.chatstory.data.homesource.model.UpdateModel;
 import com.owl.chatstory.home.HomeFragment;
 import com.owl.chatstory.user.info.UserFragment;
@@ -30,6 +31,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     private static final int[] HOME_TOOLBAR_TITLE = {
             R.string.main_tab_home,
+            R.string.common_create,
             R.string.main_tab_account
     };
 
@@ -52,8 +54,11 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                     case R.id.main_bottom_nav_home:
                         mViewPager.setCurrentItem(0);
                         break;
-                    case R.id.main_bottom_nav_account:
+                    case R.id.main_bottom_nav_add:
                         mViewPager.setCurrentItem(1);
+                        break;
+                    case R.id.main_bottom_nav_account:
+                        mViewPager.setCurrentItem(2);
                         break;
                 }
                 return true;
@@ -94,6 +99,9 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             switch (HOME_TOOLBAR_TITLE[position]) {
                 case R.string.main_tab_home:
                     fragment = new HomeFragment();
+                    break;
+                case R.string.common_create:
+                    fragment = new MyCreationFragment();
                     break;
                 case R.string.main_tab_account:
                     fragment = UserFragment.newInstance();

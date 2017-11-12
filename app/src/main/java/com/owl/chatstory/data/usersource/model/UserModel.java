@@ -10,6 +10,9 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class UserModel implements Parcelable {
+    public static final int ROLE_FIRST = 0;
+    public static final int ROLE_SECOND = 1;
+    public static final int ROLE_ASIDE = 2;
     @SerializedName("id")
     private String id;//这个ID是注册成功后你那边生成的用户主键
     @SerializedName("platform")
@@ -24,6 +27,13 @@ public class UserModel implements Parcelable {
     private int gender;//用户性别
 
     private int vipType;//用户VIP类型
+    private int roleType;//用户角色（主角，配角，旁白）
+
+    public UserModel(int role, String name, String icon) {
+        this.roleType = role;
+        this.name = name;
+        this.icon = icon;
+    }
 
     public String getId() {
         return id;
@@ -79,6 +89,22 @@ public class UserModel implements Parcelable {
 
     public void setGender(int gender) {
         this.gender = gender;
+    }
+
+    public String getRoleType() {
+        switch (roleType) {
+            case ROLE_FIRST:
+                return "right";
+            case ROLE_SECOND:
+                return "left";
+            case ROLE_ASIDE:
+                return "center";
+        }
+        return "center";
+    }
+
+    public void setRoleType(int roleType) {
+        this.roleType = roleType;
     }
 
     @Override

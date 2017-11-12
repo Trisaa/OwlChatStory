@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".MainApplication"
@@ -59,6 +61,30 @@
             android:label="@string/common_settings"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".creation.BasicCreateActivity"
+            android:label="@string/common_create"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name=".creation.ChooseCategoryActivity"
+            android:label="选择分类"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".creation.CreateActivity"
+            android:label="创作"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".creation.PreviewActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait" />
+
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="59acbf4e45297d25b1000f95" />
@@ -87,10 +113,19 @@
             </intent-filter>
         </activity>
 
-
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="dc34240161e62021570b3644826fd0bb90794dec" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
 
     </application>
 

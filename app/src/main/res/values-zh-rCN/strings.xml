@@ -19,6 +19,7 @@
     <string name="common_directory">目录</string>
     <string name="common_next">继续阅读</string>
     <string name="common_continue">未完待续</string>
+    <string name="common_create">创作</string>
 
     <string name="feedback_app_version">版本 V%1$s</string>
     <string name="feedback_message">"设备:%1$s\r\n版本信息:%2$s\r\n-------------------\r\n"</string>

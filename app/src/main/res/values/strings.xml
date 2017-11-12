@@ -19,6 +19,8 @@
     <string name="common_directory">Directory</string>
     <string name="common_next">Continue Reading</string>
     <string name="common_continue">To be continued</string>
+    <string name="common_create">Creation</string>
+    <string name="common_preview">Preview</string>
 
     <string name="feedback_app_version">Version V%1$s</string>
     <string name="feedback_message">"DeviceModel:%1$s\r\nSystemVersion:%2$s\r\n-------------------\r\n"</string>
@@ -52,4 +54,12 @@
     <string name="read_click_tips">Try to click me</string>
 
     <string name="share_content">I find a good chat-fiction app, let\'s enjoy reading</string>
+
+    <!--new added-->
+    <string name="create_publish_chapter">是否发布当前内容？</string>
+    <string name="create_save_chapter">是否保存当前内容？</string>
+    <string name="create_delete_chapter">是否要删除当前章节？不可找回</string>
+    <string name="create_dialog_cancel">我再想想</string>
+    <string name="create_dialog_ok">是的</string>
+    <string name="create_dialog_not_save">舍弃它</string>
 </resources>
