@@ -4,8 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -152,6 +150,27 @@ public class CreateActivity extends BaseActivity {
         initMessageAdapter();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (mMessageList.size() > 0) {
+            DialogUtils.showDialog(this, R.string.create_save_chapter
+                    , R.string.create_dialog_not_save, R.string.create_dialog_ok
+                    , new DialogUtils.OnDialogClickListener() {
+                        @Override
+                        public void onOK() {
+                            finish();
+                        }
+
+                        @Override
+                        public void onCancel() {
+                            finish();
+                        }
+                    });
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     private void initRoleAdapter() {
         mRolesAdapter = new CommonAdapter<UserModel>(this, R.layout.create_role_item, mSecondRoleList) {
             @Override
@@ -215,10 +234,10 @@ public class CreateActivity extends BaseActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_CODE_GALLERY:
-                    cropPhoto(data.getData());
+                    CameraUtils.cropPhoto(this, data.getData());
                     break;
                 case REQUEST_CODE_CAMERA:
-                    cropPhoto(FileUtils.getFileUri(this, FileUtils.getFilePath("temp.jpg")));
+                    CameraUtils.cropPhoto(this, FileUtils.getFileUri(this, FileUtils.getFilePath("temp.jpg")));
                     break;
                 case UCrop.REQUEST_CROP:
                     mImagePath = UCrop.getOutput(data).getPath();
@@ -315,30 +334,6 @@ public class CreateActivity extends BaseActivity {
                 CameraUtils.chooseFromCamera(this);
             }
         }
-    }
-
-    public void cropPhoto(Uri uri) {
-        UCrop.Options options = new UCrop.Options();
-        // 修改标题栏颜色
-        options.setToolbarColor(getResources().getColor(R.color.colorPrimaryDark));
-        // 修改状态栏颜色
-        options.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
-        // 隐藏底部工具
-        options.setHideBottomControls(true);
-        // 图片格式
-        options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
-        // 设置图片压缩质量
-        options.setCompressionQuality(50);
-        // 是否让用户调整范围(默认false)，如果开启，可能会造成剪切的图片的长宽比不是设定的
-        // 如果不开启，用户不能拖动选框，只能缩放图片
-        options.setFreeStyleCropEnabled(true);
-        // 设置源uri及目标uri
-        UCrop.of(uri, Uri.fromFile(FileUtils.getFilePath(System.currentTimeMillis() + ".jpg")))
-                // 长宽比
-                .withAspectRatio(1, 1)
-                // 配置参数
-                .withOptions(options)
-                .start(this);
     }
 
     private void updateRole(UserModel userModel) {

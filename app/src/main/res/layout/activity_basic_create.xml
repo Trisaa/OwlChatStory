@@ -124,34 +124,57 @@
                 android:layout_marginLeft="16dp"
                 android:background="@color/common_gray_pressed" />
 
-            <LinearLayout
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="选择创建类型"
+                android:textColor="@color/common_text_color" />
+
+
+            <TextView
+                android:id="@+id/create_single_txv"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_margin="16dp"
-                android:orientation="horizontal">
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_weight="1"
+                android:background="@drawable/common_red_btn_selector"
+                android:gravity="center"
+                android:text="创作单篇"
+                android:textColor="#ffffff" />
 
-                <TextView
-                    android:id="@+id/create_single_txv"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/common_red_btn_selector"
-                    android:gravity="center"
-                    android:text="single"
-                    android:textColor="#ffffff" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="短篇，仅一章完结"
+                android:textColor="@color/common_text_color" />
 
-                <TextView
-                    android:id="@+id/create_serialized_txv"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/common_red_btn_selector"
-                    android:gravity="center"
-                    android:text="single"
-                    android:textColor="#ffffff" />
-            </LinearLayout>
+            <TextView
+                android:id="@+id/create_serialized_txv"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_weight="1"
+                android:background="@drawable/common_red_btn_selector"
+                android:gravity="center"
+                android:text="创作连载"
+                android:textColor="#ffffff" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="长篇，可持续更新连载"
+                android:textColor="@color/common_text_color" />
 
         </LinearLayout>
 
