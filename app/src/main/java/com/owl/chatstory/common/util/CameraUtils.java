@@ -41,7 +41,7 @@ public class CameraUtils {
         }
     }
 
-    public static void cropPhoto(Activity activity, Uri uri) {
+    public static void cropPhoto(Activity activity, Uri uri,int scaleX,int scaleY) {
         UCrop.Options options = new UCrop.Options();
         // 修改标题栏颜色
         options.setToolbarColor(activity.getResources().getColor(R.color.colorPrimaryDark));
@@ -59,7 +59,7 @@ public class CameraUtils {
         // 设置源uri及目标uri
         UCrop.of(uri, Uri.fromFile(FileUtils.getFilePath(System.currentTimeMillis() + ".jpg")))
                 // 长宽比
-                .withAspectRatio(9, 16)
+                .withAspectRatio(scaleX, scaleY)
                 // 配置参数
                 .withOptions(options)
                 .start(activity);

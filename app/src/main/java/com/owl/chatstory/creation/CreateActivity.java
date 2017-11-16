@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.owl.chatstory.R;
@@ -32,6 +33,7 @@ import com.owl.chatstory.common.util.CameraUtils;
 import com.owl.chatstory.common.util.DeviceUtils;
 import com.owl.chatstory.common.util.DialogUtils;
 import com.owl.chatstory.common.util.FileUtils;
+import com.owl.chatstory.common.util.FirebaseUtil;
 import com.owl.chatstory.common.util.ImageLoaderUtils;
 import com.owl.chatstory.common.view.MaxWidthRecyclerView;
 import com.owl.chatstory.creation.adapter.RoleItemDecoration;
@@ -43,6 +45,7 @@ import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -122,7 +125,9 @@ public class CreateActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_preview:
-                PreviewActivity.start(this, (ArrayList) mMessageList);
+                if (mMessageList.size() > 0) {
+                    PreviewActivity.start(this, (ArrayList) mMessageList);
+                }
                 break;
             case R.id.menu_done:
                 DialogUtils.showDialog(this, R.string.create_publish_chapter
@@ -145,7 +150,7 @@ public class CreateActivity extends BaseActivity {
 
     @Override
     protected void initViewsAndData() {
-        mAsideRole = new UserModel(UserModel.ROLE_ASIDE, "", DeviceUtils.getUri(R.mipmap.btn_pang_normal));
+        mAsideRole = new UserModel("", UserModel.ROLE_ASIDE, "", DeviceUtils.getUri(R.mipmap.btn_pang_normal));
         initRoleAdapter();
         initMessageAdapter();
     }
@@ -205,6 +210,7 @@ public class CreateActivity extends BaseActivity {
         mEditRolesAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                showUpdateRoleDialog(position);
             }
 
             @Override
@@ -234,10 +240,10 @@ public class CreateActivity extends BaseActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_CODE_GALLERY:
-                    CameraUtils.cropPhoto(this, data.getData());
+                    CameraUtils.cropPhoto(this, data.getData(), 1, 1);
                     break;
                 case REQUEST_CODE_CAMERA:
-                    CameraUtils.cropPhoto(this, FileUtils.getFileUri(this, FileUtils.getFilePath("temp.jpg")));
+                    CameraUtils.cropPhoto(this, FileUtils.getFileUri(this, FileUtils.getFilePath("temp.jpg")), 1, 1);
                     break;
                 case UCrop.REQUEST_CROP:
                     mImagePath = UCrop.getOutput(data).getPath();
@@ -289,6 +295,7 @@ public class CreateActivity extends BaseActivity {
     }
 
     private void showAddRoleDialog(final int role) {
+        mImagePath = null;
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_add_role, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(view);
@@ -298,26 +305,119 @@ public class CreateActivity extends BaseActivity {
         view.findViewById(R.id.add_role_img).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mImagePath = null;
                 showSelectDialog();
             }
         });
+        view.findViewById(R.id.add_role_delete_txv).setVisibility(View.GONE);
         view.findViewById(R.id.add_role_submit_txv).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name = editText.getText().toString().trim();
+                final String name = editText.getText().toString().trim();
                 if (!TextUtils.isEmpty(name) && mImagePath != null) {
                     if (role == UserModel.ROLE_FIRST) {
-                        mFirstRole = new UserModel(UserModel.ROLE_FIRST, name, mImagePath);
-                        updateFirstRole();
+                        FirebaseUtil.upLoadFile(mImagePath, new FirebaseUtil.OnUploadListener() {
+                            @Override
+                            public void onFailure() {
+                                Toast.makeText(CreateActivity.this, "图片上传失败", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onSuccess(String url) {
+                                mFirstRole = new UserModel(String.valueOf(System.currentTimeMillis()), UserModel.ROLE_FIRST, name, url);
+                                updateFirstRole(mFirstRole.getIcon());
+                            }
+                        });
                     } else {
-                        UserModel userModel = new UserModel(UserModel.ROLE_SECOND, name, mImagePath);
-                        mSecondRoleList.add(userModel);
-                        mRolesAdapter.notifyDataSetChanged();
+                        FirebaseUtil.upLoadFile(mImagePath, new FirebaseUtil.OnUploadListener() {
+                            @Override
+                            public void onFailure() {
+                                Toast.makeText(CreateActivity.this, "图片上传失败", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onSuccess(String url) {
+                                UserModel userModel = new UserModel(String.valueOf(System.currentTimeMillis()), UserModel.ROLE_SECOND, name, url);
+                                mSecondRoleList.add(userModel);
+                                mRolesAdapter.notifyDataSetChanged();
+                            }
+                        });
                     }
                     alertDialog.dismiss();
                 } else {
                     Toast.makeText(CreateActivity.this, "信息不完善", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        alertDialog.show();
+    }
+
+    private void showUpdateRoleDialog(final int position) {
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_add_role, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(view);
+        final AlertDialog alertDialog = builder.create();
+        final UserModel userModel = mRoleList.get(position);
+        final String name = userModel.getName();
+        final String icon = userModel.getIcon();
+        mImagePath = icon;
+
+        mDialogUserIcon = (ImageView) view.findViewById(R.id.add_role_img);
+        final EditText editText = (EditText) view.findViewById(R.id.add_role_edit);
+        TextView textView = (TextView) view.findViewById(R.id.add_role_submit_txv);
+        editText.setText(name);
+        textView.setText("更新信息");
+        ImageLoaderUtils.getInstance().loadCircleImage(this, icon, mDialogUserIcon);
+        mDialogUserIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSelectDialog();
+            }
+        });
+        view.findViewById(R.id.add_role_delete_txv).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mRoleList.remove(position);
+                mEditRolesAdapter.notifyItemRemoved(position);
+                updateRoleInfo(userModel, true);
+                alertDialog.dismiss();
+            }
+        });
+
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String temp = editText.getText().toString().trim();
+                //什么都没改
+                if (name.equals(temp) && mImagePath.equals(icon)) {
+                    alertDialog.dismiss();
+                } else {
+                    if (!TextUtils.isEmpty(temp)) {
+                        //仅修改名称
+                        if (mImagePath.equals(icon)) {
+                            userModel.setName(temp);
+                            userModel.setIcon(mImagePath);
+                            mEditRolesAdapter.notifyItemChanged(position);
+                            updateRoleInfo(userModel, false);
+                        } else {
+                            FirebaseUtil.upLoadFile(mImagePath, new FirebaseUtil.OnUploadListener() {
+                                @Override
+                                public void onFailure() {
+                                    Toast.makeText(CreateActivity.this, "图片上传失败", Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void onSuccess(String url) {
+                                    userModel.setName(temp);
+                                    userModel.setIcon(url);
+                                    mEditRolesAdapter.notifyItemChanged(position);
+                                    updateRoleInfo(userModel, false);
+                                }
+                            });
+                        }
+                        alertDialog.dismiss();
+                    } else {
+                        Toast.makeText(CreateActivity.this, "信息不完善", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -336,13 +436,85 @@ public class CreateActivity extends BaseActivity {
         }
     }
 
+    private void updateRoleInfo(UserModel model, boolean deleteOrUpdate) {
+        if (model.getRoleType() == UserModel.ROLE_FIRST) {
+            if (deleteOrUpdate) {
+                //删除主角
+                deleteMessageAboutUser(model);
+                updateFirstRole(DeviceUtils.getUri(R.mipmap.user_default_icon));
+                mFirstRole = null;
+            } else {
+                //更新主角
+                updateMessageAboutUser(model);
+                updateFirstRole(model.getIcon());
+                mFirstRole = model;
+            }
+        } else {
+            if (deleteOrUpdate) {
+                //删除配角
+                deleteMessageAboutUser(model);
+                for (UserModel userModel : mSecondRoleList) {
+                    if (userModel.getId().equals(model.getId())) {
+                        mSecondRoleList.remove(userModel);
+                        mRolesAdapter.notifyDataSetChanged();
+                        break;
+                    }
+                }
+            } else {
+                //更新配角
+                updateMessageAboutUser(model);
+                for (int i = 0; i < mSecondRoleList.size(); i++) {
+                    UserModel userModel = mSecondRoleList.get(i);
+                    if (userModel.getId().equals(model.getId())) {
+                        userModel.setName(model.getName());
+                        userModel.setIcon(model.getIcon());
+                        mRolesAdapter.notifyItemChanged(i);
+                        break;
+                    }
+                }
+            }
+        }
+        mCurrentRole = null;
+        ImageLoaderUtils.getInstance().loadCircleImage(this, DeviceUtils.getUri(R.mipmap.user_default_icon), mCurrentRoleImg);
+    }
+
+    /**
+     * 删除所有跟user有关的对话
+     *
+     * @param model
+     */
+    private void deleteMessageAboutUser(UserModel model) {
+        Iterator<MessageModel> it = mMessageList.iterator();
+        while (it.hasNext()) {
+            MessageModel x = it.next();
+            if (x.getId().equals(model.getId())) {
+                it.remove();
+            }
+        }
+        mAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 更新所有跟user有关的对话
+     */
+    private void updateMessageAboutUser(UserModel model) {
+        for (int i = 0; i < mMessageList.size(); i++) {
+            MessageModel messageModel = mMessageList.get(i);
+            if (messageModel.getId().equals(model.getId())) {
+                messageModel.setActor(model.getName());
+                messageModel.setAvatar(model.getIcon());
+            }
+        }
+        mAdapter.notifyDataSetChanged();
+    }
+
     private void updateRole(UserModel userModel) {
         mCurrentRole = userModel;
         ImageLoaderUtils.getInstance().loadCircleImage(this, mCurrentRole.getIcon(), mCurrentRoleImg);
     }
 
-    private void updateFirstRole() {
-        ImageLoaderUtils.getInstance().loadCircleImage(this, mFirstRole.getIcon(), mFirstRoleImg);
+    private void updateFirstRole(String url) {
+        ImageLoaderUtils.getInstance().loadCircleImage(this, url, mFirstRoleImg);
     }
 
     @OnClick(R.id.create_first_role_img)
@@ -388,10 +560,11 @@ public class CreateActivity extends BaseActivity {
             String message = mEditText.getText().toString().trim();
             if (!TextUtils.isEmpty(message)) {
                 MessageModel messageModel = new MessageModel();
+                messageModel.setId(mCurrentRole.getId());
                 messageModel.setActor(mCurrentRole.getName());
                 messageModel.setAvatar(mCurrentRole.getIcon());
                 messageModel.setWord(message);
-                messageModel.setLocation(mCurrentRole.getRoleType());
+                messageModel.setLocation(mCurrentRole.getRoleTypeStr());
                 mMessageList.add(messageModel);
                 mAdapter.notifyItemInserted(mMessageList.size() - 1);
                 mEditText.setText("");

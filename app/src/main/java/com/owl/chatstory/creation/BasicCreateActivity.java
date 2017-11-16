@@ -10,6 +10,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -21,7 +23,9 @@ import com.owl.chatstory.R;
 import com.owl.chatstory.base.BaseActivity;
 import com.owl.chatstory.common.util.CameraUtils;
 import com.owl.chatstory.common.util.FileUtils;
+import com.owl.chatstory.common.util.FirebaseUtil;
 import com.owl.chatstory.common.util.ImageLoaderUtils;
+import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.homesource.model.CategoryModel;
 import com.yalantis.ucrop.UCrop;
 
@@ -53,6 +57,7 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
 
     private BasicCreateContract.Presenter mPresenter;
     private String mCoverImagePath;
+    private String mCategory;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, BasicCreateActivity.class);
@@ -77,7 +82,7 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
 
     @Override
     protected void initViewsAndData() {
-        new BasicCreatePresenter();
+        new BasicCreatePresenter(this);
     }
 
     @Override
@@ -85,10 +90,10 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_CODE_GALLERY:
-                    CameraUtils.cropPhoto(this, data.getData());
+                    CameraUtils.cropPhoto(this, data.getData(),9,16);
                     break;
                 case REQUEST_CODE_CAMERA:
-                    CameraUtils.cropPhoto(this, FileUtils.getFileUri(this, FileUtils.getFilePath("temp.jpg")));
+                    CameraUtils.cropPhoto(this, FileUtils.getFileUri(this, FileUtils.getFilePath("temp.jpg")),9,16);
                     break;
                 case UCrop.REQUEST_CROP:
                     mCoverImagePath = UCrop.getOutput(data).getPath();
@@ -126,7 +131,8 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
     @Subscribe
     public void getCategoryEvent(CategoryModel model) {
         if (model != null) {
-            mCategoryView.setText(model.getTitle());
+            mCategory = model.getTitle();
+            mCategoryView.setText(mCategory);
         }
     }
 
@@ -142,7 +148,7 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
 
     @OnClick(R.id.create_serialized_txv)
     public void createSerialized() {
-
+        saveData();
     }
 
     @OnClick(R.id.create_cover_img)
@@ -150,6 +156,32 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
         showSelectDialog();
     }
 
+    private void saveData() {
+        String title = mTitleEdit.getText().toString();
+        String summary = mDescribeEdit.getText().toString();
+        if (TextUtils.isEmpty(title) || TextUtils.isEmpty(summary)
+                || TextUtils.isEmpty(mCategory) || TextUtils.isEmpty(mCoverImagePath)) {
+            Toast.makeText(this, "信息不完整", Toast.LENGTH_SHORT).show();
+        } else {
+            final FictionDetailModel fictionDetailModel = new FictionDetailModel();
+            fictionDetailModel.setTitle(title);
+            fictionDetailModel.setSummary(summary);
+            //fictionDetailModel.setTags();
+            FirebaseUtil.upLoadFile(mCoverImagePath, new FirebaseUtil.OnUploadListener() {
+                @Override
+                public void onFailure() {
+                    Toast.makeText(BasicCreateActivity.this, "图片上传失败", Toast.LENGTH_SHORT).show();
+                    CreateActivity.start(BasicCreateActivity.this);
+                }
+
+                @Override
+                public void onSuccess(String url) {
+                    fictionDetailModel.setCover(url);
+                    CreateActivity.start(BasicCreateActivity.this);
+                }
+            });
+        }
+    }
 
     private void showSelectDialog() {
         View view = LayoutInflater.from(this).inflate(R.layout.common_update_photo, null);
@@ -189,5 +221,10 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
     @Override
     public void setPresenter(BasicCreateContract.Presenter presenter) {
         mPresenter = presenter;
+    }
+
+    @Override
+    public void showProgress(boolean show) {
+
     }
 }
