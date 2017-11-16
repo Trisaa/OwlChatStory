@@ -3,6 +3,7 @@ package com.owl.chatstory.creation.adapter;
 import android.view.View;
 
 import com.owl.chatstory.R;
+import com.owl.chatstory.creation.CreationDetailActivity;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.zhy.adapter.recyclerview.base.ItemViewDelegate;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -23,11 +24,11 @@ public class OldCreationDelegate implements ItemViewDelegate<FictionDetailModel>
     }
 
     @Override
-    public void convert(ViewHolder holder, FictionDetailModel model, int position) {
+    public void convert(final ViewHolder holder, FictionDetailModel model, int position) {
         holder.getConvertView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                CreationDetailActivity.start(holder.getConvertView().getContext(), "12");
             }
         });
     }

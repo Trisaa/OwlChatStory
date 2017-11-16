@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -11,11 +12,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +30,7 @@ import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.homesource.model.CategoryModel;
 import com.yalantis.ucrop.UCrop;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
@@ -44,6 +46,7 @@ import static com.owl.chatstory.common.util.CameraUtils.REQUEST_CODE_GALLERY;
 public class BasicCreateActivity extends BaseActivity implements BasicCreateContract.View {
     public static final int PERMISSIONS_REQUEST_WRITE_STORAGE = 100;
     public static final int PERMISSIONS_REQUEST_CAMERA = 200;
+    public static final String EXTRA_FICTION_DETAIL = "EXTRA_FICTION_DETAIL";
     @BindView(R.id.common_toolbar)
     Toolbar mToolbar;
     @BindView(R.id.create_cover_img)
@@ -54,13 +57,24 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
     EditText mDescribeEdit;
     @BindView(R.id.create_category_choose_txv)
     TextView mCategoryView;
+    @BindView(R.id.create_layout)
+    LinearLayout mBottomLayout;
+    @BindView(R.id.create_update_fiction_txv)
+    TextView mUpdateView;
+    @BindView(R.id.common_progressbar_layout)
+    View mLoadingView;
 
     private BasicCreateContract.Presenter mPresenter;
     private String mCoverImagePath;
     private String mCategory;
+    private FictionDetailModel mFictionDetailModel;
+    private boolean isUpdateOrAdd;
 
-    public static void start(Context context) {
+    public static void start(Context context, FictionDetailModel model) {
         Intent intent = new Intent(context, BasicCreateActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(EXTRA_FICTION_DETAIL, model);
+        intent.putExtras(bundle);
         context.startActivity(intent);
     }
 
@@ -82,6 +96,18 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
 
     @Override
     protected void initViewsAndData() {
+        mFictionDetailModel = getIntent().getParcelableExtra(EXTRA_FICTION_DETAIL);
+        isUpdateOrAdd = mFictionDetailModel != null;
+        if (mFictionDetailModel != null) {
+            mCoverImagePath = mFictionDetailModel.getCover();
+            mCategory = mFictionDetailModel.getTags().get(0);
+            mBottomLayout.setVisibility(View.GONE);
+            mUpdateView.setVisibility(View.VISIBLE);
+            ImageLoaderUtils.getInstance().loadImage(this, mFictionDetailModel.getCover(), mCoverImg, R.color.colorPrimaryDark);
+            mTitleEdit.setText(mFictionDetailModel.getTitle());
+            mDescribeEdit.setText(mFictionDetailModel.getSummary());
+            mCategoryView.setText(mCategory);
+        }
         new BasicCreatePresenter(this);
     }
 
@@ -90,10 +116,10 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_CODE_GALLERY:
-                    CameraUtils.cropPhoto(this, data.getData(),9,16);
+                    CameraUtils.cropPhoto(this, data.getData(), 9, 16);
                     break;
                 case REQUEST_CODE_CAMERA:
-                    CameraUtils.cropPhoto(this, FileUtils.getFileUri(this, FileUtils.getFilePath("temp.jpg")),9,16);
+                    CameraUtils.cropPhoto(this, FileUtils.getFileUri(this, FileUtils.getFilePath("temp.jpg")), 9, 16);
                     break;
                 case UCrop.REQUEST_CROP:
                     mCoverImagePath = UCrop.getOutput(data).getPath();
@@ -143,7 +169,7 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
 
     @OnClick(R.id.create_single_txv)
     public void createSingle() {
-        CreateActivity.start(this);
+        CreateActivity.start(this, "id");
     }
 
     @OnClick(R.id.create_serialized_txv)
@@ -156,6 +182,11 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
         showSelectDialog();
     }
 
+    @OnClick(R.id.create_update_fiction_txv)
+    public void updateInfo() {
+        saveData();
+    }
+
     private void saveData() {
         String title = mTitleEdit.getText().toString();
         String summary = mDescribeEdit.getText().toString();
@@ -163,23 +194,29 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
                 || TextUtils.isEmpty(mCategory) || TextUtils.isEmpty(mCoverImagePath)) {
             Toast.makeText(this, "信息不完整", Toast.LENGTH_SHORT).show();
         } else {
-            final FictionDetailModel fictionDetailModel = new FictionDetailModel();
-            fictionDetailModel.setTitle(title);
-            fictionDetailModel.setSummary(summary);
+            if (mFictionDetailModel == null) {
+                mFictionDetailModel = new FictionDetailModel();
+            }
+            mFictionDetailModel.setTitle(title);
+            mFictionDetailModel.setSummary(summary);
             //fictionDetailModel.setTags();
-            FirebaseUtil.upLoadFile(mCoverImagePath, new FirebaseUtil.OnUploadListener() {
-                @Override
-                public void onFailure() {
-                    Toast.makeText(BasicCreateActivity.this, "图片上传失败", Toast.LENGTH_SHORT).show();
-                    CreateActivity.start(BasicCreateActivity.this);
-                }
+            //未更改头像
+            if (mFictionDetailModel.getCover().equals(mCoverImagePath)) {
+                mPresenter.saveFictionBasicInfo(mFictionDetailModel);
+            } else {
+                FirebaseUtil.upLoadFile(mCoverImagePath, new FirebaseUtil.OnUploadListener() {
+                    @Override
+                    public void onFailure() {
+                        Toast.makeText(BasicCreateActivity.this, "图片上传失败", Toast.LENGTH_SHORT).show();
+                    }
 
-                @Override
-                public void onSuccess(String url) {
-                    fictionDetailModel.setCover(url);
-                    CreateActivity.start(BasicCreateActivity.this);
-                }
-            });
+                    @Override
+                    public void onSuccess(String url) {
+                        mFictionDetailModel.setCover(url);
+                        mPresenter.saveFictionBasicInfo(mFictionDetailModel);
+                    }
+                });
+            }
         }
     }
 
@@ -224,7 +261,22 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
     }
 
     @Override
-    public void showProgress(boolean show) {
+    public void showLoadingView(boolean show) {
+        mLoadingView.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
 
+    @Override
+    public void onSuccess(FictionDetailModel model) {
+        if (isUpdateOrAdd) {
+            EventBus.getDefault().post(model);
+            finish();
+        } else {
+            CreateActivity.start(BasicCreateActivity.this, model.getId());
+        }
+    }
+
+    @Override
+    public void onFailure() {
+        finish();
     }
 }

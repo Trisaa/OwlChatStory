@@ -5,19 +5,15 @@ import com.owl.chatstory.base.BaseView;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 
 /**
- * Created by lebron on 2017/10/31.
+ * Created by lebron on 2017/11/16.
  */
 
-public interface BasicCreateContract {
+public interface CreationDetailContract {
     interface Presenter extends BasePresenter {
-        void saveFictionBasicInfo(FictionDetailModel model);
+        void getFictionDetail(String id);
     }
 
     interface View extends BaseView<Presenter> {
-        void showLoadingView(boolean show);
-
-        void onSuccess(FictionDetailModel model);
-
-        void onFailure();
+        void showFictionDetail(FictionDetailModel model);
     }
 }

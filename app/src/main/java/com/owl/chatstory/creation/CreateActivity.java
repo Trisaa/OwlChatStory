@@ -61,6 +61,7 @@ import static com.owl.chatstory.creation.BasicCreateActivity.PERMISSIONS_REQUEST
  */
 
 public class CreateActivity extends BaseActivity {
+    private static final String EXTRA_FICTION_ID = "EXTRA_FICTION_ID";
     @BindView(R.id.common_toolbar)
     Toolbar mToolbar;
     @BindView(R.id.create_recycler)
@@ -93,9 +94,11 @@ public class CreateActivity extends BaseActivity {
     private CommonAdapter<UserModel> mRolesAdapter;
     private CommonAdapter<UserModel> mEditRolesAdapter;
     private MultiItemTypeAdapter<MessageModel> mAdapter;
+    private String mFictionId;
 
-    public static void start(Context context) {
+    public static void start(Context context, String id) {
         Intent intent = new Intent(context, CreateActivity.class);
+        intent.putExtra(EXTRA_FICTION_ID, id);
         context.startActivity(intent);
     }
 
@@ -150,6 +153,7 @@ public class CreateActivity extends BaseActivity {
 
     @Override
     protected void initViewsAndData() {
+        mFictionId = getIntent().getStringExtra(EXTRA_FICTION_ID);
         mAsideRole = new UserModel("", UserModel.ROLE_ASIDE, "", DeviceUtils.getUri(R.mipmap.btn_pang_normal));
         initRoleAdapter();
         initMessageAdapter();

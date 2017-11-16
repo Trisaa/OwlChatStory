@@ -47,7 +47,7 @@ public class MyCreationFragment extends BaseFragment implements MyCreationContra
 
     @OnClick(R.id.mycreation_add_img)
     public void clickAdd() {
-        BasicCreateActivity.start(getActivity());
+        BasicCreateActivity.start(getActivity(), null);
     }
 
     @Override

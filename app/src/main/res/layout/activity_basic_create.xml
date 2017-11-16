@@ -6,177 +6,204 @@
 
     <include layout="@layout/common_toolbar" />
 
-    <ScrollView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/create_cover_img"
-                android:layout_width="150dp"
-                android:layout_height="200dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="16dp"
-                android:background="@color/colorPrimaryDark"
-                android:scaleType="centerCrop" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="16dp"
-                android:background="@color/common_gray_pressed" />
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:paddingLeft="16dp"
-                    android:text="Title"
-                    android:textColor="@color/common_text_color" />
+                <ImageView
+                    android:id="@+id/create_cover_img"
+                    android:layout_width="150dp"
+                    android:layout_height="200dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/colorPrimaryDark"
+                    android:scaleType="centerCrop" />
 
-                <EditText
-                    android:id="@+id/create_title_edit"
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="16dp"
+                    android:background="@color/common_gray_pressed" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingLeft="16dp"
+                        android:text="Title"
+                        android:textColor="@color/common_text_color" />
+
+                    <EditText
+                        android:id="@+id/create_title_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:background="@null"
+                        android:hint="请输入标题（20字以内）"
+                        android:maxLength="20"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="16dp"
+                    android:background="@color/common_gray_pressed" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="90dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="Description"
+                        android:textColor="@color/common_text_color" />
+
+                    <EditText
+                        android:id="@+id/create_description_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:hint="请输入简介（50字以内）"
+                        android:maxLength="50"
+                        android:paddingTop="16dp"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="16dp"
+                    android:background="@color/common_gray_pressed" />
+
+                <RelativeLayout
+                    android:id="@+id/create_category_choose_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:paddingLeft="16dp"
+                        android:text="category"
+                        android:textColor="@color/common_text_color" />
+
+                    <TextView
+                        android:id="@+id/create_category_choose_txv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="16dp"
+                        android:drawablePadding="6dp"
+                        android:drawableRight="@mipmap/ic_goto"
+                        android:text="choose" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="16dp"
+                    android:background="@color/common_gray_pressed" />
+
+                <LinearLayout
+                    android:id="@+id/create_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:background="@null"
-                    android:hint="请输入标题（20字以内）"
-                    android:maxLength="20"
-                    android:textSize="14sp" />
-            </LinearLayout>
+                    android:orientation="vertical"
+                    android:visibility="visible">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="16dp"
-                android:background="@color/common_gray_pressed" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center"
+                        android:text="选择创建类型"
+                        android:textColor="@color/common_text_color" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="90dp"
-                android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/create_single_txv"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/common_red_btn_selector"
+                        android:gravity="center"
+                        android:text="创作单篇"
+                        android:textColor="#ffffff" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:text="短篇，仅一章完结"
+                        android:textColor="@color/common_text_color" />
+
+                    <TextView
+                        android:id="@+id/create_serialized_txv"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/common_red_btn_selector"
+                        android:gravity="center"
+                        android:text="创作连载"
+                        android:textColor="#ffffff" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:text="长篇，可持续更新连载"
+                        android:textColor="@color/common_text_color" />
+                </LinearLayout>
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:text="Description"
-                    android:textColor="@color/common_text_color" />
-
-                <EditText
-                    android:id="@+id/create_description_edit"
+                    android:id="@+id/create_update_fiction_txv"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:hint="请输入简介（50字以内）"
-                    android:maxLength="50"
-                    android:paddingTop="16dp"
-                    android:textSize="14sp" />
+                    android:layout_height="40dp"
+                    android:layout_margin="16dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/common_red_btn_selector"
+                    android:gravity="center"
+                    android:text="更新"
+                    android:textColor="#ffffff"
+                    android:visibility="gone" />
+
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="16dp"
-                android:background="@color/common_gray_pressed" />
+        </ScrollView>
 
-            <RelativeLayout
-                android:id="@+id/create_category_choose_layout"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:paddingLeft="16dp"
-                    android:text="category"
-                    android:textColor="@color/common_text_color" />
-
-                <TextView
-                    android:id="@+id/create_category_choose_txv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="16dp"
-                    android:drawablePadding="6dp"
-                    android:drawableRight="@mipmap/ic_goto"
-                    android:text="choose" />
-            </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="16dp"
-                android:background="@color/common_gray_pressed" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginTop="16dp"
-                android:gravity="center"
-                android:text="选择创建类型"
-                android:textColor="@color/common_text_color" />
-
-
-            <TextView
-                android:id="@+id/create_single_txv"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_weight="1"
-                android:background="@drawable/common_red_btn_selector"
-                android:gravity="center"
-                android:text="创作单篇"
-                android:textColor="#ffffff" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:text="短篇，仅一章完结"
-                android:textColor="@color/common_text_color" />
-
-            <TextView
-                android:id="@+id/create_serialized_txv"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_weight="1"
-                android:background="@drawable/common_red_btn_selector"
-                android:gravity="center"
-                android:text="创作连载"
-                android:textColor="#ffffff" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:text="长篇，可持续更新连载"
-                android:textColor="@color/common_text_color" />
-
-        </LinearLayout>
-
-    </ScrollView>
+        <include layout="@layout/common_loading_layout" />
+    </FrameLayout>
 </LinearLayout>

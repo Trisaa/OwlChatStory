@@ -82,6 +82,10 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".creation.CreationDetailActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait" />
 
