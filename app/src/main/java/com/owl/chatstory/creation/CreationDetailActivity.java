@@ -74,12 +74,24 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
     @Override
     protected void initViewsAndData() {
         mFictionId = getIntent().getStringExtra(EXTRA_FICTION_ID);
-        CommonAdapter<ChapterModel> adapter = new CommonAdapter<ChapterModel>(this, R.layout.directory_chapter_item, mDatas) {
+        CommonAdapter<ChapterModel> adapter = new CommonAdapter<ChapterModel>(this, R.layout.creation_chapter_item, mDatas) {
             @Override
             protected void convert(ViewHolder holder, final ChapterModel chapterModel, int position) {
                 holder.setText(R.id.chapter_item_title_txv, getString(R.string.chapter_num, position, chapterModel.getChapterName()));
-                //holder.setText(R.id.chapter_item_progress_txv, list.get(position - 1) + "%");
                 holder.setText(R.id.chapter_item_time_txv, TimeUtils.getTimeFormat(chapterModel.getCreateTime()));
+                holder.setText(R.id.chapter_item_state_txv, "Creating");
+                holder.setOnClickListener(R.id.chapter_item_more_img, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showEditDialog();
+                    }
+                });
+                holder.setOnClickListener(R.id.chapter_item_title_txv, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showAddChapterDialog(chapterModel.getChapterName());
+                    }
+                });
                 holder.getConvertView().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -118,7 +130,7 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
                 BasicCreateActivity.start(this, mFictionDetailModel);
                 break;
             case R.id.chapter_header_add_chapters_txv:
-                showAddRoleDialog();
+                showAddChapterDialog("");
                 break;
         }
     }
@@ -145,12 +157,15 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
         }
     }
 
-    private void showAddRoleDialog() {
+    private void showAddChapterDialog(String title) {
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_add_chapter, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(view);
         final AlertDialog alertDialog = builder.create();
         final EditText editText = (EditText) view.findViewById(R.id.add_chapter_edit);
+        if (!TextUtils.isEmpty(title)) {
+            editText.setText(title);
+        }
         view.findViewById(R.id.add_chapter_delete_txv).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -164,6 +179,32 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
                 if (!TextUtils.isEmpty(title)) {
 
                 }
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.show();
+    }
+
+    private void showEditDialog() {
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_chapter_edit_layout, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(view);
+        final AlertDialog alertDialog = builder.create();
+        view.findViewById(R.id.dialog_chapter_edit_txv).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+        view.findViewById(R.id.dialog_chapter_publish_txv).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+        view.findViewById(R.id.dialog_chapter_delete_txv).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 alertDialog.dismiss();
             }
         });

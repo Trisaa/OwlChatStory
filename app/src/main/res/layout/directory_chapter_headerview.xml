@@ -44,7 +44,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="16dp"
-                android:background="@mipmap/ic_book_edit_icon"
+                android:background="@mipmap/ic_edit"
                 android:visibility="gone" />
         </RelativeLayout>
 

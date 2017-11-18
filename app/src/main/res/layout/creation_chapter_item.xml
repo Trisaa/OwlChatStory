@@ -12,32 +12,43 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:drawableEnd="@mipmap/ic_edit_chapter_name"
+        android:layout_marginTop="20dp"
+        android:drawableEnd="@mipmap/ic_pencil"
         android:drawablePadding="6dp"
         android:text="No 1"
         android:textColor="@color/common_toolbar_color"
         android:textSize="16sp" />
+
+    <ImageView
+        android:id="@+id/chapter_item_more_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@mipmap/ic_more"
+        android:foreground="?android:attr/selectableItemBackground" />
 
     <TextView
         android:id="@+id/chapter_item_time_txv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/chapter_item_title_txv"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="20dp"
         android:layout_marginLeft="16dp"
         android:text="2017-10-30"
         android:textColor="@color/common_text_color"
         android:textSize="14sp" />
 
     <TextView
-        android:id="@+id/chapter_item_progress_txv"
+        android:id="@+id/chapter_item_state_txv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/chapter_item_time_txv"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
         android:layout_marginRight="14dp"
-        android:text="10%"
-        android:textColor="@color/common_text_color" />
+        android:text="创作中"
+        android:textColor="@color/common_text_color"
+        android:textSize="13sp" />
 
 </RelativeLayout>

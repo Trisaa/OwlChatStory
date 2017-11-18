@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:background="@drawable/common_tags_bg"
-        android:hint="角色名称（最多10字）"
+        android:hint="章节名称"
         android:padding="5dp"
         android:textSize="14sp" />
 
