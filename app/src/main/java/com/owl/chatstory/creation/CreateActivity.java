@@ -12,6 +12,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -36,6 +37,7 @@ import com.owl.chatstory.common.util.FileUtils;
 import com.owl.chatstory.common.util.FirebaseUtil;
 import com.owl.chatstory.common.util.ImageLoaderUtils;
 import com.owl.chatstory.common.view.MaxWidthRecyclerView;
+import com.owl.chatstory.creation.adapter.ItemTouchCallback;
 import com.owl.chatstory.creation.adapter.RoleItemDecoration;
 import com.owl.chatstory.data.chatsource.model.MessageModel;
 import com.owl.chatstory.data.usersource.model.UserModel;
@@ -45,6 +47,7 @@ import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -236,6 +239,20 @@ public class CreateActivity extends BaseActivity {
         mAdapter.addItemViewDelegate(new ChatAsideDelegate());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.addItemDecoration(new ReadItemDecoration(24));
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchCallback(new ItemTouchCallback.ItemTouchListener() {
+            @Override
+            public void onItemMoved(int fromPosition, int toPosition) {
+                Collections.swap(mMessageList, fromPosition, toPosition);
+                mAdapter.notifyItemMoved(fromPosition, toPosition);
+            }
+
+            @Override
+            public void onItemDismissd(int position) {
+                mMessageList.remove(position);
+                mAdapter.notifyItemRemoved(position);
+            }
+        }));
+        itemTouchHelper.attachToRecyclerView(mRecyclerView);
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -571,6 +588,7 @@ public class CreateActivity extends BaseActivity {
                 messageModel.setLocation(mCurrentRole.getRoleTypeStr());
                 mMessageList.add(messageModel);
                 mAdapter.notifyItemInserted(mMessageList.size() - 1);
+                mRecyclerView.smoothScrollToPosition(mMessageList.size() - 1);
                 mEditText.setText("");
             } else {
                 Toast.makeText(this, "发送内容不能为空", Toast.LENGTH_SHORT).show();

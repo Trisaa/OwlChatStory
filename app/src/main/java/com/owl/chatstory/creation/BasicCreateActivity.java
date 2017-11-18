@@ -98,13 +98,14 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
     protected void initViewsAndData() {
         mFictionDetailModel = getIntent().getParcelableExtra(EXTRA_FICTION_DETAIL);
         isUpdateOrAdd = mFictionDetailModel != null;
-        if (mFictionDetailModel != null) {
+        if (isUpdateOrAdd) {
             mCoverImagePath = mFictionDetailModel.getCover();
             mCategory = mFictionDetailModel.getTags().get(0);
             mBottomLayout.setVisibility(View.GONE);
             mUpdateView.setVisibility(View.VISIBLE);
             ImageLoaderUtils.getInstance().loadImage(this, mFictionDetailModel.getCover(), mCoverImg, R.color.colorPrimaryDark);
             mTitleEdit.setText(mFictionDetailModel.getTitle());
+            mTitleEdit.setSelection(mFictionDetailModel.getTitle().length());
             mDescribeEdit.setText(mFictionDetailModel.getSummary());
             mCategoryView.setText(mCategory);
         }

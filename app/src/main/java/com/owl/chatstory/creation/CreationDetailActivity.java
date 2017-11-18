@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 
 import com.owl.chatstory.R;
 import com.owl.chatstory.base.BaseActivity;
+import com.owl.chatstory.common.util.DialogUtils;
 import com.owl.chatstory.common.util.ImageLoaderUtils;
 import com.owl.chatstory.common.util.TimeUtils;
 import com.owl.chatstory.data.chatsource.model.ChapterModel;
@@ -95,7 +98,7 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
                 holder.getConvertView().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        finish();
+                        CreateActivity.start(CreationDetailActivity.this, mFictionId);
                     }
                 });
             }
@@ -106,6 +109,39 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mAdapter);
         new CreationDetailPresenter(this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.creation_detail_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_finished:
+
+                break;
+            case R.id.menu_under:
+                /*DialogUtils.showDialog(this, R.string.create_publish_chapter
+                        , R.string.create_dialog_cancel, R.string.create_dialog_ok
+                        , new DialogUtils.OnDialogClickListener() {
+                            @Override
+                            public void onOK() {
+                                finish();
+                            }
+
+                            @Override
+                            public void onCancel() {
+
+                            }
+                        });*/
+                break;
+            case R.id.menu_delete:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void setFictionDetail(FictionDetailModel fictionDetailModel) {
@@ -165,6 +201,7 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
         final EditText editText = (EditText) view.findViewById(R.id.add_chapter_edit);
         if (!TextUtils.isEmpty(title)) {
             editText.setText(title);
+            editText.setSelection(title.length());
         }
         view.findViewById(R.id.add_chapter_delete_txv).setOnClickListener(new View.OnClickListener() {
             @Override
