@@ -39,7 +39,7 @@ public class CategoryFragment extends BaseFragment implements CategoryContract.V
     RecyclerView mRecyclerView;
     @BindView(R.id.category_refresh_layout)
     SwipeRefreshLayout mRefreshLayout;
-    @BindView(R.id.empty_layout)
+    @BindView(R.id.error_layout)
     View mEmptyLayout;
 
     private CategoryContract.Presenter mPresenter;

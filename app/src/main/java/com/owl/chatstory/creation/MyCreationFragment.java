@@ -1,5 +1,6 @@
 package com.owl.chatstory.creation;
 
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -20,12 +21,20 @@ import butterknife.OnClick;
  * Created by lebron on 2017/10/30.
  */
 
-public class MyCreationFragment extends BaseFragment implements MyCreationContract.View {
+public class MyCreationFragment extends BaseFragment implements MyCreationContract.View, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.mycreation_recycler)
     RecyclerView mRecyclerview;
+    @BindView(R.id.empty_layout)
+    View mEmptyView;
+    @BindView(R.id.error_layout)
+    View mErrorView;
+    @BindView(R.id.mycreation_refresh_layout)
+    SwipeRefreshLayout mRefreshLayout;
 
+    private MyCreationContract.Presenter mPresenter;
     private List<FictionDetailModel> mDatas = new ArrayList<>();
     private MultiItemTypeAdapter<FictionDetailModel> mAdapter;
+    private String mLanguage = "english";
 
     @Override
     protected int getContentViewID() {
@@ -34,15 +43,13 @@ public class MyCreationFragment extends BaseFragment implements MyCreationContra
 
     @Override
     protected void initViewsAndData(View view) {
-        mDatas.add(new FictionDetailModel());
-        mDatas.add(new FictionDetailModel());
-        mDatas.add(new FictionDetailModel());
-        mDatas.add(new FictionDetailModel());
-        mDatas.add(new FictionDetailModel());
         mAdapter = new MultiItemTypeAdapter<>(getActivity(), mDatas);
         mAdapter.addItemViewDelegate(new OldCreationDelegate());
         mRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerview.setAdapter(mAdapter);
+        mRefreshLayout.setOnRefreshListener(this);
+
+        new MyCreationPresenter(this);
     }
 
     @OnClick(R.id.mycreation_add_img)
@@ -52,11 +59,34 @@ public class MyCreationFragment extends BaseFragment implements MyCreationContra
 
     @Override
     public void showMyCreations(List<FictionDetailModel> list) {
+        mErrorView.setVisibility(View.GONE);
+        mEmptyView.setVisibility(View.GONE);
+        mRefreshLayout.setRefreshing(false);
+        if (mDatas == null) {
+            mDatas = new ArrayList<>();
+        }
+        mDatas.clear();
+        mDatas.addAll(list);
+        if (mDatas.size() <= 0) {
+            mEmptyView.setVisibility(View.VISIBLE);
+        }
+        mAdapter.notifyDataSetChanged();
+    }
 
+    @Override
+    public void showErrorView() {
+        mRefreshLayout.setRefreshing(false);
+        mErrorView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void setPresenter(MyCreationContract.Presenter presenter) {
+        mPresenter = presenter;
+        mPresenter.getUserFictionList(mLanguage);
+    }
 
+    @Override
+    public void onRefresh() {
+        mPresenter.getUserFictionList(mLanguage);
     }
 }

@@ -63,7 +63,7 @@ import static com.owl.chatstory.creation.BasicCreateActivity.PERMISSIONS_REQUEST
  * Created by lebron on 2017/11/3.
  */
 
-public class CreateActivity extends BaseActivity {
+public class CreateActivity extends BaseActivity implements CreateContract.View {
     private static final String EXTRA_FICTION_ID = "EXTRA_FICTION_ID";
     @BindView(R.id.common_toolbar)
     Toolbar mToolbar;
@@ -87,7 +87,10 @@ public class CreateActivity extends BaseActivity {
     RecyclerView mEditRecyclerView;
     @BindView(R.id.create_edit_role_layout)
     RelativeLayout mEditRoleLayout;
+    @BindView(R.id.common_progressbar_layout)
+    View mLoadingView;
 
+    private CreateContract.Presenter mPresenter;
     private ImageView mDialogUserIcon;
     private String mImagePath;
     private UserModel mFirstRole, mAsideRole, mCurrentRole;
@@ -97,7 +100,7 @@ public class CreateActivity extends BaseActivity {
     private CommonAdapter<UserModel> mRolesAdapter;
     private CommonAdapter<UserModel> mEditRolesAdapter;
     private MultiItemTypeAdapter<MessageModel> mAdapter;
-    private String mFictionId;
+    private String mFictionId, mLanguage;
 
     public static void start(Context context, String id) {
         Intent intent = new Intent(context, CreateActivity.class);
@@ -141,7 +144,7 @@ public class CreateActivity extends BaseActivity {
                         , new DialogUtils.OnDialogClickListener() {
                             @Override
                             public void onOK() {
-                                finish();
+                                //mPresenter.publishChapter(mFi);
                             }
 
                             @Override
@@ -157,9 +160,12 @@ public class CreateActivity extends BaseActivity {
     @Override
     protected void initViewsAndData() {
         mFictionId = getIntent().getStringExtra(EXTRA_FICTION_ID);
-        mAsideRole = new UserModel("", UserModel.ROLE_ASIDE, "", DeviceUtils.getUri(R.mipmap.btn_pang_normal));
+        mFictionId = "8";
+        mLanguage = "english";
+        mAsideRole = new UserModel(UserModel.ROLE_ASIDE, "", DeviceUtils.getUri(R.mipmap.create_aside_role));
         initRoleAdapter();
         initMessageAdapter();
+        new CreatePresenter(this);
     }
 
     @Override
@@ -344,8 +350,12 @@ public class CreateActivity extends BaseActivity {
 
                             @Override
                             public void onSuccess(String url) {
-                                mFirstRole = new UserModel(String.valueOf(System.currentTimeMillis()), UserModel.ROLE_FIRST, name, url);
-                                updateFirstRole(mFirstRole.getIcon());
+                                mFirstRole = new UserModel(UserModel.ROLE_FIRST, name, url);
+                                getEditRoleList();
+                                if (mPresenter != null) {
+                                    mPresenter.updateRoleList(mFictionId, mLanguage, mRoleList);
+                                }
+                                //updateFirstRole(mFirstRole.getIcon());
                             }
                         });
                     } else {
@@ -357,7 +367,7 @@ public class CreateActivity extends BaseActivity {
 
                             @Override
                             public void onSuccess(String url) {
-                                UserModel userModel = new UserModel(String.valueOf(System.currentTimeMillis()), UserModel.ROLE_SECOND, name, url);
+                                UserModel userModel = new UserModel(UserModel.ROLE_SECOND, name, url);
                                 mSecondRoleList.add(userModel);
                                 mRolesAdapter.notifyDataSetChanged();
                             }
@@ -538,6 +548,16 @@ public class CreateActivity extends BaseActivity {
         ImageLoaderUtils.getInstance().loadCircleImage(this, url, mFirstRoleImg);
     }
 
+    private void getEditRoleList() {
+        if (mRoleList != null) {
+            mRoleList.clear();
+        }
+        mRoleList.addAll(mSecondRoleList);
+        if (mFirstRole != null) {
+            mRoleList.add(mRoleList.size(), mFirstRole);
+        }
+    }
+
     @OnClick(R.id.create_first_role_img)
     public void clickFirstRole() {
         if (mFirstRole != null) {
@@ -559,13 +579,7 @@ public class CreateActivity extends BaseActivity {
 
     @OnClick(R.id.create_edit_role_img)
     public void clickEditRole() {
-        if (mRoleList != null) {
-            mRoleList.clear();
-        }
-        mRoleList.addAll(mSecondRoleList);
-        if (mFirstRole != null) {
-            mRoleList.add(mRoleList.size(), mFirstRole);
-        }
+        getEditRoleList();
         mEditRolesAdapter.notifyDataSetChanged();
         mEditRoleLayout.setVisibility(View.VISIBLE);
     }
@@ -596,5 +610,35 @@ public class CreateActivity extends BaseActivity {
         } else {
             Toast.makeText(this, "选择一个角色", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void publishSuccess() {
+
+    }
+
+    @Override
+    public void showRoleList(List<UserModel> list) {
+        if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
+                UserModel userModel = list.get(i);
+                if (userModel.getRoleType() == UserModel.ROLE_FIRST) {
+                    mFirstRole = userModel;
+                    updateFirstRole(mFirstRole.getIcon());
+                } else {
+                    mSecondRoleList.clear();
+                    mSecondRoleList.add(userModel);
+                }
+            }
+            mRolesAdapter.notifyDataSetChanged();
+        } else {
+            Toast.makeText(this, "获取角色信息失败", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void setPresenter(CreateContract.Presenter presenter) {
+        mPresenter = presenter;
+        mPresenter.getRoleList(mFictionId, mLanguage);
     }
 }

@@ -20,6 +20,9 @@ public class FictionModel {
     @SerializedName("content")
     private List<MessageModel> list;
 
+    private String token;
+    private String ifiction_id;
+
     public String getId() {
         return id;
     }
@@ -58,5 +61,21 @@ public class FictionModel {
 
     public void setList(List<MessageModel> list) {
         this.list = list;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getIfiction_id() {
+        return ifiction_id;
+    }
+
+    public void setIfiction_id(String ifiction_id) {
+        this.ifiction_id = ifiction_id;
     }
 }

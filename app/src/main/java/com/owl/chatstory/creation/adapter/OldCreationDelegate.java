@@ -1,8 +1,11 @@
 package com.owl.chatstory.creation.adapter;
 
 import android.view.View;
+import android.widget.ImageView;
 
 import com.owl.chatstory.R;
+import com.owl.chatstory.common.util.ImageLoaderUtils;
+import com.owl.chatstory.common.util.TimeUtils;
 import com.owl.chatstory.creation.CreationDetailActivity;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.zhy.adapter.recyclerview.base.ItemViewDelegate;
@@ -24,11 +27,14 @@ public class OldCreationDelegate implements ItemViewDelegate<FictionDetailModel>
     }
 
     @Override
-    public void convert(final ViewHolder holder, FictionDetailModel model, int position) {
+    public void convert(final ViewHolder holder, final FictionDetailModel model, int position) {
+        holder.setText(R.id.my_creation_title_txv, model.getTitle());
+        holder.setText(R.id.my_creation_time_txv, TimeUtils.getTimeFormat(model.getCreateLine()));
+        ImageLoaderUtils.getInstance().loadImage(holder.getConvertView().getContext(), model.getCover(), (ImageView) holder.getView(R.id.my_creation_img), R.color.colorPrimaryDark);
         holder.getConvertView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CreationDetailActivity.start(holder.getConvertView().getContext(), "12");
+                CreationDetailActivity.start(holder.getConvertView().getContext(), model.getId());
             }
         });
     }

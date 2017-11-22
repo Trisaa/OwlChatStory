@@ -6,7 +6,6 @@ import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 import com.owl.chatstory.data.usersource.model.UserModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,6 +29,16 @@ public class FictionDetailModel implements Parcelable {
     private UserModel writer;
     @SerializedName("chapter")
     private List<ChapterModel> chapters;
+    @SerializedName("createline")
+    private Long createLine;
+    @SerializedName("is_end")
+    private int ended;//是否完结
+    @SerializedName("serials")
+    private int serials;//是否是连载
+    @SerializedName("language")
+    private String language;//语言
+
+    private String token;
 
     public String getId() {
         return id;
@@ -95,6 +104,49 @@ public class FictionDetailModel implements Parcelable {
         this.chapters = chapters;
     }
 
+    public Long getCreateLine() {
+        return createLine;
+    }
+
+    public void setCreateLine(Long createLine) {
+        this.createLine = createLine;
+    }
+
+    public int getEnded() {
+        return ended;
+    }
+
+    public void setEnded(int ended) {
+        this.ended = ended;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public int getSerials() {
+        return serials;
+    }
+
+    public void setSerials(int serials) {
+        this.serials = serials;
+    }
+
+    public FictionDetailModel() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -109,10 +161,9 @@ public class FictionDetailModel implements Parcelable {
         dest.writeString(this.summary);
         dest.writeInt(this.views);
         dest.writeParcelable(this.writer, flags);
-        dest.writeList(this.chapters);
-    }
-
-    public FictionDetailModel() {
+        dest.writeTypedList(this.chapters);
+        dest.writeString(this.token);
+        dest.writeString(this.language);
     }
 
     protected FictionDetailModel(Parcel in) {
@@ -123,11 +174,12 @@ public class FictionDetailModel implements Parcelable {
         this.summary = in.readString();
         this.views = in.readInt();
         this.writer = in.readParcelable(UserModel.class.getClassLoader());
-        this.chapters = new ArrayList<ChapterModel>();
-        in.readList(this.chapters, ChapterModel.class.getClassLoader());
+        this.chapters = in.createTypedArrayList(ChapterModel.CREATOR);
+        this.token = in.readString();
+        this.language = in.readString();
     }
 
-    public static final Parcelable.Creator<FictionDetailModel> CREATOR = new Parcelable.Creator<FictionDetailModel>() {
+    public static final Creator<FictionDetailModel> CREATOR = new Creator<FictionDetailModel>() {
         @Override
         public FictionDetailModel createFromParcel(Parcel source) {
             return new FictionDetailModel(source);

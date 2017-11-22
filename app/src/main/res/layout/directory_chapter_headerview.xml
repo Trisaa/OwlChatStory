@@ -11,7 +11,7 @@
         android:layout_height="0dp"
         android:layout_margin="16dp"
         android:scaleType="centerCrop"
-        app:layout_aspectRatio="65%"
+        app:layout_aspectRatio="71%"
         app:layout_widthPercent="30%" />
 
     <RelativeLayout

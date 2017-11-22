@@ -95,8 +95,8 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginRight="0dp"
-                    android:src="@mipmap/btn_pei_role_normal"
-                    android:foreground="?android:attr/actionBarItemBackground" />
+                    android:foreground="?android:attr/actionBarItemBackground"
+                    android:src="@mipmap/create_left_role" />
 
                 <com.owl.chatstory.common.view.MaxWidthRecyclerView
                     android:id="@+id/create_second_role_recycler"
@@ -109,15 +109,15 @@
                     android:layout_height="30dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:background="@mipmap/btn_pang_normal"
+                    android:background="@mipmap/create_aside_role"
                     android:foreground="?android:attr/actionBarItemBackground" />
 
                 <ImageView
                     android:id="@+id/create_first_role_img"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@mipmap/btn_main_role_normal"
-                    android:foreground="?android:attr/actionBarItemBackground" />
+                    android:foreground="?android:attr/actionBarItemBackground"
+                    android:src="@mipmap/create_right_role" />
             </LinearLayout>
 
             <RelativeLayout
@@ -148,5 +148,7 @@
         </RelativeLayout>
 
     </RelativeLayout>
+
+    <include layout="@layout/common_loading_layout" />
 
 </RelativeLayout>

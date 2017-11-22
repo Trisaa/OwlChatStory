@@ -12,10 +12,12 @@ import java.util.List;
 
 public interface MyCreationContract {
     interface Presenter extends BasePresenter {
-
+        void getUserFictionList(String language);
     }
 
     interface View extends BaseView<Presenter> {
         void showMyCreations(List<FictionDetailModel> list);
+
+        void showErrorView();
     }
 }

@@ -33,6 +33,9 @@ import com.yalantis.ucrop.UCrop;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -200,11 +203,15 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
             }
             mFictionDetailModel.setTitle(title);
             mFictionDetailModel.setSummary(summary);
-            //fictionDetailModel.setTags();
+            mFictionDetailModel.setLanguage("english");
+            List<String> list = new ArrayList<>();
+            list.add(mCategory);
+            mFictionDetailModel.setTags(list);
             //未更改头像
-            if (mFictionDetailModel.getCover().equals(mCoverImagePath)) {
+            if (mCoverImagePath.equals(mFictionDetailModel.getCover())) {
                 mPresenter.saveFictionBasicInfo(mFictionDetailModel);
             } else {
+                showLoadingView(true);
                 FirebaseUtil.upLoadFile(mCoverImagePath, new FirebaseUtil.OnUploadListener() {
                     @Override
                     public void onFailure() {
@@ -269,15 +276,17 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
     @Override
     public void onSuccess(FictionDetailModel model) {
         if (isUpdateOrAdd) {
-            EventBus.getDefault().post(model);
+            EventBus.getDefault().post(mFictionDetailModel);
             finish();
         } else {
             CreateActivity.start(BasicCreateActivity.this, model.getId());
+            finish();
         }
     }
 
     @Override
     public void onFailure() {
+        Toast.makeText(this, "更新信息失败", Toast.LENGTH_SHORT).show();
         finish();
     }
 }

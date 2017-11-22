@@ -2,13 +2,16 @@ package com.owl.chatstory.common.util.network;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.owl.chatstory.BuildConfig;
 import com.owl.chatstory.common.util.PreferencesHelper;
 import com.owl.chatstory.common.util.network.request.UserRequest;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
+import com.owl.chatstory.data.chatsource.model.RoleListRequest;
 import com.owl.chatstory.data.homesource.model.CategoryModel;
 import com.owl.chatstory.data.homesource.model.UpdateModel;
+import com.owl.chatstory.data.usersource.model.UserModel;
 import com.owl.chatstory.data.usersource.model.UserResponse;
 
 import java.io.IOException;
@@ -215,6 +218,64 @@ public class HttpUtils {
         String token = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_TOKEN, "");
         Subscription subscription = mApiService.clearHistory(token)
                 .map(new BaseResponseFunc())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return subscription;
+    }
+
+    public Subscription updateFictionBasicInfo(Subscriber<FictionDetailModel> subscriber, FictionDetailModel model) {
+        String token = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_TOKEN, "");
+        model.setToken(token);
+        Log.i("Lebron", new Gson().toJson(model).toString());
+        Subscription subscription = mApiService.updateFictionBasicInfo(model)
+                .map(new BaseResponseFunc<FictionDetailModel>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return subscription;
+    }
+
+    public Subscription getUserFictionList(Subscriber<List<FictionDetailModel>> subscriber, String language) {
+        String token = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_TOKEN, "");
+        Subscription subscription = mApiService.getUserFictionList(token, language)
+                .map(new BaseArrayResponseFunc<FictionDetailModel>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return subscription;
+    }
+
+    public Subscription publishChapter(Subscriber subscriber, FictionModel model) {
+        String token = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_TOKEN, "");
+        model.setToken(token);
+        Subscription subscription = mApiService.publishChapter(model)
+                .map(new BaseResponseFunc())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return subscription;
+    }
+
+    public Subscription getRoleList(Subscriber<List<UserModel>> subscriber, String language, String id) {
+        String token = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_TOKEN, "");
+        Subscription subscription = mApiService.getRoleList(token, language, id)
+                .map(new BaseArrayResponseFunc<UserModel>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return subscription;
+    }
+
+    public Subscription updateRoleList(Subscriber<List<UserModel>> subscriber, RoleListRequest request) {
+        String token = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_TOKEN, "");
+        Subscription subscription = mApiService.updateRoleList(token, request)
+                .map(new BaseArrayResponseFunc<UserModel>())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

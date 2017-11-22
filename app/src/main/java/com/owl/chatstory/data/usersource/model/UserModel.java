@@ -29,11 +29,10 @@ public class UserModel implements Parcelable {
     private int vipType;//用户VIP类型
     private int roleType;//用户角色（主角，配角，旁白）
 
-    public UserModel(String id, int role, String name, String icon) {
+    public UserModel(int role, String name, String icon) {
         this.roleType = role;
         this.name = name;
         this.icon = icon;
-        this.id = id;
     }
 
     public String getId() {

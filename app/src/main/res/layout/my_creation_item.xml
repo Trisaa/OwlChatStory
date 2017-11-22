@@ -10,10 +10,10 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="16dp"
-        android:background="@mipmap/ic_launcher"
         android:scaleType="centerCrop"
-        app:layout_aspectRatio="56%"
-        app:layout_widthPercent="20%" />
+        android:src="@color/colorPrimaryDark"
+        app:layout_aspectRatio="71%"
+        app:layout_widthPercent="30%" />
 
     <TextView
         android:id="@+id/my_creation_title_txv"
