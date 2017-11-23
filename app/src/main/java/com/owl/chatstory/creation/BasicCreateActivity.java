@@ -23,6 +23,8 @@ import android.widget.Toast;
 import com.owl.chatstory.R;
 import com.owl.chatstory.base.BaseActivity;
 import com.owl.chatstory.common.util.CameraUtils;
+import com.owl.chatstory.common.util.Constants;
+import com.owl.chatstory.common.util.DialogUtils;
 import com.owl.chatstory.common.util.FileUtils;
 import com.owl.chatstory.common.util.FirebaseUtil;
 import com.owl.chatstory.common.util.ImageLoaderUtils;
@@ -60,6 +62,8 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
     EditText mDescribeEdit;
     @BindView(R.id.create_category_choose_txv)
     TextView mCategoryView;
+    @BindView(R.id.create_language_choose_txv)
+    TextView mLanguageView;
     @BindView(R.id.create_layout)
     LinearLayout mBottomLayout;
     @BindView(R.id.create_update_fiction_txv)
@@ -69,7 +73,7 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
 
     private BasicCreateContract.Presenter mPresenter;
     private String mCoverImagePath;
-    private String mCategory;
+    private String mCategory, mLanguage;
     private FictionDetailModel mFictionDetailModel;
     private boolean isUpdateOrAdd;
 
@@ -104,6 +108,7 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
         if (isUpdateOrAdd) {
             mCoverImagePath = mFictionDetailModel.getCover();
             mCategory = mFictionDetailModel.getTags().get(0);
+            mLanguage = mFictionDetailModel.getLanguage();
             mBottomLayout.setVisibility(View.GONE);
             mUpdateView.setVisibility(View.VISIBLE);
             ImageLoaderUtils.getInstance().loadImage(this, mFictionDetailModel.getCover(), mCoverImg, R.color.colorPrimaryDark);
@@ -111,6 +116,8 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
             mTitleEdit.setSelection(mFictionDetailModel.getTitle().length());
             mDescribeEdit.setText(mFictionDetailModel.getSummary());
             mCategoryView.setText(mCategory);
+            mLanguageView.setText(Constants.getLanguage(mLanguage));
+            mLanguageView.setEnabled(false);
         }
         new BasicCreatePresenter(this);
     }
@@ -120,10 +127,10 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_CODE_GALLERY:
-                    CameraUtils.cropPhoto(this, data.getData(), 9, 16);
+                    CameraUtils.cropPhoto(this, data.getData(), 5, 7);
                     break;
                 case REQUEST_CODE_CAMERA:
-                    CameraUtils.cropPhoto(this, FileUtils.getFileUri(this, FileUtils.getFilePath("temp.jpg")), 9, 16);
+                    CameraUtils.cropPhoto(this, FileUtils.getFileUri(this, FileUtils.getFilePath("temp.jpg")), 5, 7);
                     break;
                 case UCrop.REQUEST_CROP:
                     mCoverImagePath = UCrop.getOutput(data).getPath();
@@ -171,14 +178,25 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
         ChooseCategoryActivity.start(this);
     }
 
+    @OnClick(R.id.create_language_choose_txv)
+    public void chooseLanguage() {
+        DialogUtils.showLanguageDialog(this, new DialogUtils.OnLanguageChooseListener() {
+            @Override
+            public void onChoose(String language) {
+                mLanguage = language;
+                mLanguageView.setText(Constants.getLanguage(language));
+            }
+        });
+    }
+
     @OnClick(R.id.create_single_txv)
     public void createSingle() {
-        CreateActivity.start(this, "id");
+        saveData(false);
     }
 
     @OnClick(R.id.create_serialized_txv)
     public void createSerialized() {
-        saveData();
+        saveData(true);
     }
 
     @OnClick(R.id.create_cover_img)
@@ -188,14 +206,15 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
 
     @OnClick(R.id.create_update_fiction_txv)
     public void updateInfo() {
-        saveData();
+        saveData(mFictionDetailModel.getSerials());
     }
 
-    private void saveData() {
+    private void saveData(boolean serials) {
         String title = mTitleEdit.getText().toString();
         String summary = mDescribeEdit.getText().toString();
         if (TextUtils.isEmpty(title) || TextUtils.isEmpty(summary)
-                || TextUtils.isEmpty(mCategory) || TextUtils.isEmpty(mCoverImagePath)) {
+                || TextUtils.isEmpty(mCategory) || TextUtils.isEmpty(mCoverImagePath)
+                || TextUtils.isEmpty(mLanguage)) {
             Toast.makeText(this, "信息不完整", Toast.LENGTH_SHORT).show();
         } else {
             if (mFictionDetailModel == null) {
@@ -203,7 +222,8 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
             }
             mFictionDetailModel.setTitle(title);
             mFictionDetailModel.setSummary(summary);
-            mFictionDetailModel.setLanguage("english");
+            mFictionDetailModel.setLanguage(mLanguage);
+            mFictionDetailModel.setSerials(serials);
             List<String> list = new ArrayList<>();
             list.add(mCategory);
             mFictionDetailModel.setTags(list);

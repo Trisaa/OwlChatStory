@@ -206,7 +206,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
         mRolesAdapter = new CommonAdapter<ActorModel>(this, R.layout.create_role_item, mSecondRoleList) {
             @Override
             protected void convert(ViewHolder holder, ActorModel userModel, int position) {
-                ImageLoaderUtils.getInstance().loadCircleImage(CreateActivity.this, userModel.getPicture(), (ImageView) holder.getView(R.id.create_role_item_img));
+                ImageLoaderUtils.getInstance().loadCircleImage(CreateActivity.this, userModel.getPicture(), (ImageView) holder.getView(R.id.create_role_item_img), R.mipmap.user_default_icon);
             }
         };
         mRolesAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
@@ -358,6 +358,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
                         FirebaseUtil.upLoadFile(mImagePath, new FirebaseUtil.OnUploadListener() {
                             @Override
                             public void onFailure() {
+                                mLoadingView.setVisibility(View.GONE);
                                 Toast.makeText(CreateActivity.this, "图片上传失败", Toast.LENGTH_SHORT).show();
                             }
 
@@ -372,6 +373,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
                         FirebaseUtil.upLoadFile(mImagePath, new FirebaseUtil.OnUploadListener() {
                             @Override
                             public void onFailure() {
+                                mLoadingView.setVisibility(View.GONE);
                                 Toast.makeText(CreateActivity.this, "图片上传失败", Toast.LENGTH_SHORT).show();
                             }
 
@@ -385,6 +387,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
                         });
                     }
                     alertDialog.dismiss();
+                    mLoadingView.setVisibility(View.VISIBLE);
                 } else {
                     Toast.makeText(CreateActivity.this, "信息不完善", Toast.LENGTH_SHORT).show();
                 }
@@ -422,6 +425,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
                 mEditRolesAdapter.notifyItemRemoved(position);
                 updateRoleInfo(userModel, true);
                 alertDialog.dismiss();
+                mLoadingView.setVisibility(View.VISIBLE);
             }
         });
 
@@ -444,6 +448,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
                             FirebaseUtil.upLoadFile(mImagePath, new FirebaseUtil.OnUploadListener() {
                                 @Override
                                 public void onFailure() {
+                                    mLoadingView.setVisibility(View.GONE);
                                     Toast.makeText(CreateActivity.this, "图片上传失败", Toast.LENGTH_SHORT).show();
                                 }
 
@@ -457,6 +462,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
                             });
                         }
                         alertDialog.dismiss();
+                        mLoadingView.setVisibility(View.VISIBLE);
                     } else {
                         Toast.makeText(CreateActivity.this, "信息不完善", Toast.LENGTH_SHORT).show();
                     }
@@ -479,8 +485,6 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
     }
 
     private void updateRoleInfo(ActorModel model, boolean deleteOrUpdate) {
-        updateRoleList();
-
         if (model.getRole_type() == ActorModel.ROLE_FIRST) {
             if (deleteOrUpdate) {
                 //删除主角
@@ -517,6 +521,9 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
                     }
                 }
             }
+        }
+        if (!deleteOrUpdate) {
+            updateRoleList();
         }
         mCurrentRole = null;
         ImageLoaderUtils.getInstance().loadCircleImage(this, DeviceUtils.getUri(R.mipmap.user_default_icon), mCurrentRoleImg);
@@ -642,6 +649,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
 
     @Override
     public void showRoleList(List<ActorModel> list) {
+        mLoadingView.setVisibility(View.GONE);
         if (list != null) {
             mSecondRoleList.clear();
             for (int i = 0; i < list.size(); i++) {
@@ -650,7 +658,6 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
                     mFirstRole = userModel;
                     updateFirstRole(mFirstRole.getPicture());
                 } else {
-                    Log.i("Lebron", " second role ");
                     mSecondRoleList.add(userModel);
                 }
             }

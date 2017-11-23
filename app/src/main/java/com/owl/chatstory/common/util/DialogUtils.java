@@ -101,9 +101,32 @@ public class DialogUtils {
         alertDialog.show();
     }
 
+    public static void showLanguageDialog(final Activity activity, final OnLanguageChooseListener listener) {
+        if (activity == null || activity.isFinishing()) {
+            return;
+        }
+        final String[] arrays = activity.getResources().getStringArray(R.array.language_array_tags);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle("选择语言");
+        builder.setItems(R.array.language_array, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                if (listener != null) {
+                    listener.onChoose(arrays[which]);
+                }
+            }
+        });
+        builder.create().show();
+    }
+
     public interface OnDialogClickListener {
         void onOK();
 
         void onCancel();
+    }
+
+    public interface OnLanguageChooseListener {
+        void onChoose(String language);
     }
 }

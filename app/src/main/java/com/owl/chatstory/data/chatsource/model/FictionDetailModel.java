@@ -112,12 +112,12 @@ public class FictionDetailModel implements Parcelable {
         this.createLine = createLine;
     }
 
-    public int getEnded() {
-        return ended;
+    public boolean getEnded() {
+        return ended == 0 ? false : true;
     }
 
-    public void setEnded(int ended) {
-        this.ended = ended;
+    public void setEnded(boolean ended) {
+        this.ended = ended ? 1 : 0;
     }
 
     public String getToken() {
@@ -136,12 +136,12 @@ public class FictionDetailModel implements Parcelable {
         this.language = language;
     }
 
-    public int getSerials() {
-        return serials;
+    public boolean getSerials() {
+        return serials == 0 ? false : true;
     }
 
-    public void setSerials(int serials) {
-        this.serials = serials;
+    public void setSerials(boolean serials) {
+        this.serials = serials ? 1 : 0;
     }
 
     public FictionDetailModel() {

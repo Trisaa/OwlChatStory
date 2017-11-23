@@ -28,4 +28,17 @@ public class Constants {
                 return "审核中";
         }
     }
+
+    public static String getLanguage(String language) {
+        switch (language) {
+            case LANGUAGE_ENGLISH:
+                return "English";
+            case LANGUAGE_CHINESE:
+                return "简体中文";
+            case LANGUAGE_CHINESE_TW:
+                return "繁體中文";
+            default:
+                return "繁體中文";
+        }
+    }
 }

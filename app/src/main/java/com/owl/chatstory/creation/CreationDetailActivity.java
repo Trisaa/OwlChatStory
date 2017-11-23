@@ -21,6 +21,7 @@ import com.owl.chatstory.R;
 import com.owl.chatstory.base.BaseActivity;
 import com.owl.chatstory.common.util.Constants;
 import com.owl.chatstory.common.util.ImageLoaderUtils;
+import com.owl.chatstory.common.util.TimeUtils;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
 import com.zhy.adapter.recyclerview.CommonAdapter;
@@ -84,7 +85,7 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
             @Override
             protected void convert(ViewHolder holder, final FictionModel fictionModel, int position) {
                 holder.setText(R.id.chapter_item_title_txv, getString(R.string.chapter_num, position, fictionModel.getName()));
-                //holder.setText(R.id.chapter_item_time_txv, TimeUtils.getTimeFormat(fictionModel.get()));
+                holder.setText(R.id.chapter_item_time_txv, TimeUtils.getTimeFormat(fictionModel.getUpdateline()));
                 holder.setText(R.id.chapter_item_state_txv, Constants.getStatus(fictionModel.getStatus()));
                 holder.setOnClickListener(R.id.chapter_item_more_img, new View.OnClickListener() {
                     @Override
@@ -156,10 +157,10 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
         ((TextView) mHeaderView.findViewById(R.id.chapter_header_tags_txv)).setText(fictionDetailModel.getTags().get(0));
         ((TextView) mHeaderView.findViewById(R.id.chapter_header_chapters_txv)).setText(getString(R.string.chapter_total_chapters, mDatas.size()));
         mHeaderView.findViewById(R.id.chapter_header_edit_img).setVisibility(View.VISIBLE);
+        mHeaderView.findViewById(R.id.chapter_header_edit_img).setOnClickListener(this);
         TextView addChapterView = (TextView) (mHeaderView.findViewById(R.id.chapter_header_add_chapters_txv));
         addChapterView.setVisibility(View.VISIBLE);
         addChapterView.setOnClickListener(this);
-        mHeaderView.findViewById(R.id.chapter_header_edit_img).setOnClickListener(this);
     }
 
     @Override

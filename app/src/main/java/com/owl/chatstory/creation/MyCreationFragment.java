@@ -52,6 +52,12 @@ public class MyCreationFragment extends BaseFragment implements MyCreationContra
             protected void convert(ViewHolder holder, FictionDetailModel model, int position) {
                 holder.setText(R.id.my_creation_title_txv, model.getTitle());
                 holder.setText(R.id.my_creation_time_txv, TimeUtils.getTimeFormat(model.getCreateLine()));
+                holder.setText(R.id.my_creation_chapters_txv, model.getSummary());
+                int chapters = 0;
+                if (model.getChapters() != null) {
+                    chapters = model.getChapters().size();
+                }
+                holder.setText(R.id.my_creation_texts_txv, getString(R.string.chapter_total_chapters, chapters));
                 ImageLoaderUtils.getInstance().loadImage(holder.getConvertView().getContext(), model.getCover(), (ImageView) holder.getView(R.id.my_creation_img), R.color.colorPrimaryDark);
             }
         };

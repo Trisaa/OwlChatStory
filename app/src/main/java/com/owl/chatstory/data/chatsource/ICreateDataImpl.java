@@ -50,8 +50,8 @@ public class ICreateDataImpl implements ICreateData {
             public void onNext(FictionResponse response) {
                 if (listener != null) {
                     model.setId(response.getId() + "");
-                    model.setEnded(response.getEnded());
-                    model.setSerials(response.getSerials());
+                    //model.setEnded(response.getEnded());
+                    //model.setSerials(response.getSerials());
                     listener.onUpdateSuccess(model);
                 }
             }
@@ -120,7 +120,7 @@ public class ICreateDataImpl implements ICreateData {
 
             @Override
             public void onError(Throwable e) {
-                Log.i("Lebron", e.toString());
+                Log.i("Lebron", "getRoleList "+e.toString());
                 if (listener != null) {
                     listener.onGetRoleList(null);
                 }
@@ -146,6 +146,7 @@ public class ICreateDataImpl implements ICreateData {
 
             @Override
             public void onError(Throwable e) {
+                Log.i("Lebron", "updateRoleList "+e.toString());
                 if (listener != null) {
                     listener.onGetRoleList(null);
                 }

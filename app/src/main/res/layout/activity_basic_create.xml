@@ -128,6 +128,39 @@
                     android:layout_marginLeft="16dp"
                     android:background="@color/common_gray_pressed" />
 
+                <RelativeLayout
+                    android:id="@+id/create_language_choose_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:paddingLeft="16dp"
+                        android:text="language"
+                        android:textColor="@color/common_text_color" />
+
+                    <TextView
+                        android:id="@+id/create_language_choose_txv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="16dp"
+                        android:drawablePadding="6dp"
+                        android:drawableRight="@mipmap/ic_goto"
+                        android:text="choose" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="16dp"
+                    android:background="@color/common_gray_pressed" />
+
                 <LinearLayout
                     android:id="@+id/create_layout"
                     android:layout_width="match_parent"

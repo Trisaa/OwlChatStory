@@ -43,6 +43,8 @@
         android:layout_below="@id/my_creation_texts_txv"
         android:layout_marginTop="16dp"
         android:layout_toRightOf="@id/my_creation_img"
+        android:ellipsize="end"
+        android:maxLines="3"
         android:text="Title"
         android:textColor="@color/common_text_color"
         android:textSize="16sp" />

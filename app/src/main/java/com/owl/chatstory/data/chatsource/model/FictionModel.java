@@ -24,6 +24,10 @@ public class FictionModel implements Parcelable {
     private List<MessageModel> list;
     @SerializedName("status")
     private int status;
+    @SerializedName("createline")
+    private long createline;
+    @SerializedName("updateline")
+    private long updateline;
 
     private String token;
     private String ifiction_id;
@@ -99,6 +103,22 @@ public class FictionModel implements Parcelable {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public long getCreateline() {
+        return createline;
+    }
+
+    public void setCreateline(long createline) {
+        this.createline = createline;
+    }
+
+    public long getUpdateline() {
+        return updateline;
+    }
+
+    public void setUpdateline(long updateline) {
+        this.updateline = updateline;
     }
 
     @Override

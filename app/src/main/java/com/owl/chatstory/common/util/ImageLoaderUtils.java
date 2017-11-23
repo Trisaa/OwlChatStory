@@ -39,4 +39,8 @@ public class ImageLoaderUtils {
     public void loadCircleImage(Context context, Object object, ImageView view) {
         Glide.with(context).load(object).bitmapTransform(new CropCircleTransformation(context)).into(view);
     }
+
+    public void loadCircleImage(Context context, Object object, ImageView view, int placeHolderImg) {
+        Glide.with(context).load(object).bitmapTransform(new CropCircleTransformation(context)).placeholder(placeHolderImg).into(view);
+    }
 }
