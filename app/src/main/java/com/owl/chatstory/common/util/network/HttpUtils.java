@@ -1,17 +1,21 @@
 package com.owl.chatstory.common.util.network;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.owl.chatstory.BuildConfig;
+import com.owl.chatstory.common.util.Constants;
 import com.owl.chatstory.common.util.PreferencesHelper;
 import com.owl.chatstory.common.util.network.request.UserRequest;
+import com.owl.chatstory.data.chatsource.model.ActorModel;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
+import com.owl.chatstory.data.chatsource.model.FictionResponse;
 import com.owl.chatstory.data.chatsource.model.RoleListRequest;
 import com.owl.chatstory.data.homesource.model.CategoryModel;
 import com.owl.chatstory.data.homesource.model.UpdateModel;
-import com.owl.chatstory.data.usersource.model.UserModel;
 import com.owl.chatstory.data.usersource.model.UserResponse;
 
 import java.io.IOException;
@@ -47,13 +51,13 @@ public class HttpUtils {
 
     private Retrofit mRetrofit;
     private ApiService mApiService;
-    private static HttpUtils mInstance;
+    private static HttpUtils mInstance, mLanguageInstance;
 
-    private HttpUtils() {
+    private HttpUtils(String language) {
         String url = BuildConfig.DEBUG ? BASE_TEST_URL : BASE_URL;
         mRetrofit = new Retrofit.Builder()
-                .client(getHttpClientBuilder().build())
-                .addConverterFactory(GsonConverterFactory.create())
+                .client(getHttpClientBuilder(language).build())
+                .addConverterFactory(GsonConverterFactory.create(getGson()))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .baseUrl(url)
                 .build();
@@ -61,11 +65,11 @@ public class HttpUtils {
         mApiService = mRetrofit.create(ApiService.class);
     }
 
-    private OkHttpClient.Builder getHttpClientBuilder() {
+    private OkHttpClient.Builder getHttpClientBuilder(final String language) {
         //声明日志类
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
         //设定日志级别
-        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         return new OkHttpClient.Builder()
                 .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
                 .addInterceptor(new Interceptor() {
@@ -74,7 +78,7 @@ public class HttpUtils {
                         Request originalRequest = chain.request();
                         HttpUrl originalHttpUrl = originalRequest.url();
                         HttpUrl url = originalHttpUrl.newBuilder()
-                                .addQueryParameter("type", getType())
+                                .addQueryParameter("type", language)
                                 .build();
                         Request request = originalRequest.newBuilder()
                                 .url(url)
@@ -86,27 +90,46 @@ public class HttpUtils {
                 .addInterceptor(httpLoggingInterceptor);
     }
 
-    private String getType() {
+    private Gson getGson() {
+        Gson gson = new GsonBuilder()
+                .setLenient()  // 设置GSON的非严格模式setLenient()
+                .create();
+        return gson;
+    }
+
+    private static String getType() {
         try {
             String country = Locale.getDefault().getCountry().toLowerCase();
             if (country.equals("cn")) {
-                return "simplified";
+                return Constants.LANGUAGE_CHINESE;
             } else if (country.equals("tw")) {
-                return "traditional";
+                return Constants.LANGUAGE_CHINESE_TW;
             } else {
-                return "traditional";
+                return Constants.LANGUAGE_CHINESE_TW;
             }
         } catch (Exception e) {
-            return "simplified";
+            return Constants.LANGUAGE_CHINESE;
         }
     }
 
     //获取单例
     public static HttpUtils getInstance() {
         if (mInstance == null) {
-            mInstance = new HttpUtils();
+            mInstance = new HttpUtils(getType());
         }
         return mInstance;
+    }
+
+    public static HttpUtils getInstance(String language) {
+        if (TextUtils.isEmpty(language)) {
+            if (mInstance == null) {
+                mInstance = new HttpUtils(getType());
+            }
+            return mInstance;
+        } else {
+            mLanguageInstance = new HttpUtils(language);
+            return mLanguageInstance;
+        }
     }
 
     private class BaseResponseFunc<T> implements Func1<BaseResponse<T>, T> {
@@ -225,12 +248,13 @@ public class HttpUtils {
         return subscription;
     }
 
-    public Subscription updateFictionBasicInfo(Subscriber<FictionDetailModel> subscriber, FictionDetailModel model) {
+    public Subscription updateFictionBasicInfo(Subscriber<FictionResponse> subscriber, FictionDetailModel model) {
         String token = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_TOKEN, "");
         model.setToken(token);
+        model.setWriter(null);
         Log.i("Lebron", new Gson().toJson(model).toString());
         Subscription subscription = mApiService.updateFictionBasicInfo(model)
-                .map(new BaseResponseFunc<FictionDetailModel>())
+                .map(new BaseResponseFunc<FictionResponse>())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -261,10 +285,10 @@ public class HttpUtils {
         return subscription;
     }
 
-    public Subscription getRoleList(Subscriber<List<UserModel>> subscriber, String language, String id) {
+    public Subscription getRoleList(Subscriber<List<ActorModel>> subscriber, String language, String id) {
         String token = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_TOKEN, "");
         Subscription subscription = mApiService.getRoleList(token, language, id)
-                .map(new BaseArrayResponseFunc<UserModel>())
+                .map(new BaseArrayResponseFunc<ActorModel>())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -272,10 +296,22 @@ public class HttpUtils {
         return subscription;
     }
 
-    public Subscription updateRoleList(Subscriber<List<UserModel>> subscriber, RoleListRequest request) {
+    public Subscription updateRoleList(Subscriber<List<ActorModel>> subscriber, RoleListRequest request) {
         String token = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_TOKEN, "");
-        Subscription subscription = mApiService.updateRoleList(token, request)
-                .map(new BaseArrayResponseFunc<UserModel>())
+        request.setToken(token);
+        Subscription subscription = mApiService.updateRoleList(request)
+                .map(new BaseArrayResponseFunc<ActorModel>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return subscription;
+    }
+
+    public Subscription getChapterList(Subscriber<List<FictionModel>> subscriber, String language, String id) {
+        String token = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_TOKEN, "");
+        Subscription subscription = mApiService.getChapterList(token, language, id)
+                .map(new BaseArrayResponseFunc<FictionModel>())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -3,10 +3,11 @@ package com.owl.chatstory.data.chatsource;
 import android.util.Log;
 
 import com.owl.chatstory.common.util.network.HttpUtils;
+import com.owl.chatstory.data.chatsource.model.ActorModel;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
+import com.owl.chatstory.data.chatsource.model.FictionResponse;
 import com.owl.chatstory.data.chatsource.model.RoleListRequest;
-import com.owl.chatstory.data.usersource.model.UserModel;
 
 import java.util.List;
 
@@ -31,8 +32,8 @@ public class ICreateDataImpl implements ICreateData {
     }
 
     @Override
-    public void updateFictionBasicInfo(FictionDetailModel model, final OnCreateListener listener) {
-        Subscription subscription = HttpUtils.getInstance().updateFictionBasicInfo(new Subscriber<FictionDetailModel>() {
+    public void updateFictionBasicInfo(final FictionDetailModel model, final OnCreateListener listener) {
+        Subscription subscription = HttpUtils.getInstance().updateFictionBasicInfo(new Subscriber<FictionResponse>() {
             @Override
             public void onCompleted() {
             }
@@ -46,8 +47,11 @@ public class ICreateDataImpl implements ICreateData {
             }
 
             @Override
-            public void onNext(FictionDetailModel model) {
+            public void onNext(FictionResponse response) {
                 if (listener != null) {
+                    model.setId(response.getId() + "");
+                    model.setEnded(response.getEnded());
+                    model.setSerials(response.getSerials());
                     listener.onUpdateSuccess(model);
                 }
             }
@@ -108,7 +112,7 @@ public class ICreateDataImpl implements ICreateData {
 
     @Override
     public void getRoleList(String id, String language, final OnRoleListener listener) {
-        Subscription subscription = HttpUtils.getInstance().getRoleList(new Subscriber<List<UserModel>>() {
+        Subscription subscription = HttpUtils.getInstance().getRoleList(new Subscriber<List<ActorModel>>() {
             @Override
             public void onCompleted() {
 
@@ -116,13 +120,14 @@ public class ICreateDataImpl implements ICreateData {
 
             @Override
             public void onError(Throwable e) {
+                Log.i("Lebron", e.toString());
                 if (listener != null) {
                     listener.onGetRoleList(null);
                 }
             }
 
             @Override
-            public void onNext(List<UserModel> list) {
+            public void onNext(List<ActorModel> list) {
                 if (listener != null) {
                     listener.onGetRoleList(list);
                 }
@@ -132,8 +137,8 @@ public class ICreateDataImpl implements ICreateData {
     }
 
     @Override
-    public void updateRoleList(RoleListRequest request, final List<UserModel> list, final OnRoleListener listener) {
-        Subscription subscription = HttpUtils.getInstance().updateRoleList(new Subscriber<List<UserModel>>() {
+    public void updateRoleList(RoleListRequest request, final List<ActorModel> list, final OnRoleListener listener) {
+        Subscription subscription = HttpUtils.getInstance().updateRoleList(new Subscriber<List<ActorModel>>() {
             @Override
             public void onCompleted() {
 
@@ -147,12 +152,37 @@ public class ICreateDataImpl implements ICreateData {
             }
 
             @Override
-            public void onNext(List<UserModel> list) {
+            public void onNext(List<ActorModel> list) {
                 if (listener != null) {
                     listener.onGetRoleList(list);
                 }
             }
         }, request);
+        mSubscriptions.add(subscription);
+    }
+
+    @Override
+    public void getChapterList(String id, String language, final OnChapterListener listener) {
+        Subscription subscription = HttpUtils.getInstance().getChapterList(new Subscriber<List<FictionModel>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                if (listener != null) {
+                    listener.onGetChapterList(null);
+                }
+            }
+
+            @Override
+            public void onNext(List<FictionModel> list) {
+                if (listener != null) {
+                    listener.onGetChapterList(list);
+                }
+            }
+        }, language, id);
         mSubscriptions.add(subscription);
     }
 }

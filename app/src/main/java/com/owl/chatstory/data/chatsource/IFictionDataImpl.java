@@ -25,8 +25,8 @@ public class IFictionDataImpl implements IFictionData {
     }
 
     @Override
-    public void getFictionDetail(String id, final OnFictionListener listener) {
-        Subscription subscription = HttpUtils.getInstance().getFictionDetail(new Subscriber<FictionDetailModel>() {
+    public void getFictionDetail(String id, String language, final OnFictionListener listener) {
+        Subscription subscription = HttpUtils.getInstance(language).getFictionDetail(new Subscriber<FictionDetailModel>() {
             @Override
             public void onCompleted() {
 
@@ -48,8 +48,8 @@ public class IFictionDataImpl implements IFictionData {
     }
 
     @Override
-    public void getChapterDetail(String id, final OnFictionListener listener) {
-        Subscription subscription = HttpUtils.getInstance().getChapterDetail(new Subscriber<FictionModel>() {
+    public void getChapterDetail(String id, String language, final OnFictionListener listener) {
+        Subscription subscription = HttpUtils.getInstance(language).getChapterDetail(new Subscriber<FictionModel>() {
             @Override
             public void onCompleted() {
 

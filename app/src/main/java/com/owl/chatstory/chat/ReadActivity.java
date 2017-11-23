@@ -269,7 +269,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
 
     @Override
     public void showFictionData(FictionModel model) {
-        mToolbar.setTitle(mFictionDetailModel.getTitle() + " (" + model.getWatchers() + ")");
+        mToolbar.setTitle(mFictionDetailModel.getTitle() + " (" + model.getNum() + ")");
         mLastChapterId = model.getId();
         mLoadingView.setVisibility(View.GONE);
         mDatas = model.getList();

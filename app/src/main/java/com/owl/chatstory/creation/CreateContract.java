@@ -2,6 +2,7 @@ package com.owl.chatstory.creation;
 
 import com.owl.chatstory.base.BasePresenter;
 import com.owl.chatstory.base.BaseView;
+import com.owl.chatstory.data.chatsource.model.ActorModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
 import com.owl.chatstory.data.usersource.model.UserModel;
 
@@ -19,12 +20,14 @@ public interface CreateContract {
 
         void getRoleList(String id, String language);
 
-        void updateRoleList(String id, String language, List<UserModel> list);
+        void updateRoleList(String id, String language, List<ActorModel> list);
     }
 
     interface View extends BaseView<Presenter> {
         void publishSuccess();
 
-        void showRoleList(List<UserModel> list);
+        void showRoleList(List<ActorModel> list);
+
+        void publishFailed();
     }
 }

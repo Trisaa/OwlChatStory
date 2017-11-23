@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -14,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,8 +41,9 @@ import com.owl.chatstory.common.util.ImageLoaderUtils;
 import com.owl.chatstory.common.view.MaxWidthRecyclerView;
 import com.owl.chatstory.creation.adapter.ItemTouchCallback;
 import com.owl.chatstory.creation.adapter.RoleItemDecoration;
+import com.owl.chatstory.data.chatsource.model.ActorModel;
+import com.owl.chatstory.data.chatsource.model.FictionModel;
 import com.owl.chatstory.data.chatsource.model.MessageModel;
-import com.owl.chatstory.data.usersource.model.UserModel;
 import com.yalantis.ucrop.UCrop;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
@@ -65,6 +68,7 @@ import static com.owl.chatstory.creation.BasicCreateActivity.PERMISSIONS_REQUEST
 
 public class CreateActivity extends BaseActivity implements CreateContract.View {
     private static final String EXTRA_FICTION_ID = "EXTRA_FICTION_ID";
+    private static final String EXTRA_FICTION_MODEL = "EXTRA_FICTION_MODEL";
     @BindView(R.id.common_toolbar)
     Toolbar mToolbar;
     @BindView(R.id.create_recycler)
@@ -93,18 +97,26 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
     private CreateContract.Presenter mPresenter;
     private ImageView mDialogUserIcon;
     private String mImagePath;
-    private UserModel mFirstRole, mAsideRole, mCurrentRole;
-    private List<UserModel> mSecondRoleList = new ArrayList<>();
-    private List<UserModel> mRoleList = new ArrayList<>();
+    private ActorModel mFirstRole, mAsideRole, mCurrentRole;
+    private List<ActorModel> mSecondRoleList = new ArrayList<>();
+    private List<ActorModel> mRoleList = new ArrayList<>();
     private List<MessageModel> mMessageList = new ArrayList<>();
-    private CommonAdapter<UserModel> mRolesAdapter;
-    private CommonAdapter<UserModel> mEditRolesAdapter;
+    private CommonAdapter<ActorModel> mRolesAdapter;
+    private CommonAdapter<ActorModel> mEditRolesAdapter;
     private MultiItemTypeAdapter<MessageModel> mAdapter;
-    private String mFictionId, mLanguage;
+    private FictionModel mFictionModel;
 
     public static void start(Context context, String id) {
         Intent intent = new Intent(context, CreateActivity.class);
         intent.putExtra(EXTRA_FICTION_ID, id);
+        context.startActivity(intent);
+    }
+
+    public static void start(Context context, FictionModel model) {
+        Intent intent = new Intent(context, CreateActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(EXTRA_FICTION_MODEL, model);
+        intent.putExtras(bundle);
         context.startActivity(intent);
     }
 
@@ -144,7 +156,10 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
                         , new DialogUtils.OnDialogClickListener() {
                             @Override
                             public void onOK() {
-                                //mPresenter.publishChapter(mFi);
+                                if (mPresenter != null) {
+                                    mFictionModel.setList(mMessageList);
+                                    mPresenter.publishChapter(mFictionModel);
+                                }
                             }
 
                             @Override
@@ -159,10 +174,8 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
 
     @Override
     protected void initViewsAndData() {
-        mFictionId = getIntent().getStringExtra(EXTRA_FICTION_ID);
-        mFictionId = "8";
-        mLanguage = "english";
-        mAsideRole = new UserModel(UserModel.ROLE_ASIDE, "", DeviceUtils.getUri(R.mipmap.create_aside_role));
+        mFictionModel = getIntent().getParcelableExtra(EXTRA_FICTION_MODEL);
+        mAsideRole = new ActorModel(ActorModel.ROLE_ASIDE, "", DeviceUtils.getUri(R.mipmap.create_aside_role));
         initRoleAdapter();
         initMessageAdapter();
         new CreatePresenter(this);
@@ -190,10 +203,10 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
     }
 
     private void initRoleAdapter() {
-        mRolesAdapter = new CommonAdapter<UserModel>(this, R.layout.create_role_item, mSecondRoleList) {
+        mRolesAdapter = new CommonAdapter<ActorModel>(this, R.layout.create_role_item, mSecondRoleList) {
             @Override
-            protected void convert(ViewHolder holder, UserModel userModel, int position) {
-                ImageLoaderUtils.getInstance().loadCircleImage(CreateActivity.this, userModel.getIcon(), (ImageView) holder.getView(R.id.create_role_item_img));
+            protected void convert(ViewHolder holder, ActorModel userModel, int position) {
+                ImageLoaderUtils.getInstance().loadCircleImage(CreateActivity.this, userModel.getPicture(), (ImageView) holder.getView(R.id.create_role_item_img));
             }
         };
         mRolesAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
@@ -213,10 +226,10 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
         mRoleRecyclerView.setLayoutManager(layoutManager);
         mRoleRecyclerView.setAdapter(mRolesAdapter);
 
-        mEditRolesAdapter = new CommonAdapter<UserModel>(this, R.layout.create_role_item, mRoleList) {
+        mEditRolesAdapter = new CommonAdapter<ActorModel>(this, R.layout.create_role_item, mRoleList) {
             @Override
-            protected void convert(ViewHolder holder, UserModel userModel, int position) {
-                ImageLoaderUtils.getInstance().loadCircleImage(CreateActivity.this, userModel.getIcon(), (ImageView) holder.getView(R.id.create_role_item_img));
+            protected void convert(ViewHolder holder, ActorModel userModel, int position) {
+                ImageLoaderUtils.getInstance().loadCircleImage(CreateActivity.this, userModel.getPicture(), (ImageView) holder.getView(R.id.create_role_item_img));
                 holder.setVisible(R.id.create_role_item_img_edit, true);
             }
         };
@@ -341,7 +354,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
             public void onClick(View v) {
                 final String name = editText.getText().toString().trim();
                 if (!TextUtils.isEmpty(name) && mImagePath != null) {
-                    if (role == UserModel.ROLE_FIRST) {
+                    if (role == ActorModel.ROLE_FIRST) {
                         FirebaseUtil.upLoadFile(mImagePath, new FirebaseUtil.OnUploadListener() {
                             @Override
                             public void onFailure() {
@@ -350,11 +363,8 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
 
                             @Override
                             public void onSuccess(String url) {
-                                mFirstRole = new UserModel(UserModel.ROLE_FIRST, name, url);
-                                getEditRoleList();
-                                if (mPresenter != null) {
-                                    mPresenter.updateRoleList(mFictionId, mLanguage, mRoleList);
-                                }
+                                mFirstRole = new ActorModel(ActorModel.ROLE_FIRST, name, url);
+                                updateRoleList();
                                 //updateFirstRole(mFirstRole.getIcon());
                             }
                         });
@@ -367,9 +377,10 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
 
                             @Override
                             public void onSuccess(String url) {
-                                UserModel userModel = new UserModel(UserModel.ROLE_SECOND, name, url);
+                                ActorModel userModel = new ActorModel(ActorModel.ROLE_SECOND, name, url);
                                 mSecondRoleList.add(userModel);
-                                mRolesAdapter.notifyDataSetChanged();
+                                updateRoleList();
+                                //mRolesAdapter.notifyDataSetChanged();
                             }
                         });
                     }
@@ -387,9 +398,9 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(view);
         final AlertDialog alertDialog = builder.create();
-        final UserModel userModel = mRoleList.get(position);
+        final ActorModel userModel = mRoleList.get(position);
         final String name = userModel.getName();
-        final String icon = userModel.getIcon();
+        final String icon = userModel.getPicture();
         mImagePath = icon;
 
         mDialogUserIcon = (ImageView) view.findViewById(R.id.add_role_img);
@@ -426,7 +437,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
                         //仅修改名称
                         if (mImagePath.equals(icon)) {
                             userModel.setName(temp);
-                            userModel.setIcon(mImagePath);
+                            userModel.setPicture(mImagePath);
                             mEditRolesAdapter.notifyItemChanged(position);
                             updateRoleInfo(userModel, false);
                         } else {
@@ -439,7 +450,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
                                 @Override
                                 public void onSuccess(String url) {
                                     userModel.setName(temp);
-                                    userModel.setIcon(url);
+                                    userModel.setPicture(url);
                                     mEditRolesAdapter.notifyItemChanged(position);
                                     updateRoleInfo(userModel, false);
                                 }
@@ -467,8 +478,10 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
         }
     }
 
-    private void updateRoleInfo(UserModel model, boolean deleteOrUpdate) {
-        if (model.getRoleType() == UserModel.ROLE_FIRST) {
+    private void updateRoleInfo(ActorModel model, boolean deleteOrUpdate) {
+        updateRoleList();
+
+        if (model.getRole_type() == ActorModel.ROLE_FIRST) {
             if (deleteOrUpdate) {
                 //删除主角
                 deleteMessageAboutUser(model);
@@ -477,14 +490,14 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
             } else {
                 //更新主角
                 updateMessageAboutUser(model);
-                updateFirstRole(model.getIcon());
+                updateFirstRole(model.getPicture());
                 mFirstRole = model;
             }
         } else {
             if (deleteOrUpdate) {
                 //删除配角
                 deleteMessageAboutUser(model);
-                for (UserModel userModel : mSecondRoleList) {
+                for (ActorModel userModel : mSecondRoleList) {
                     if (userModel.getId().equals(model.getId())) {
                         mSecondRoleList.remove(userModel);
                         mRolesAdapter.notifyDataSetChanged();
@@ -495,10 +508,10 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
                 //更新配角
                 updateMessageAboutUser(model);
                 for (int i = 0; i < mSecondRoleList.size(); i++) {
-                    UserModel userModel = mSecondRoleList.get(i);
+                    ActorModel userModel = mSecondRoleList.get(i);
                     if (userModel.getId().equals(model.getId())) {
                         userModel.setName(model.getName());
-                        userModel.setIcon(model.getIcon());
+                        userModel.setPicture(model.getPicture());
                         mRolesAdapter.notifyItemChanged(i);
                         break;
                     }
@@ -514,7 +527,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
      *
      * @param model
      */
-    private void deleteMessageAboutUser(UserModel model) {
+    private void deleteMessageAboutUser(ActorModel model) {
         Iterator<MessageModel> it = mMessageList.iterator();
         while (it.hasNext()) {
             MessageModel x = it.next();
@@ -528,20 +541,20 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
     /**
      * 更新所有跟user有关的对话
      */
-    private void updateMessageAboutUser(UserModel model) {
+    private void updateMessageAboutUser(ActorModel model) {
         for (int i = 0; i < mMessageList.size(); i++) {
             MessageModel messageModel = mMessageList.get(i);
             if (messageModel.getId().equals(model.getId())) {
                 messageModel.setActor(model.getName());
-                messageModel.setAvatar(model.getIcon());
+                messageModel.setAvatar(model.getPicture());
             }
         }
         mAdapter.notifyDataSetChanged();
     }
 
-    private void updateRole(UserModel userModel) {
+    private void updateRole(ActorModel userModel) {
         mCurrentRole = userModel;
-        ImageLoaderUtils.getInstance().loadCircleImage(this, mCurrentRole.getIcon(), mCurrentRoleImg);
+        ImageLoaderUtils.getInstance().loadCircleImage(this, mCurrentRole.getPicture(), mCurrentRoleImg);
     }
 
     private void updateFirstRole(String url) {
@@ -558,18 +571,28 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
         }
     }
 
+    /**
+     * 更新角色信息到服务端
+     */
+    private void updateRoleList() {
+        getEditRoleList();
+        if (mPresenter != null) {
+            mPresenter.updateRoleList(mFictionModel.getIfiction_id(), mFictionModel.getLanguage(), mRoleList);
+        }
+    }
+
     @OnClick(R.id.create_first_role_img)
     public void clickFirstRole() {
         if (mFirstRole != null) {
             updateRole(mFirstRole);
         } else {
-            showAddRoleDialog(UserModel.ROLE_FIRST);
+            showAddRoleDialog(ActorModel.ROLE_FIRST);
         }
     }
 
     @OnClick(R.id.create_second_role_img)
     public void clickSecondRole() {
-        showAddRoleDialog(UserModel.ROLE_SECOND);
+        showAddRoleDialog(ActorModel.ROLE_SECOND);
     }
 
     @OnClick(R.id.create_aside_role_img)
@@ -597,7 +620,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
                 MessageModel messageModel = new MessageModel();
                 messageModel.setId(mCurrentRole.getId());
                 messageModel.setActor(mCurrentRole.getName());
-                messageModel.setAvatar(mCurrentRole.getIcon());
+                messageModel.setAvatar(mCurrentRole.getPicture());
                 messageModel.setWord(message);
                 messageModel.setLocation(mCurrentRole.getRoleTypeStr());
                 mMessageList.add(messageModel);
@@ -614,19 +637,20 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
 
     @Override
     public void publishSuccess() {
-
+        Toast.makeText(this, "发布章节成功", Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void showRoleList(List<UserModel> list) {
+    public void showRoleList(List<ActorModel> list) {
         if (list != null) {
+            mSecondRoleList.clear();
             for (int i = 0; i < list.size(); i++) {
-                UserModel userModel = list.get(i);
-                if (userModel.getRoleType() == UserModel.ROLE_FIRST) {
+                ActorModel userModel = list.get(i);
+                if (userModel.getRole_type() == ActorModel.ROLE_FIRST) {
                     mFirstRole = userModel;
-                    updateFirstRole(mFirstRole.getIcon());
+                    updateFirstRole(mFirstRole.getPicture());
                 } else {
-                    mSecondRoleList.clear();
+                    Log.i("Lebron", " second role ");
                     mSecondRoleList.add(userModel);
                 }
             }
@@ -637,8 +661,13 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
     }
 
     @Override
+    public void publishFailed() {
+        Toast.makeText(this, "发布章节失败", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void setPresenter(CreateContract.Presenter presenter) {
         mPresenter = presenter;
-        mPresenter.getRoleList(mFictionId, mLanguage);
+        mPresenter.getRoleList(mFictionModel.getIfiction_id(), mFictionModel.getLanguage());
     }
 }

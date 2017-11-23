@@ -10,9 +10,9 @@ import com.owl.chatstory.data.chatsource.model.FictionModel;
 public interface IFictionData {
     void clearSubscriptions();
 
-    void getFictionDetail(String id, OnFictionListener listener);
+    void getFictionDetail(String id, String language, OnFictionListener listener);
 
-    void getChapterDetail(String id, OnFictionListener listener);
+    void getChapterDetail(String id, String language, OnFictionListener listener);
 
     interface OnFictionListener {
         void onFiction(FictionModel model);

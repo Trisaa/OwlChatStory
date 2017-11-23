@@ -4,12 +4,16 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.owl.chatstory.R;
 import com.owl.chatstory.base.BaseFragment;
-import com.owl.chatstory.creation.adapter.OldCreationDelegate;
+import com.owl.chatstory.common.util.ImageLoaderUtils;
+import com.owl.chatstory.common.util.TimeUtils;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
+import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
+import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +37,7 @@ public class MyCreationFragment extends BaseFragment implements MyCreationContra
 
     private MyCreationContract.Presenter mPresenter;
     private List<FictionDetailModel> mDatas = new ArrayList<>();
-    private MultiItemTypeAdapter<FictionDetailModel> mAdapter;
+    private CommonAdapter<FictionDetailModel> mAdapter;
     private String mLanguage = "english";
 
     @Override
@@ -43,8 +47,25 @@ public class MyCreationFragment extends BaseFragment implements MyCreationContra
 
     @Override
     protected void initViewsAndData(View view) {
-        mAdapter = new MultiItemTypeAdapter<>(getActivity(), mDatas);
-        mAdapter.addItemViewDelegate(new OldCreationDelegate());
+        mAdapter = new CommonAdapter<FictionDetailModel>(getActivity(), R.layout.my_creation_item, mDatas) {
+            @Override
+            protected void convert(ViewHolder holder, FictionDetailModel model, int position) {
+                holder.setText(R.id.my_creation_title_txv, model.getTitle());
+                holder.setText(R.id.my_creation_time_txv, TimeUtils.getTimeFormat(model.getCreateLine()));
+                ImageLoaderUtils.getInstance().loadImage(holder.getConvertView().getContext(), model.getCover(), (ImageView) holder.getView(R.id.my_creation_img), R.color.colorPrimaryDark);
+            }
+        };
+        mAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                CreationDetailActivity.start(getActivity(), mDatas.get(position).getId(), mLanguage);
+            }
+
+            @Override
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                return false;
+            }
+        });
         mRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerview.setAdapter(mAdapter);
         mRefreshLayout.setOnRefreshListener(this);

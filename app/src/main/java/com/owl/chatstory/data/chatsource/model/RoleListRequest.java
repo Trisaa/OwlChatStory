@@ -1,6 +1,5 @@
 package com.owl.chatstory.data.chatsource.model;
 
-import com.owl.chatstory.data.usersource.model.UserModel;
 
 import java.util.List;
 
@@ -10,8 +9,9 @@ import java.util.List;
 
 public class RoleListRequest {
     private String ifiction_id;
-    private List<UserModel> list;
-    private String type;
+    private List<ActorModel> actors;
+    private String language;
+    private String token;
 
     public String getIfiction_id() {
         return ifiction_id;
@@ -21,19 +21,27 @@ public class RoleListRequest {
         this.ifiction_id = ifiction_id;
     }
 
-    public List<UserModel> getList() {
-        return list;
+    public List<ActorModel> getList() {
+        return actors;
     }
 
-    public void setList(List<UserModel> list) {
-        this.list = list;
+    public void setList(List<ActorModel> list) {
+        this.actors = list;
     }
 
-    public String getType() {
-        return type;
+    public String getLanguage() {
+        return language;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

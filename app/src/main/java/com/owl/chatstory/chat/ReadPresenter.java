@@ -25,12 +25,12 @@ public class ReadPresenter implements ReadContract.Presenter, IFictionData.OnFic
 
     @Override
     public void getFictionData(String id) {
-        mFictionData.getFictionDetail(id, this);
+        mFictionData.getFictionDetail(id, "", this);
     }
 
     @Override
     public void getChapterData(String id) {
-        mFictionData.getChapterDetail(id, this);
+        mFictionData.getChapterDetail(id, "", this);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class ReadPresenter implements ReadContract.Presenter, IFictionData.OnFic
     public void onFictionDetail(FictionDetailModel model) {
         if (model != null && model.getChapters() != null) {
             mView.showFictionDetailData(model);
-            mFictionData.getChapterDetail(model.getChapters().get(0).getChapterId(), this);
+            mFictionData.getChapterDetail(model.getChapters().get(0).getChapterId(), "", this);
         }
     }
 }

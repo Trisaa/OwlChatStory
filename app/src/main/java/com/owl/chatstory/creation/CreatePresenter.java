@@ -3,6 +3,7 @@ package com.owl.chatstory.creation;
 
 import com.owl.chatstory.data.chatsource.ICreateData;
 import com.owl.chatstory.data.chatsource.ICreateDataImpl;
+import com.owl.chatstory.data.chatsource.model.ActorModel;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
 import com.owl.chatstory.data.chatsource.model.RoleListRequest;
@@ -40,11 +41,11 @@ public class CreatePresenter implements CreateContract.Presenter, ICreateData.On
     }
 
     @Override
-    public void updateRoleList(String id, String language, List<UserModel> list) {
+    public void updateRoleList(String id, String language, List<ActorModel> list) {
         RoleListRequest request = new RoleListRequest();
         request.setIfiction_id(id);
         request.setList(list);
-        request.setType(language);
+        request.setLanguage(language);
         mData.updateRoleList(request, list, this);
     }
 
@@ -65,11 +66,11 @@ public class CreatePresenter implements CreateContract.Presenter, ICreateData.On
 
     @Override
     public void onFailed() {
-
+        mView.publishFailed();
     }
 
     @Override
-    public void onGetRoleList(List<UserModel> list) {
+    public void onGetRoleList(List<ActorModel> list) {
         mView.showRoleList(list);
     }
 }

@@ -15,14 +15,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.owl.chatstory.R;
 import com.owl.chatstory.base.BaseActivity;
-import com.owl.chatstory.common.util.DialogUtils;
+import com.owl.chatstory.common.util.Constants;
 import com.owl.chatstory.common.util.ImageLoaderUtils;
-import com.owl.chatstory.common.util.TimeUtils;
-import com.owl.chatstory.data.chatsource.model.ChapterModel;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
+import com.owl.chatstory.data.chatsource.model.FictionModel;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
@@ -40,6 +40,7 @@ import butterknife.BindView;
 
 public class CreationDetailActivity extends BaseActivity implements View.OnClickListener, CreationDetailContract.View {
     private static final String EXTRA_FICTION_ID = "EXTRA_FICTION_ID";
+    private static final String EXTRA_LANGUAGE = "EXTRA_LANGUAGE";
     @BindView(R.id.common_toolbar)
     Toolbar mToolbar;
     @BindView(R.id.directory_recycler)
@@ -48,13 +49,14 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
     private CreationDetailContract.Presenter mPresenter;
     private HeaderAndFooterWrapper<FictionDetailModel> mAdapter;
     private FictionDetailModel mFictionDetailModel;
-    private List<ChapterModel> mDatas = new ArrayList<>();
+    private List<FictionModel> mDatas = new ArrayList<>();
     private View mHeaderView;
-    private String mFictionId;
+    private String mFictionId, mLanguage;
 
-    public static void start(Context context, String id) {
+    public static void start(Context context, String id, String language) {
         Intent intent = new Intent(context, CreationDetailActivity.class);
         intent.putExtra(EXTRA_FICTION_ID, id);
+        intent.putExtra(EXTRA_LANGUAGE, language);
         context.startActivity(intent);
     }
 
@@ -77,12 +79,13 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
     @Override
     protected void initViewsAndData() {
         mFictionId = getIntent().getStringExtra(EXTRA_FICTION_ID);
-        CommonAdapter<ChapterModel> adapter = new CommonAdapter<ChapterModel>(this, R.layout.creation_chapter_item, mDatas) {
+        mLanguage = getIntent().getStringExtra(EXTRA_LANGUAGE);
+        CommonAdapter<FictionModel> adapter = new CommonAdapter<FictionModel>(this, R.layout.creation_chapter_item, mDatas) {
             @Override
-            protected void convert(ViewHolder holder, final ChapterModel chapterModel, int position) {
-                holder.setText(R.id.chapter_item_title_txv, getString(R.string.chapter_num, position, chapterModel.getChapterName()));
-                holder.setText(R.id.chapter_item_time_txv, TimeUtils.getTimeFormat(chapterModel.getCreateTime()));
-                holder.setText(R.id.chapter_item_state_txv, "Creating");
+            protected void convert(ViewHolder holder, final FictionModel fictionModel, int position) {
+                holder.setText(R.id.chapter_item_title_txv, getString(R.string.chapter_num, position, fictionModel.getName()));
+                //holder.setText(R.id.chapter_item_time_txv, TimeUtils.getTimeFormat(fictionModel.get()));
+                holder.setText(R.id.chapter_item_state_txv, Constants.getStatus(fictionModel.getStatus()));
                 holder.setOnClickListener(R.id.chapter_item_more_img, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -92,7 +95,7 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
                 holder.setOnClickListener(R.id.chapter_item_title_txv, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showAddChapterDialog(chapterModel.getChapterName());
+                        showAddChapterDialog(fictionModel.getName());
                     }
                 });
                 holder.getConvertView().setOnClickListener(new View.OnClickListener() {
@@ -151,7 +154,7 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
         ((TextView) mHeaderView.findViewById(R.id.chapter_header_author_txv)).setText(author);
         ((TextView) mHeaderView.findViewById(R.id.chapter_header_describe_txv)).setText(fictionDetailModel.getSummary());
         ((TextView) mHeaderView.findViewById(R.id.chapter_header_tags_txv)).setText(fictionDetailModel.getTags().get(0));
-        ((TextView) mHeaderView.findViewById(R.id.chapter_header_chapters_txv)).setText(getString(R.string.chapter_total_chapters, fictionDetailModel.getChapters().size()));
+        ((TextView) mHeaderView.findViewById(R.id.chapter_header_chapters_txv)).setText(getString(R.string.chapter_total_chapters, mDatas.size()));
         mHeaderView.findViewById(R.id.chapter_header_edit_img).setVisibility(View.VISIBLE);
         TextView addChapterView = (TextView) (mHeaderView.findViewById(R.id.chapter_header_add_chapters_txv));
         addChapterView.setVisibility(View.VISIBLE);
@@ -174,15 +177,24 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
     @Override
     public void showFictionDetail(FictionDetailModel model) {
         mFictionDetailModel = model;
-        mDatas.addAll(mFictionDetailModel.getChapters());
         setFictionDetail(model);
-        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showChapterList(List<FictionModel> list) {
+        if (list != null) {
+            mDatas.addAll(list);
+            mAdapter.notifyDataSetChanged();
+        } else {
+            Toast.makeText(this, "获取章节列表失败", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     public void setPresenter(CreationDetailContract.Presenter presenter) {
         mPresenter = presenter;
-        mPresenter.getFictionDetail(mFictionId);
+        mPresenter.getFictionDetail(mFictionId, mLanguage);
+        mPresenter.getChapterList(mFictionId, mLanguage);
     }
 
     @Subscribe
@@ -214,7 +226,13 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
             public void onClick(View v) {
                 String title = editText.getText().toString().trim();
                 if (!TextUtils.isEmpty(title)) {
+                    FictionModel model = new FictionModel();
+                    model.setIfiction_id(mFictionId);
+                    model.setLanguage(mLanguage);
+                    model.setName(title);
+                    model.setNum(1);
 
+                    CreateActivity.start(CreationDetailActivity.this, model);
                 }
                 alertDialog.dismiss();
             }

@@ -2,8 +2,10 @@ package com.owl.chatstory.common.util.network;
 
 
 import com.owl.chatstory.common.util.network.request.UserRequest;
+import com.owl.chatstory.data.chatsource.model.ActorModel;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
+import com.owl.chatstory.data.chatsource.model.FictionResponse;
 import com.owl.chatstory.data.chatsource.model.RoleListRequest;
 import com.owl.chatstory.data.homesource.model.CategoryModel;
 import com.owl.chatstory.data.homesource.model.UpdateModel;
@@ -104,7 +106,7 @@ public interface ApiService {
      * @return
      */
     @POST("ifiction/manageifiction")
-    Observable<BaseResponse<FictionDetailModel>> updateFictionBasicInfo(@Body FictionDetailModel model);
+    Observable<BaseResponse<FictionResponse>> updateFictionBasicInfo(@Body FictionDetailModel model);
 
     /**
      * 获取用户创作的小说列表
@@ -134,16 +136,27 @@ public interface ApiService {
      */
     @FormUrlEncoded
     @POST("actor/managelist")
-    Observable<BaseArrayResponse<UserModel>> getRoleList(@Field("token") String token, @Field("type") String language, @Field("ifiction_id") String id);
+    Observable<BaseArrayResponse<ActorModel>> getRoleList(@Field("token") String token, @Field("language") String language, @Field("ifiction_id") String id);
 
     /**
      * 上传角色列表
      *
-     * @param token
      * @param request
      * @return
      */
     @POST("actor/manage")
-    Observable<BaseArrayResponse<UserModel>> updateRoleList(@Field("token") String token, @Body RoleListRequest request);
+    Observable<BaseArrayResponse<ActorModel>> updateRoleList(@Body RoleListRequest request);
+
+    /**
+     * 获取章节列表
+     *
+     * @param token
+     * @param language
+     * @param id
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("ifiction/managechapterlist")
+    Observable<BaseArrayResponse<FictionModel>> getChapterList(@Field("token") String token, @Field("language") String language, @Field("ifiction_id") String id);
 
 }
