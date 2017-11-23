@@ -6,10 +6,17 @@
 
     <include layout="@layout/common_toolbar" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/directory_recycler"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#ecedf1" />
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/directory_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#ecedf1" />
+
+        <include layout="@layout/common_loading_layout" />
+    </FrameLayout>
 
 </LinearLayout>

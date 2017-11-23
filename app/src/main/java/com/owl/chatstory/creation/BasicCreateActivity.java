@@ -29,6 +29,7 @@ import com.owl.chatstory.common.util.FileUtils;
 import com.owl.chatstory.common.util.FirebaseUtil;
 import com.owl.chatstory.common.util.ImageLoaderUtils;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
+import com.owl.chatstory.data.chatsource.model.FictionModel;
 import com.owl.chatstory.data.homesource.model.CategoryModel;
 import com.yalantis.ucrop.UCrop;
 
@@ -299,7 +300,12 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
             EventBus.getDefault().post(mFictionDetailModel);
             finish();
         } else {
-            CreateActivity.start(BasicCreateActivity.this, model.getId());
+            FictionModel fictionModel = new FictionModel();
+            fictionModel.setLanguage(mLanguage);
+            fictionModel.setIfiction_id(model.getId());
+            fictionModel.setNum(1);
+            fictionModel.setName(getString(R.string.app_name));
+            CreateActivity.start(BasicCreateActivity.this, fictionModel);
             finish();
         }
     }

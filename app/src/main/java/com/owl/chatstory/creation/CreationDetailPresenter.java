@@ -46,8 +46,13 @@ public class CreationDetailPresenter implements CreationDetailContract.Presenter
     }
 
     @Override
-    public void onFiction(FictionModel model) {
+    public void getChapterDetail(String chapterId, String language) {
+        mData.getChapterDetail(chapterId, language, this);
+    }
 
+    @Override
+    public void onFiction(FictionModel model) {
+        mView.showFictionModel(model);
     }
 
     @Override

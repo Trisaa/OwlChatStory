@@ -44,10 +44,13 @@ import com.owl.chatstory.creation.adapter.RoleItemDecoration;
 import com.owl.chatstory.data.chatsource.model.ActorModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
 import com.owl.chatstory.data.chatsource.model.MessageModel;
+import com.owl.chatstory.data.eventsource.CreationDetailEvent;
 import com.yalantis.ucrop.UCrop;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -93,10 +96,12 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
     RelativeLayout mEditRoleLayout;
     @BindView(R.id.common_progressbar_layout)
     View mLoadingView;
+    @BindView(R.id.toolbar_title)
+    TextView mTitleView;
 
     private CreateContract.Presenter mPresenter;
     private ImageView mDialogUserIcon;
-    private String mImagePath;
+    private String mImagePath, mChapterTitle;
     private ActorModel mFirstRole, mAsideRole, mCurrentRole;
     private List<ActorModel> mSecondRoleList = new ArrayList<>();
     private List<ActorModel> mRoleList = new ArrayList<>();
@@ -105,12 +110,6 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
     private CommonAdapter<ActorModel> mEditRolesAdapter;
     private MultiItemTypeAdapter<MessageModel> mAdapter;
     private FictionModel mFictionModel;
-
-    public static void start(Context context, String id) {
-        Intent intent = new Intent(context, CreateActivity.class);
-        intent.putExtra(EXTRA_FICTION_ID, id);
-        context.startActivity(intent);
-    }
 
     public static void start(Context context, FictionModel model) {
         Intent intent = new Intent(context, CreateActivity.class);
@@ -131,6 +130,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
             setSupportActionBar(mToolbar);
             ActionBar ab = getSupportActionBar();
             if (ab != null) {
+                ab.setDisplayShowTitleEnabled(false);
                 ab.setDisplayHomeAsUpEnabled(true);
             }
         }
@@ -157,6 +157,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
                             @Override
                             public void onOK() {
                                 if (mPresenter != null) {
+                                    mFictionModel.setName(mChapterTitle);
                                     mFictionModel.setList(mMessageList);
                                     mPresenter.publishChapter(mFictionModel);
                                 }
@@ -175,6 +176,18 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
     @Override
     protected void initViewsAndData() {
         mFictionModel = getIntent().getParcelableExtra(EXTRA_FICTION_MODEL);
+        if (mFictionModel != null) {
+            if (mFictionModel.getList() != null) {
+                mMessageList.clear();
+                mMessageList.addAll(mFictionModel.getList());
+            }
+            if (!TextUtils.isEmpty(mFictionModel.getName())) {
+                mChapterTitle = mFictionModel.getName();
+                mTitleView.setText(mChapterTitle);
+            } else {
+                mTitleView.setText("");
+            }
+        }
         mAsideRole = new ActorModel(ActorModel.ROLE_ASIDE, "", DeviceUtils.getUri(R.mipmap.create_aside_role));
         initRoleAdapter();
         initMessageAdapter();
@@ -425,7 +438,6 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
                 mEditRolesAdapter.notifyItemRemoved(position);
                 updateRoleInfo(userModel, true);
                 alertDialog.dismiss();
-                mLoadingView.setVisibility(View.VISIBLE);
             }
         });
 
@@ -565,7 +577,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
     }
 
     private void updateFirstRole(String url) {
-        ImageLoaderUtils.getInstance().loadCircleImage(this, url, mFirstRoleImg);
+        ImageLoaderUtils.getInstance().loadCircleImage(this, url, mFirstRoleImg, R.mipmap.user_default_icon);
     }
 
     private void getEditRoleList() {
@@ -614,6 +626,11 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
         mEditRoleLayout.setVisibility(View.VISIBLE);
     }
 
+    @OnClick(R.id.toolbar_title)
+    public void clickToolbarTitle() {
+        showAddChapterDialog(mChapterTitle);
+    }
+
     @OnClick(R.id.create_edit_role_close)
     public void clickEditClose() {
         mEditRoleLayout.setVisibility(View.GONE);
@@ -644,7 +661,9 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
 
     @Override
     public void publishSuccess() {
+        EventBus.getDefault().post(new CreationDetailEvent(true));
         Toast.makeText(this, "发布章节成功", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     @Override
@@ -676,5 +695,35 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
     public void setPresenter(CreateContract.Presenter presenter) {
         mPresenter = presenter;
         mPresenter.getRoleList(mFictionModel.getIfiction_id(), mFictionModel.getLanguage());
+    }
+
+    private void showAddChapterDialog(String title) {
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_add_chapter, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(view);
+        final AlertDialog alertDialog = builder.create();
+        final EditText editText = (EditText) view.findViewById(R.id.add_chapter_edit);
+        if (!TextUtils.isEmpty(title)) {
+            editText.setText(title);
+            editText.setSelection(title.length());
+        }
+        view.findViewById(R.id.add_chapter_delete_txv).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+        view.findViewById(R.id.add_chapter_submit_txv).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String title = editText.getText().toString().trim();
+                if (!TextUtils.isEmpty(title)) {
+                    mChapterTitle = title;
+                    mTitleView.setText(mChapterTitle);
+                }
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.show();
     }
 }

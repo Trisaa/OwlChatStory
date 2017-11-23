@@ -13,8 +13,6 @@
         android:layout_marginBottom="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="20dp"
-        android:drawableEnd="@mipmap/ic_pencil"
-        android:drawablePadding="6dp"
         android:text="No 1"
         android:textColor="@color/common_toolbar_color"
         android:textSize="16sp" />

@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +23,7 @@ import com.owl.chatstory.common.util.ImageLoaderUtils;
 import com.owl.chatstory.common.util.TimeUtils;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
+import com.owl.chatstory.data.eventsource.CreationDetailEvent;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
@@ -46,6 +46,8 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
     Toolbar mToolbar;
     @BindView(R.id.directory_recycler)
     RecyclerView mRecyclerView;
+    @BindView(R.id.common_progressbar_layout)
+    View mLoadingView;
 
     private CreationDetailContract.Presenter mPresenter;
     private HeaderAndFooterWrapper<FictionDetailModel> mAdapter;
@@ -93,16 +95,13 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
                         showEditDialog();
                     }
                 });
-                holder.setOnClickListener(R.id.chapter_item_title_txv, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showAddChapterDialog(fictionModel.getName());
-                    }
-                });
                 holder.getConvertView().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        CreateActivity.start(CreationDetailActivity.this, mFictionId);
+                        if (mPresenter != null) {
+                            mPresenter.getChapterDetail(fictionModel.getId(), mFictionDetailModel.getLanguage());
+                            mLoadingView.setVisibility(View.VISIBLE);
+                        }
                     }
                 });
             }
@@ -159,7 +158,9 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
         mHeaderView.findViewById(R.id.chapter_header_edit_img).setVisibility(View.VISIBLE);
         mHeaderView.findViewById(R.id.chapter_header_edit_img).setOnClickListener(this);
         TextView addChapterView = (TextView) (mHeaderView.findViewById(R.id.chapter_header_add_chapters_txv));
-        addChapterView.setVisibility(View.VISIBLE);
+        if (fictionDetailModel.getSerials()) {
+            addChapterView.setVisibility(View.VISIBLE);
+        }
         addChapterView.setOnClickListener(this);
     }
 
@@ -170,7 +171,11 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
                 BasicCreateActivity.start(this, mFictionDetailModel);
                 break;
             case R.id.chapter_header_add_chapters_txv:
-                showAddChapterDialog("");
+                FictionModel model = new FictionModel();
+                model.setIfiction_id(mFictionId);
+                model.setLanguage(mLanguage);
+                model.setNum(mDatas.size() + 1);
+                CreateActivity.start(CreationDetailActivity.this, model);
                 break;
         }
     }
@@ -184,11 +189,21 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
     @Override
     public void showChapterList(List<FictionModel> list) {
         if (list != null) {
+            if (mDatas == null) {
+                mDatas = new ArrayList<>();
+            }
+            mDatas.clear();
             mDatas.addAll(list);
             mAdapter.notifyDataSetChanged();
         } else {
             Toast.makeText(this, "获取章节列表失败", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void showFictionModel(FictionModel model) {
+        mLoadingView.setVisibility(View.GONE);
+        CreateActivity.start(this, model);
     }
 
     @Override
@@ -206,39 +221,13 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
         }
     }
 
-    private void showAddChapterDialog(String title) {
-        View view = LayoutInflater.from(this).inflate(R.layout.dialog_add_chapter, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setView(view);
-        final AlertDialog alertDialog = builder.create();
-        final EditText editText = (EditText) view.findViewById(R.id.add_chapter_edit);
-        if (!TextUtils.isEmpty(title)) {
-            editText.setText(title);
-            editText.setSelection(title.length());
+    @Subscribe
+    public void updateChapterList(CreationDetailEvent event) {
+        if (event != null) {
+            if (event.isReload() && mPresenter != null) {
+                mPresenter.getChapterList(mFictionId, mLanguage);
+            }
         }
-        view.findViewById(R.id.add_chapter_delete_txv).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alertDialog.dismiss();
-            }
-        });
-        view.findViewById(R.id.add_chapter_submit_txv).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String title = editText.getText().toString().trim();
-                if (!TextUtils.isEmpty(title)) {
-                    FictionModel model = new FictionModel();
-                    model.setIfiction_id(mFictionId);
-                    model.setLanguage(mLanguage);
-                    model.setName(title);
-                    model.setNum(1);
-
-                    CreateActivity.start(CreationDetailActivity.this, model);
-                }
-                alertDialog.dismiss();
-            }
-        });
-        alertDialog.show();
     }
 
     private void showEditDialog() {

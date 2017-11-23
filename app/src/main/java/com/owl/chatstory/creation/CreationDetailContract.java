@@ -16,11 +16,15 @@ public interface CreationDetailContract {
         void getFictionDetail(String id, String language);
 
         void getChapterList(String id, String language);
+
+        void getChapterDetail(String chapterId, String language);
     }
 
     interface View extends BaseView<Presenter> {
         void showFictionDetail(FictionDetailModel model);
 
         void showChapterList(List<FictionModel> list);
+
+        void showFictionModel(FictionModel model);
     }
 }
