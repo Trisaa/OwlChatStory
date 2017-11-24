@@ -59,6 +59,7 @@
     <string name="create_publish_chapter">是否发布当前内容？</string>
     <string name="create_save_chapter">是否保存当前内容？</string>
     <string name="create_delete_chapter">是否要删除当前章节？不可找回</string>
+    <string name="create_offline_fiction">是否下架当前小说？</string>
     <string name="create_dialog_cancel">我再想想</string>
     <string name="create_dialog_ok">是的</string>
     <string name="create_dialog_not_save">舍弃它</string>

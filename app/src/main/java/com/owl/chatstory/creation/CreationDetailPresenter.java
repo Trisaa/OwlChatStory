@@ -6,6 +6,7 @@ import com.owl.chatstory.data.chatsource.IFictionData;
 import com.owl.chatstory.data.chatsource.IFictionDataImpl;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
+import com.owl.chatstory.data.chatsource.model.OperationRequest;
 
 import java.util.List;
 
@@ -13,7 +14,8 @@ import java.util.List;
  * Created by lebron on 2017/11/16.
  */
 
-public class CreationDetailPresenter implements CreationDetailContract.Presenter, IFictionData.OnFictionListener, ICreateData.OnChapterListener {
+public class CreationDetailPresenter implements CreationDetailContract.Presenter, IFictionData.OnFictionListener
+        , ICreateData.OnChapterListener, ICreateData.OnOperateFictionListener {
     private CreationDetailContract.View mView;
     private IFictionData mData;
     private ICreateData mICreateData;
@@ -51,6 +53,16 @@ public class CreationDetailPresenter implements CreationDetailContract.Presenter
     }
 
     @Override
+    public void operateFiction(OperationRequest request) {
+        mICreateData.operateFiction(request, this);
+    }
+
+    @Override
+    public void operateChapter(OperationRequest request) {
+        mICreateData.operateChapter(request, this);
+    }
+
+    @Override
     public void onFiction(FictionModel model) {
         mView.showFictionModel(model);
     }
@@ -63,5 +75,15 @@ public class CreationDetailPresenter implements CreationDetailContract.Presenter
     @Override
     public void onGetChapterList(List<FictionModel> list) {
         mView.showChapterList(list);
+    }
+
+    @Override
+    public void operateFictionFinished(boolean success) {
+        mView.operateFictionFinished(success);
+    }
+
+    @Override
+    public void operateChapterFinished(boolean success) {
+        mView.operateChapterFinished(success);
     }
 }

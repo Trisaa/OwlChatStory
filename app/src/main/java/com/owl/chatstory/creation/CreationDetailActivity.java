@@ -23,6 +23,7 @@ import com.owl.chatstory.common.util.ImageLoaderUtils;
 import com.owl.chatstory.common.util.TimeUtils;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
+import com.owl.chatstory.data.chatsource.model.OperationRequest;
 import com.owl.chatstory.data.eventsource.CreationDetailEvent;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -92,7 +93,7 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
                 holder.setOnClickListener(R.id.chapter_item_more_img, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showEditDialog();
+                        showEditDialog(fictionModel);
                     }
                 });
                 holder.getConvertView().setOnClickListener(new View.OnClickListener() {
@@ -123,25 +124,23 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_finished:
-
-                break;
             case R.id.menu_under:
-                /*DialogUtils.showDialog(this, R.string.create_publish_chapter
-                        , R.string.create_dialog_cancel, R.string.create_dialog_ok
-                        , new DialogUtils.OnDialogClickListener() {
-                            @Override
-                            public void onOK() {
-                                finish();
-                            }
-
-                            @Override
-                            public void onCancel() {
-
-                            }
-                        });*/
+                if (mPresenter != null) {
+                    OperationRequest request = new OperationRequest();
+                    request.setIfiction_id(mFictionId);
+                    request.setLanguage(mLanguage);
+                    request.setOp(Constants.OPERATION_DELETE);
+                    mPresenter.operateFiction(request);
+                }
                 break;
-            case R.id.menu_delete:
+            case R.id.menu_recover:
+                if (mPresenter != null) {
+                    OperationRequest request = new OperationRequest();
+                    request.setIfiction_id(mFictionId);
+                    request.setLanguage(mLanguage);
+                    request.setOp(Constants.OPERATION_RECOVER);
+                    mPresenter.operateFiction(request);
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -207,6 +206,22 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
     }
 
     @Override
+    public void operateFictionFinished(boolean success) {
+        Toast.makeText(this, "操作小说成功 " + success, Toast.LENGTH_SHORT).show();
+        if (mPresenter != null) {
+            mPresenter.getFictionDetail(mFictionId, mLanguage);
+        }
+    }
+
+    @Override
+    public void operateChapterFinished(boolean success) {
+        Toast.makeText(this, "操作章节成功 " + success, Toast.LENGTH_SHORT).show();
+        if (mPresenter != null) {
+            mPresenter.getChapterList(mFictionId, mLanguage);
+        }
+    }
+
+    @Override
     public void setPresenter(CreationDetailContract.Presenter presenter) {
         mPresenter = presenter;
         mPresenter.getFictionDetail(mFictionId, mLanguage);
@@ -230,7 +245,7 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
         }
     }
 
-    private void showEditDialog() {
+    private void showEditDialog(final FictionModel model) {
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_chapter_edit_layout, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(view);
@@ -238,6 +253,10 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
         view.findViewById(R.id.dialog_chapter_edit_txv).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mPresenter != null) {
+                    mPresenter.getChapterDetail(model.getId(), mFictionDetailModel.getLanguage());
+                    mLoadingView.setVisibility(View.VISIBLE);
+                }
                 alertDialog.dismiss();
             }
         });
@@ -245,12 +264,28 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
             @Override
             public void onClick(View v) {
                 alertDialog.dismiss();
+                if (mPresenter != null) {
+                    OperationRequest request = new OperationRequest();
+                    request.setIfiction_id(mFictionId);
+                    request.setLanguage(mLanguage);
+                    request.setChapter_id(model.getId());
+                    request.setOp(Constants.OPERATION_RECOVER);
+                    mPresenter.operateChapter(request);
+                }
             }
         });
         view.findViewById(R.id.dialog_chapter_delete_txv).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 alertDialog.dismiss();
+                if (mPresenter != null) {
+                    OperationRequest request = new OperationRequest();
+                    request.setIfiction_id(mFictionId);
+                    request.setLanguage(mLanguage);
+                    request.setChapter_id(model.getId());
+                    request.setOp(Constants.OPERATION_DELETE);
+                    mPresenter.operateChapter(request);
+                }
             }
         });
         alertDialog.show();

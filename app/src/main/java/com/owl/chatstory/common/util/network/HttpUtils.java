@@ -13,6 +13,7 @@ import com.owl.chatstory.data.chatsource.model.ActorModel;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
 import com.owl.chatstory.data.chatsource.model.FictionResponse;
+import com.owl.chatstory.data.chatsource.model.OperationRequest;
 import com.owl.chatstory.data.chatsource.model.RoleListRequest;
 import com.owl.chatstory.data.homesource.model.CategoryModel;
 import com.owl.chatstory.data.homesource.model.UpdateModel;
@@ -312,6 +313,30 @@ public class HttpUtils {
         String token = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_TOKEN, "");
         Subscription subscription = mApiService.getChapterList(token, language, id)
                 .map(new BaseArrayResponseFunc<FictionModel>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return subscription;
+    }
+
+    public Subscription operateChapter(Subscriber subscriber, OperationRequest request) {
+        String token = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_TOKEN, "");
+        request.setToken(token);
+        Subscription subscription = mApiService.operateChapter(request)
+                .map(new BaseResponseFunc())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return subscription;
+    }
+
+    public Subscription operateFiction(Subscriber subscriber, OperationRequest request) {
+        String token = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_TOKEN, "");
+        request.setToken(token);
+        Subscription subscription = mApiService.operateFiction(request)
+                .map(new BaseResponseFunc())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

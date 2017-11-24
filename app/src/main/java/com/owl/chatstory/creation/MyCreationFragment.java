@@ -8,6 +8,7 @@ import android.widget.ImageView;
 
 import com.owl.chatstory.R;
 import com.owl.chatstory.base.BaseFragment;
+import com.owl.chatstory.common.util.Constants;
 import com.owl.chatstory.common.util.ImageLoaderUtils;
 import com.owl.chatstory.common.util.TimeUtils;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
@@ -53,11 +54,7 @@ public class MyCreationFragment extends BaseFragment implements MyCreationContra
                 holder.setText(R.id.my_creation_title_txv, model.getTitle());
                 holder.setText(R.id.my_creation_time_txv, TimeUtils.getTimeFormat(model.getCreateLine()));
                 holder.setText(R.id.my_creation_chapters_txv, model.getSummary());
-                int chapters = 0;
-                if (model.getChapters() != null) {
-                    chapters = model.getChapters().size();
-                }
-                holder.setText(R.id.my_creation_texts_txv, getString(R.string.chapter_total_chapters, chapters));
+                holder.setText(R.id.my_creation_texts_txv, Constants.getStatus(model.getStatus()));
                 ImageLoaderUtils.getInstance().loadImage(holder.getConvertView().getContext(), model.getCover(), (ImageView) holder.getView(R.id.my_creation_img), R.color.colorPrimaryDark);
             }
         };

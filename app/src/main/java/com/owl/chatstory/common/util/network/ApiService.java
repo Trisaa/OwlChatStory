@@ -6,6 +6,7 @@ import com.owl.chatstory.data.chatsource.model.ActorModel;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
 import com.owl.chatstory.data.chatsource.model.FictionResponse;
+import com.owl.chatstory.data.chatsource.model.OperationRequest;
 import com.owl.chatstory.data.chatsource.model.RoleListRequest;
 import com.owl.chatstory.data.homesource.model.CategoryModel;
 import com.owl.chatstory.data.homesource.model.UpdateModel;
@@ -159,4 +160,9 @@ public interface ApiService {
     @POST("ifiction/managechapterlist")
     Observable<BaseArrayResponse<FictionModel>> getChapterList(@Field("token") String token, @Field("language") String language, @Field("ifiction_id") String id);
 
+    @POST("ifiction/ifictionstatus")
+    Observable<BaseResponse> operateFiction(@Body OperationRequest request);
+
+    @POST("ifiction/chapterstatus")
+    Observable<BaseResponse> operateChapter(@Body OperationRequest request);
 }

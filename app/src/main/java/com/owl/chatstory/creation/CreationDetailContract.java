@@ -4,6 +4,7 @@ import com.owl.chatstory.base.BasePresenter;
 import com.owl.chatstory.base.BaseView;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
+import com.owl.chatstory.data.chatsource.model.OperationRequest;
 
 import java.util.List;
 
@@ -18,6 +19,10 @@ public interface CreationDetailContract {
         void getChapterList(String id, String language);
 
         void getChapterDetail(String chapterId, String language);
+
+        void operateFiction(OperationRequest request);
+
+        void operateChapter(OperationRequest request);
     }
 
     interface View extends BaseView<Presenter> {
@@ -26,5 +31,9 @@ public interface CreationDetailContract {
         void showChapterList(List<FictionModel> list);
 
         void showFictionModel(FictionModel model);
+
+        void operateFictionFinished(boolean success);
+
+        void operateChapterFinished(boolean success);
     }
 }

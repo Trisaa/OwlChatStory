@@ -7,6 +7,7 @@ import com.owl.chatstory.data.chatsource.model.ActorModel;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
 import com.owl.chatstory.data.chatsource.model.FictionResponse;
+import com.owl.chatstory.data.chatsource.model.OperationRequest;
 import com.owl.chatstory.data.chatsource.model.RoleListRequest;
 
 import java.util.List;
@@ -50,8 +51,6 @@ public class ICreateDataImpl implements ICreateData {
             public void onNext(FictionResponse response) {
                 if (listener != null) {
                     model.setId(response.getId() + "");
-                    //model.setEnded(response.getEnded());
-                    //model.setSerials(response.getSerials());
                     listener.onUpdateSuccess(model);
                 }
             }
@@ -69,7 +68,7 @@ public class ICreateDataImpl implements ICreateData {
 
             @Override
             public void onError(Throwable e) {
-                Log.i("Lebron", e.toString());
+                Log.i("Lebron", "getUserFictionList " + e.toString());
                 if (listener != null) {
                     listener.onError();
                 }
@@ -95,6 +94,7 @@ public class ICreateDataImpl implements ICreateData {
 
             @Override
             public void onError(Throwable e) {
+                Log.i("Lebron", "publishChapter " + e.toString());
                 if (listener != null) {
                     listener.onFailed();
                 }
@@ -120,7 +120,7 @@ public class ICreateDataImpl implements ICreateData {
 
             @Override
             public void onError(Throwable e) {
-                Log.i("Lebron", "getRoleList "+e.toString());
+                Log.i("Lebron", "getRoleList " + e.toString());
                 if (listener != null) {
                     listener.onGetRoleList(null);
                 }
@@ -146,7 +146,7 @@ public class ICreateDataImpl implements ICreateData {
 
             @Override
             public void onError(Throwable e) {
-                Log.i("Lebron", "updateRoleList "+e.toString());
+                Log.i("Lebron", "updateRoleList " + e.toString());
                 if (listener != null) {
                     listener.onGetRoleList(null);
                 }
@@ -186,4 +186,55 @@ public class ICreateDataImpl implements ICreateData {
         }, language, id);
         mSubscriptions.add(subscription);
     }
+
+    @Override
+    public void operateFiction(OperationRequest request, final OnOperateFictionListener listener) {
+        Subscription subscription = HttpUtils.getInstance().operateFiction(new Subscriber() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                if (listener != null) {
+                    listener.operateFictionFinished(false);
+                }
+            }
+
+            @Override
+            public void onNext(Object o) {
+                if (listener != null) {
+                    listener.operateFictionFinished(true);
+                }
+            }
+        }, request);
+        mSubscriptions.add(subscription);
+    }
+
+    @Override
+    public void operateChapter(OperationRequest request, final OnOperateFictionListener listener) {
+        Subscription subscription = HttpUtils.getInstance().operateChapter(new Subscriber() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                if (listener != null) {
+                    listener.operateChapterFinished(false);
+                }
+            }
+
+            @Override
+            public void onNext(Object o) {
+                if (listener != null) {
+                    listener.operateChapterFinished(true);
+                }
+            }
+        }, request);
+        mSubscriptions.add(subscription);
+    }
+
+
 }

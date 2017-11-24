@@ -3,6 +3,7 @@ package com.owl.chatstory.data.chatsource;
 import com.owl.chatstory.data.chatsource.model.ActorModel;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
+import com.owl.chatstory.data.chatsource.model.OperationRequest;
 import com.owl.chatstory.data.chatsource.model.RoleListRequest;
 import com.owl.chatstory.data.usersource.model.UserModel;
 
@@ -27,6 +28,10 @@ public interface ICreateData {
 
     void getChapterList(String id, String language, OnChapterListener listener);
 
+    void operateFiction(OperationRequest request, OnOperateFictionListener listener);
+
+    void operateChapter(OperationRequest request, OnOperateFictionListener listener);
+
     interface OnCreateListener {
         void onUpdateSuccess(FictionDetailModel model);
 
@@ -39,5 +44,11 @@ public interface ICreateData {
 
     interface OnChapterListener {
         void onGetChapterList(List<FictionModel> list);
+    }
+
+    interface OnOperateFictionListener {
+        void operateFictionFinished(boolean success);
+
+        void operateChapterFinished(boolean success);
     }
 }

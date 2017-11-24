@@ -37,6 +37,8 @@ public class FictionDetailModel implements Parcelable {
     private int serials;//是否是连载
     @SerializedName("language")
     private String language;//语言
+    @SerializedName("status")
+    private int status;
 
     private String token;
 
@@ -142,6 +144,14 @@ public class FictionDetailModel implements Parcelable {
 
     public void setSerials(boolean serials) {
         this.serials = serials ? 1 : 0;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public FictionDetailModel() {
