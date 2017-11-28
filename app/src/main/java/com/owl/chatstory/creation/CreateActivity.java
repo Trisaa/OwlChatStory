@@ -15,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -190,6 +191,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
             } else {
                 mTitleView.setText("");
             }
+            Log.i("Lebron", " status " + mFictionModel.getStatus());
         }
         mAsideRole = new ActorModel(ActorModel.ROLE_ASIDE, "", DeviceUtils.getUri(R.mipmap.create_aside_role));
         mAsideRole.setId("");
@@ -201,26 +203,46 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
     @Override
     public void onBackPressed() {
         if (mMessageList.size() > 0) {
-            DialogUtils.showDialog(this, R.string.create_save_chapter
-                    , R.string.create_dialog_not_save, R.string.create_dialog_ok
-                    , new DialogUtils.OnDialogClickListener() {
-                        @Override
-                        public void onOK() {
-                            if (mPresenter != null) {
-                                mFictionModel.setName(mChapterTitle);
-                                mFictionModel.setList(mMessageList);
-                                mFictionModel.setStatus(Constants.STATUS_CREATING);
-                                mPresenter.saveChapter(mFictionModel);
-                                EventBus.getDefault().post(new CreationDetailEvent(true));
+            if (mFictionModel.getStatus() == Constants.STATUS_CREATING) {
+                DialogUtils.showDialog(this, R.string.create_save_chapter
+                        , R.string.create_dialog_not_save, R.string.create_dialog_ok
+                        , new DialogUtils.OnDialogClickListener() {
+                            @Override
+                            public void onOK() {
+                                if (mPresenter != null) {
+                                    mFictionModel.setName(mChapterTitle);
+                                    mFictionModel.setList(mMessageList);
+                                    mFictionModel.setStatus(Constants.STATUS_CREATING);
+                                    mPresenter.saveChapter(mFictionModel);
+                                    EventBus.getDefault().post(new CreationDetailEvent(true));
+                                }
+                                finish();
                             }
-                            finish();
-                        }
 
-                        @Override
-                        public void onCancel() {
-                            finish();
-                        }
-                    });
+                            @Override
+                            public void onCancel() {
+                                finish();
+                            }
+                        });
+            } else {
+                DialogUtils.showDialog(this, R.string.create_publish_chapter
+                        , R.string.create_dialog_cancel, R.string.create_dialog_ok
+                        , new DialogUtils.OnDialogClickListener() {
+                            @Override
+                            public void onOK() {
+                                if (mPresenter != null) {
+                                    mFictionModel.setName(mChapterTitle);
+                                    mFictionModel.setList(mMessageList);
+                                    mPresenter.publishChapter(mFictionModel);
+                                }
+                            }
+
+                            @Override
+                            public void onCancel() {
+                                finish();
+                            }
+                        });
+            }
         } else {
             super.onBackPressed();
         }

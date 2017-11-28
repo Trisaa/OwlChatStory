@@ -172,8 +172,12 @@ public class FictionDetailModel implements Parcelable {
         dest.writeInt(this.views);
         dest.writeParcelable(this.writer, flags);
         dest.writeTypedList(this.chapters);
-        dest.writeString(this.token);
+        dest.writeValue(this.createLine);
+        dest.writeInt(this.ended);
+        dest.writeInt(this.serials);
         dest.writeString(this.language);
+        dest.writeInt(this.status);
+        dest.writeString(this.token);
     }
 
     protected FictionDetailModel(Parcel in) {
@@ -185,8 +189,12 @@ public class FictionDetailModel implements Parcelable {
         this.views = in.readInt();
         this.writer = in.readParcelable(UserModel.class.getClassLoader());
         this.chapters = in.createTypedArrayList(ChapterModel.CREATOR);
-        this.token = in.readString();
+        this.createLine = (Long) in.readValue(Long.class.getClassLoader());
+        this.ended = in.readInt();
+        this.serials = in.readInt();
         this.language = in.readString();
+        this.status = in.readInt();
+        this.token = in.readString();
     }
 
     public static final Creator<FictionDetailModel> CREATOR = new Creator<FictionDetailModel>() {

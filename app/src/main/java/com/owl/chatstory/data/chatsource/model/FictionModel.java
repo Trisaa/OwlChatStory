@@ -121,6 +121,9 @@ public class FictionModel implements Parcelable {
         this.updateline = updateline;
     }
 
+    public FictionModel() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -133,12 +136,12 @@ public class FictionModel implements Parcelable {
         dest.writeString(this.name);
         dest.writeString(this.cover);
         dest.writeTypedList(this.list);
+        dest.writeInt(this.status);
+        dest.writeLong(this.createline);
+        dest.writeLong(this.updateline);
         dest.writeString(this.token);
         dest.writeString(this.ifiction_id);
         dest.writeString(this.language);
-    }
-
-    public FictionModel() {
     }
 
     protected FictionModel(Parcel in) {
@@ -147,12 +150,15 @@ public class FictionModel implements Parcelable {
         this.name = in.readString();
         this.cover = in.readString();
         this.list = in.createTypedArrayList(MessageModel.CREATOR);
+        this.status = in.readInt();
+        this.createline = in.readLong();
+        this.updateline = in.readLong();
         this.token = in.readString();
         this.ifiction_id = in.readString();
         this.language = in.readString();
     }
 
-    public static final Parcelable.Creator<FictionModel> CREATOR = new Parcelable.Creator<FictionModel>() {
+    public static final Creator<FictionModel> CREATOR = new Creator<FictionModel>() {
         @Override
         public FictionModel createFromParcel(Parcel source) {
             return new FictionModel(source);
