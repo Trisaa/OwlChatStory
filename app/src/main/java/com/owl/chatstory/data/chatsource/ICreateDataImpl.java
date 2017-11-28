@@ -2,6 +2,8 @@ package com.owl.chatstory.data.chatsource;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.owl.chatstory.common.util.PreferencesHelper;
 import com.owl.chatstory.common.util.network.HttpUtils;
 import com.owl.chatstory.data.chatsource.model.ActorModel;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
@@ -85,7 +87,7 @@ public class ICreateDataImpl implements ICreateData {
     }
 
     @Override
-    public void publishChapter(FictionModel model, final OnCreateListener listener) {
+    public void publishChapter(final FictionModel model, final OnCreateListener listener) {
         Subscription subscription = HttpUtils.getInstance().publishChapter(new Subscriber() {
             @Override
             public void onCompleted() {
@@ -102,6 +104,7 @@ public class ICreateDataImpl implements ICreateData {
 
             @Override
             public void onNext(Object o) {
+                PreferencesHelper.getInstance().removeLocalChapter(model);
                 if (listener != null) {
                     listener.onUpdateSuccess(null);
                 }
@@ -163,7 +166,7 @@ public class ICreateDataImpl implements ICreateData {
     }
 
     @Override
-    public void getChapterList(String id, String language, final OnChapterListener listener) {
+    public void getChapterList(final String id, final String language, final OnChapterListener listener) {
         Subscription subscription = HttpUtils.getInstance().getChapterList(new Subscriber<List<FictionModel>>() {
             @Override
             public void onCompleted() {
@@ -172,6 +175,7 @@ public class ICreateDataImpl implements ICreateData {
 
             @Override
             public void onError(Throwable e) {
+                Log.i("Lebron", "getChapterList " + e.toString());
                 if (listener != null) {
                     listener.onGetChapterList(null);
                 }
@@ -180,6 +184,9 @@ public class ICreateDataImpl implements ICreateData {
             @Override
             public void onNext(List<FictionModel> list) {
                 if (listener != null) {
+                    String key = id + language + "chapter";
+                    List<FictionModel> localChapterList = PreferencesHelper.getInstance().getLocalChapterList(key);
+                    list.addAll(localChapterList);
                     listener.onGetChapterList(list);
                 }
             }

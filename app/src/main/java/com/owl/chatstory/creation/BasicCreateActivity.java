@@ -12,7 +12,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -21,7 +20,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.owl.chatstory.R;
 import com.owl.chatstory.base.BaseActivity;
 import com.owl.chatstory.common.util.CameraUtils;
@@ -299,7 +297,6 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
     @Override
     public void onSuccess(FictionDetailModel model) {
         if (isUpdateOrAdd) {
-            Log.i("Lebron",new Gson().toJson(mFictionDetailModel));
             EventBus.getDefault().post(mFictionDetailModel);
             finish();
         } else {

@@ -15,7 +15,7 @@ import java.util.List;
  */
 
 public class CreationDetailPresenter implements CreationDetailContract.Presenter, IFictionData.OnFictionListener
-        , ICreateData.OnChapterListener, ICreateData.OnOperateFictionListener {
+        , ICreateData.OnChapterListener, ICreateData.OnOperateFictionListener, ICreateData.OnCreateListener {
     private CreationDetailContract.View mView;
     private IFictionData mData;
     private ICreateData mICreateData;
@@ -63,6 +63,11 @@ public class CreationDetailPresenter implements CreationDetailContract.Presenter
     }
 
     @Override
+    public void publishChapter(FictionModel model) {
+        mICreateData.publishChapter(model, this);
+    }
+
+    @Override
     public void onFiction(FictionModel model) {
         mView.showFictionModel(model);
     }
@@ -85,5 +90,15 @@ public class CreationDetailPresenter implements CreationDetailContract.Presenter
     @Override
     public void operateChapterFinished(boolean success) {
         mView.operateChapterFinished(success);
+    }
+
+    @Override
+    public void onUpdateSuccess(FictionDetailModel model) {
+        mView.publishSuccess();
+    }
+
+    @Override
+    public void onFailed() {
+        mView.publishFailed();
     }
 }

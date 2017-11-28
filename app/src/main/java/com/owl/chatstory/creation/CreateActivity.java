@@ -15,7 +15,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,6 +32,7 @@ import com.owl.chatstory.chat.adapter.ChatLeftDelegate;
 import com.owl.chatstory.chat.adapter.ChatRightDelegate;
 import com.owl.chatstory.chat.adapter.ReadItemDecoration;
 import com.owl.chatstory.common.util.CameraUtils;
+import com.owl.chatstory.common.util.Constants;
 import com.owl.chatstory.common.util.DeviceUtils;
 import com.owl.chatstory.common.util.DialogUtils;
 import com.owl.chatstory.common.util.FileUtils;
@@ -145,6 +145,9 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
             case R.id.menu_preview:
                 if (mMessageList.size() > 0) {
                     PreviewActivity.start(this, (ArrayList) mMessageList);
@@ -189,6 +192,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
             }
         }
         mAsideRole = new ActorModel(ActorModel.ROLE_ASIDE, "", DeviceUtils.getUri(R.mipmap.create_aside_role));
+        mAsideRole.setId("");
         initRoleAdapter();
         initMessageAdapter();
         new CreatePresenter(this);
@@ -202,6 +206,13 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
                     , new DialogUtils.OnDialogClickListener() {
                         @Override
                         public void onOK() {
+                            if (mPresenter != null) {
+                                mFictionModel.setName(mChapterTitle);
+                                mFictionModel.setList(mMessageList);
+                                mFictionModel.setStatus(Constants.STATUS_CREATING);
+                                mPresenter.saveChapter(mFictionModel);
+                                EventBus.getDefault().post(new CreationDetailEvent(true));
+                            }
                             finish();
                         }
 

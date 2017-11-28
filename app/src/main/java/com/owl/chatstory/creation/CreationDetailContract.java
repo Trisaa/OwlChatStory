@@ -23,6 +23,8 @@ public interface CreationDetailContract {
         void operateFiction(OperationRequest request);
 
         void operateChapter(OperationRequest request);
+
+        void publishChapter(FictionModel model);
     }
 
     interface View extends BaseView<Presenter> {
@@ -35,5 +37,9 @@ public interface CreationDetailContract {
         void operateFictionFinished(boolean success);
 
         void operateChapterFinished(boolean success);
+
+        void publishSuccess();
+
+        void publishFailed();
     }
 }

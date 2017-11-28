@@ -13,6 +13,7 @@ public class Constants {
     public static final int STATUS_ONLINE = 1;//上线
     public static final int STATUS_OFFLINE = 2;//下线
     public static final int STATUS_VIOLATION = 3;//违规
+    public static final int STATUS_CREATING = -1;//创作中
 
     public static final String OPERATION_DELETE = "delete";
     public static final String OPERATION_RECOVER = "recover";
@@ -27,6 +28,8 @@ public class Constants {
                 return "已下架";
             case STATUS_VIOLATION:
                 return "违规下架";
+            case STATUS_CREATING:
+                return "创作中";
             default:
                 return "审核中";
         }

@@ -160,9 +160,19 @@ public interface ApiService {
     @POST("ifiction/managechapterlist")
     Observable<BaseArrayResponse<FictionModel>> getChapterList(@Field("token") String token, @Field("language") String language, @Field("ifiction_id") String id);
 
+    /**
+     * 上下架小说
+     * @param request
+     * @return
+     */
     @POST("ifiction/ifictionstatus")
     Observable<BaseResponse> operateFiction(@Body OperationRequest request);
 
+    /**
+     * 上下架章节
+     * @param request
+     * @return
+     */
     @POST("ifiction/chapterstatus")
     Observable<BaseResponse> operateChapter(@Body OperationRequest request);
 }

@@ -1,6 +1,9 @@
 package com.owl.chatstory.creation;
 
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.owl.chatstory.common.util.PreferencesHelper;
 import com.owl.chatstory.data.chatsource.ICreateData;
 import com.owl.chatstory.data.chatsource.ICreateDataImpl;
 import com.owl.chatstory.data.chatsource.model.ActorModel;
@@ -32,7 +35,21 @@ public class CreatePresenter implements CreateContract.Presenter, ICreateData.On
 
     @Override
     public void saveChapter(FictionModel model) {
-
+        String key = model.getIfiction_id() + model.getLanguage() + "chapter";
+        List<FictionModel> list = PreferencesHelper.getInstance().getLocalChapterList(key);
+        boolean existed = false;
+        for (int i = 0; i < list.size(); i++) {
+            FictionModel fictionModel = list.get(i);
+            if (fictionModel.getNum() == model.getNum()) {
+                existed = true;
+                list.set(i, model);
+                break;
+            }
+        }
+        if (!existed) {
+            list.add(model);
+        }
+        PreferencesHelper.getInstance().setString(key, new Gson().toJson(list).toString());
     }
 
     @Override

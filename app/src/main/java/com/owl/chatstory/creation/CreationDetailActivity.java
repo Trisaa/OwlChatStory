@@ -19,7 +19,9 @@ import android.widget.Toast;
 import com.owl.chatstory.R;
 import com.owl.chatstory.base.BaseActivity;
 import com.owl.chatstory.common.util.Constants;
+import com.owl.chatstory.common.util.DialogUtils;
 import com.owl.chatstory.common.util.ImageLoaderUtils;
+import com.owl.chatstory.common.util.PreferencesHelper;
 import com.owl.chatstory.common.util.TimeUtils;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
@@ -56,6 +58,7 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
     private List<FictionModel> mDatas = new ArrayList<>();
     private View mHeaderView;
     private String mFictionId, mLanguage;
+    private TextView mChaptersView;
 
     public static void start(Context context, String id, String language) {
         Intent intent = new Intent(context, CreationDetailActivity.class);
@@ -99,9 +102,13 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
                 holder.getConvertView().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (mPresenter != null) {
-                            mPresenter.getChapterDetail(fictionModel.getId(), mFictionDetailModel.getLanguage());
-                            mLoadingView.setVisibility(View.VISIBLE);
+                        if (fictionModel.getStatus() == Constants.STATUS_CREATING) {
+                            CreateActivity.start(CreationDetailActivity.this, fictionModel);
+                        } else {
+                            if (mPresenter != null) {
+                                mPresenter.getChapterDetail(fictionModel.getId(), mFictionDetailModel.getLanguage());
+                                mLoadingView.setVisibility(View.VISIBLE);
+                            }
                         }
                     }
                 });
@@ -153,7 +160,8 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
         ((TextView) mHeaderView.findViewById(R.id.chapter_header_author_txv)).setText(author);
         ((TextView) mHeaderView.findViewById(R.id.chapter_header_describe_txv)).setText(fictionDetailModel.getSummary());
         ((TextView) mHeaderView.findViewById(R.id.chapter_header_tags_txv)).setText(fictionDetailModel.getTags().get(0));
-        ((TextView) mHeaderView.findViewById(R.id.chapter_header_chapters_txv)).setText(getString(R.string.chapter_total_chapters, mDatas.size()));
+        mChaptersView = ((TextView) mHeaderView.findViewById(R.id.chapter_header_chapters_txv));
+        mChaptersView.setText(getString(R.string.chapter_total_chapters, mDatas.size()));
         mHeaderView.findViewById(R.id.chapter_header_edit_img).setVisibility(View.VISIBLE);
         mHeaderView.findViewById(R.id.chapter_header_edit_img).setOnClickListener(this);
         TextView addChapterView = (TextView) (mHeaderView.findViewById(R.id.chapter_header_add_chapters_txv));
@@ -194,6 +202,9 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
             mDatas.clear();
             mDatas.addAll(list);
             mAdapter.notifyDataSetChanged();
+            if (mChaptersView != null) {
+                mChaptersView.setText(getString(R.string.chapter_total_chapters, mDatas.size()));
+            }
         } else {
             Toast.makeText(this, "获取章节列表失败", Toast.LENGTH_SHORT).show();
         }
@@ -219,6 +230,18 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
         if (mPresenter != null) {
             mPresenter.getChapterList(mFictionId, mLanguage);
         }
+    }
+
+    @Override
+    public void publishSuccess() {
+        if (mPresenter != null) {
+            mPresenter.getChapterList(mFictionId, mLanguage);
+        }
+    }
+
+    @Override
+    public void publishFailed() {
+        Toast.makeText(this, "发布失败", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -250,42 +273,74 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(view);
         final AlertDialog alertDialog = builder.create();
-        view.findViewById(R.id.dialog_chapter_edit_txv).setOnClickListener(new View.OnClickListener() {
+        TextView editView = (TextView) view.findViewById(R.id.dialog_chapter_edit_txv);
+        TextView publishView = (TextView) view.findViewById(R.id.dialog_chapter_publish_txv);
+        TextView deleteView = (TextView) view.findViewById(R.id.dialog_chapter_delete_txv);
+        editView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mPresenter != null) {
-                    mPresenter.getChapterDetail(model.getId(), mFictionDetailModel.getLanguage());
-                    mLoadingView.setVisibility(View.VISIBLE);
+                if (model.getStatus() == Constants.STATUS_CREATING) {
+                    CreateActivity.start(CreationDetailActivity.this, model);
+                } else {
+                    if (mPresenter != null) {
+                        mPresenter.getChapterDetail(model.getId(), mFictionDetailModel.getLanguage());
+                        mLoadingView.setVisibility(View.VISIBLE);
+                    }
                 }
                 alertDialog.dismiss();
             }
         });
-        view.findViewById(R.id.dialog_chapter_publish_txv).setOnClickListener(new View.OnClickListener() {
+        publishView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertDialog.dismiss();
-                if (mPresenter != null) {
-                    OperationRequest request = new OperationRequest();
-                    request.setIfiction_id(mFictionId);
-                    request.setLanguage(mLanguage);
-                    request.setChapter_id(model.getId());
-                    request.setOp(Constants.OPERATION_RECOVER);
-                    mPresenter.operateChapter(request);
+                if (model.getStatus() == Constants.STATUS_CREATING) {
+                    DialogUtils.showDialog(CreationDetailActivity.this, R.string.create_publish_chapter
+                            , R.string.create_dialog_cancel, R.string.create_dialog_ok
+                            , new DialogUtils.OnDialogClickListener() {
+                                @Override
+                                public void onOK() {
+                                    if (mPresenter != null) {
+                                        mPresenter.publishChapter(model);
+                                    }
+                                }
+
+                                @Override
+                                public void onCancel() {
+
+                                }
+                            });
+                } else {
+                    if (mPresenter != null) {
+                        OperationRequest request = new OperationRequest();
+                        request.setIfiction_id(mFictionId);
+                        request.setLanguage(mLanguage);
+                        request.setChapter_id(model.getId());
+                        request.setOp(Constants.OPERATION_RECOVER);
+                        mPresenter.operateChapter(request);
+                    }
                 }
+                alertDialog.dismiss();
             }
         });
-        view.findViewById(R.id.dialog_chapter_delete_txv).setOnClickListener(new View.OnClickListener() {
+        deleteView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertDialog.dismiss();
-                if (mPresenter != null) {
-                    OperationRequest request = new OperationRequest();
-                    request.setIfiction_id(mFictionId);
-                    request.setLanguage(mLanguage);
-                    request.setChapter_id(model.getId());
-                    request.setOp(Constants.OPERATION_DELETE);
-                    mPresenter.operateChapter(request);
+                if (model.getStatus() == Constants.STATUS_CREATING) {
+                    PreferencesHelper.getInstance().removeLocalChapter(model);
+                    if (mPresenter != null) {
+                        mPresenter.getChapterList(mFictionId, mLanguage);
+                    }
+                } else {
+                    if (mPresenter != null) {
+                        OperationRequest request = new OperationRequest();
+                        request.setIfiction_id(mFictionId);
+                        request.setLanguage(mLanguage);
+                        request.setChapter_id(model.getId());
+                        request.setOp(Constants.OPERATION_DELETE);
+                        mPresenter.operateChapter(request);
+                    }
                 }
+                alertDialog.dismiss();
             }
         });
         alertDialog.show();

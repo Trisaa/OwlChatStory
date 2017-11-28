@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.owl.chatstory.MainApplication;
+import com.owl.chatstory.data.chatsource.model.FictionModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -110,5 +113,28 @@ public class PreferencesHelper {
             }
             return list;
         }
+    }
+
+    public List<FictionModel> getLocalChapterList(String key) {
+        Gson gson = new Gson();
+        String chapters = mPref.getString(key, "");
+        List<FictionModel> list = gson.fromJson(chapters, new TypeToken<List<FictionModel>>() {
+        }.getType());
+        if (list == null) {
+            list = new ArrayList<>();
+        }
+        return list;
+    }
+
+    public void removeLocalChapter(FictionModel model) {
+        String key = model.getIfiction_id() + model.getLanguage() + "chapter";
+        List<FictionModel> list = getLocalChapterList(key);
+        for (FictionModel fictionModel : list) {
+            if (fictionModel.getNum() == model.getNum()) {
+                list.remove(fictionModel);
+                break;
+            }
+        }
+        setString(key, new Gson().toJson(list));
     }
 }

@@ -252,7 +252,6 @@ public class HttpUtils {
     public Subscription updateFictionBasicInfo(Subscriber<FictionResponse> subscriber, FictionDetailModel model) {
         String token = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_TOKEN, "");
         model.setToken(token);
-        model.setWriter(null);
         Log.i("Lebron", new Gson().toJson(model).toString());
         Subscription subscription = mApiService.updateFictionBasicInfo(model)
                 .map(new BaseResponseFunc<FictionResponse>())
