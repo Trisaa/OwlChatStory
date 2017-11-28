@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.owl.chatstory.R;
 import com.owl.chatstory.base.BaseActivity;
+import com.owl.chatstory.common.util.Constants;
 import com.owl.chatstory.common.util.JumpUtils;
 import com.owl.chatstory.common.util.PreferencesHelper;
 import com.owl.chatstory.common.view.CustomTwitterLoginButton;
@@ -105,6 +106,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
             PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_USER_ID, userModel.getId());
             PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_USER, new Gson().toJson(userModel));
             EventBus.getDefault().post(userModel);
+            EventBus.getDefault().post(Constants.RELOAD_DATA_AFTER_LOGINED);
             finish();
         } else {
             Toast.makeText(this, R.string.login_failed, Toast.LENGTH_SHORT).show();

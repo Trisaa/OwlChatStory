@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by lebron on 2017/9/10.
@@ -164,6 +165,11 @@ public class CategoryFragment extends BaseFragment implements CategoryContract.V
                 mPrePage = mPage;
             }
         }
+    }
+
+    @OnClick(R.id.error_btn)
+    public void clickReload() {
+        onRefresh();
     }
 
     private FictionListRequest getRequest(int page) {

@@ -18,6 +18,8 @@ public class Constants {
     public static final String OPERATION_DELETE = "delete";
     public static final String OPERATION_RECOVER = "recover";
 
+    public static final String RELOAD_DATA_AFTER_LOGINED = "RELOAD_DATA_AFTER_LOGINED";
+
     public static String getStatus(int status) {
         switch (status) {
             case STATUS_REVIEWING:

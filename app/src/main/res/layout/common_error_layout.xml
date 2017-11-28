@@ -17,4 +17,17 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/common_network_error" />
+
+    <TextView
+        android:id="@+id/error_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/common_red_btn_selector"
+        android:paddingBottom="6dp"
+        android:paddingEnd="20dp"
+        android:paddingStart="20dp"
+        android:paddingTop="6dp"
+        android:text="重新加载"
+        android:textColor="#ffffff" />
 </LinearLayout>

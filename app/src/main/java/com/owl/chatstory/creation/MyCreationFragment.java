@@ -5,16 +5,22 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.owl.chatstory.R;
 import com.owl.chatstory.base.BaseFragment;
 import com.owl.chatstory.common.util.Constants;
 import com.owl.chatstory.common.util.ImageLoaderUtils;
+import com.owl.chatstory.common.util.PreferencesHelper;
 import com.owl.chatstory.common.util.TimeUtils;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
+import com.owl.chatstory.user.login.LoginActivity;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
+
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +41,10 @@ public class MyCreationFragment extends BaseFragment implements MyCreationContra
     View mErrorView;
     @BindView(R.id.mycreation_refresh_layout)
     SwipeRefreshLayout mRefreshLayout;
+    @BindView(R.id.error_btn)
+    TextView mErrorBtn;
+    @BindView(R.id.error_txv)
+    TextView mErrorTextView;
 
     private MyCreationContract.Presenter mPresenter;
     private List<FictionDetailModel> mDatas = new ArrayList<>();
@@ -78,7 +88,27 @@ public class MyCreationFragment extends BaseFragment implements MyCreationContra
 
     @OnClick(R.id.mycreation_add_img)
     public void clickAdd() {
-        BasicCreateActivity.start(getActivity(), null);
+        if (PreferencesHelper.getInstance().isLogined()) {
+            BasicCreateActivity.start(getActivity(), null);
+        } else {
+            Toast.makeText(getActivity(), "您还未登录", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @OnClick(R.id.error_btn)
+    public void clickErrorBtn() {
+        if (PreferencesHelper.getInstance().isLogined()) {
+            mPresenter.getUserFictionList(mLanguage);
+        } else {
+            LoginActivity.start(getActivity());
+        }
+    }
+
+    @Subscribe
+    public void onEvent(String event) {
+        if (event != null && event.equals(Constants.RELOAD_DATA_AFTER_LOGINED)) {
+            mPresenter.getUserFictionList(mLanguage);
+        }
     }
 
     @Override
@@ -100,6 +130,13 @@ public class MyCreationFragment extends BaseFragment implements MyCreationContra
     @Override
     public void showErrorView() {
         mRefreshLayout.setRefreshing(false);
+        if (PreferencesHelper.getInstance().isLogined()) {
+            mErrorTextView.setText(R.string.common_network_error);
+            mErrorBtn.setText("重新加载");
+        } else {
+            mErrorTextView.setText("登录后获取更多");
+            mErrorBtn.setText("登录");
+        }
         mErrorView.setVisibility(View.VISIBLE);
     }
 
