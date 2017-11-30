@@ -3,6 +3,7 @@
     android:id="@+id/error_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/common_recycler_bg"
     android:gravity="center"
     android:orientation="vertical">
 

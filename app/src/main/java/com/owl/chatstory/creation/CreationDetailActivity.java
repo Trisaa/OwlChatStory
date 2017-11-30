@@ -161,14 +161,22 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
         ((TextView) mHeaderView.findViewById(R.id.chapter_header_describe_txv)).setText(fictionDetailModel.getSummary());
         ((TextView) mHeaderView.findViewById(R.id.chapter_header_tags_txv)).setText(fictionDetailModel.getTags().get(0));
         mChaptersView = ((TextView) mHeaderView.findViewById(R.id.chapter_header_chapters_txv));
-        mChaptersView.setText(getString(R.string.chapter_total_chapters, mDatas.size()));
         mHeaderView.findViewById(R.id.chapter_header_edit_img).setVisibility(View.VISIBLE);
         mHeaderView.findViewById(R.id.chapter_header_edit_img).setOnClickListener(this);
         TextView addChapterView = (TextView) (mHeaderView.findViewById(R.id.chapter_header_add_chapters_txv));
-        if (fictionDetailModel.getSerials()) {
-            addChapterView.setVisibility(View.VISIBLE);
-        }
         addChapterView.setOnClickListener(this);
+        setChaptersView();
+    }
+
+    private void setChaptersView() {
+        if (mChaptersView != null) {
+            mChaptersView.setText(getString(R.string.chapter_total_chapters, mDatas.size()));
+            if (mDatas.size() <= 0 || mFictionDetailModel.getSerials()) {
+                mHeaderView.findViewById(R.id.chapter_header_add_chapters_txv).setVisibility(View.VISIBLE);
+            } else {
+                mHeaderView.findViewById(R.id.chapter_header_add_chapters_txv).setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override
@@ -183,6 +191,7 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
                 model.setLanguage(mLanguage);
                 model.setNum(mDatas.size() + 1);
                 model.setStatus(Constants.STATUS_CREATING);
+                model.setName(getString(R.string.app_name));
                 CreateActivity.start(CreationDetailActivity.this, model);
                 break;
         }
@@ -203,9 +212,7 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
             mDatas.clear();
             mDatas.addAll(list);
             mAdapter.notifyDataSetChanged();
-            if (mChaptersView != null) {
-                mChaptersView.setText(getString(R.string.chapter_total_chapters, mDatas.size()));
-            }
+            setChaptersView();
         } else {
             Toast.makeText(this, "获取章节列表失败", Toast.LENGTH_SHORT).show();
         }
