@@ -1,5 +1,7 @@
 package com.owl.chatstory.common.util;
 
+import java.util.Locale;
+
 /**
  * Created by lebron on 2017/11/22.
  */
@@ -47,6 +49,21 @@ public class Constants {
                 return "繁體中文";
             default:
                 return "繁體中文";
+        }
+    }
+
+    public static String getLanguage() {
+        try {
+            String country = Locale.getDefault().getCountry().toLowerCase();
+            if (country.equals("cn")) {
+                return Constants.LANGUAGE_CHINESE;
+            } else if (country.equals("tw")) {
+                return Constants.LANGUAGE_CHINESE_TW;
+            } else {
+                return Constants.LANGUAGE_ENGLISH;
+            }
+        } catch (Exception e) {
+            return Constants.LANGUAGE_CHINESE;
         }
     }
 }

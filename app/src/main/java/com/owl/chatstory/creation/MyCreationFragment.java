@@ -49,7 +49,7 @@ public class MyCreationFragment extends BaseFragment implements MyCreationContra
     private MyCreationContract.Presenter mPresenter;
     private List<FictionDetailModel> mDatas = new ArrayList<>();
     private CommonAdapter<FictionDetailModel> mAdapter;
-    private String mLanguage = "english";
+    private String mLanguage = Constants.LANGUAGE_ENGLISH;
 
     @Override
     protected int getContentViewID() {
@@ -58,6 +58,7 @@ public class MyCreationFragment extends BaseFragment implements MyCreationContra
 
     @Override
     protected void initViewsAndData(View view) {
+        mLanguage = Constants.getLanguage();
         mAdapter = new CommonAdapter<FictionDetailModel>(getActivity(), R.layout.my_creation_item, mDatas) {
             @Override
             protected void convert(ViewHolder holder, FictionDetailModel model, int position) {

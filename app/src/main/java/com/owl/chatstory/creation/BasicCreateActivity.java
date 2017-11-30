@@ -106,6 +106,7 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
     protected void initViewsAndData() {
         mFictionDetailModel = getIntent().getParcelableExtra(EXTRA_FICTION_DETAIL);
         isUpdateOrAdd = mFictionDetailModel != null;
+        mLanguage = Constants.getLanguage();
         if (isUpdateOrAdd) {
             mCoverImagePath = mFictionDetailModel.getCover();
             mCategory = mFictionDetailModel.getTags().get(0);
@@ -119,6 +120,8 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
             mCategoryView.setText(mCategory);
             mLanguageView.setText(Constants.getLanguage(mLanguage));
             mLanguageView.setEnabled(false);
+        } else {
+            mLanguageView.setText(Constants.getLanguage(mLanguage));
         }
         new BasicCreatePresenter(this);
     }
@@ -237,6 +240,8 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
                     @Override
                     public void onFailure() {
                         Toast.makeText(BasicCreateActivity.this, "图片上传失败", Toast.LENGTH_SHORT).show();
+                        mFictionDetailModel.setCover("");
+                        mPresenter.saveFictionBasicInfo(mFictionDetailModel);
                     }
 
                     @Override

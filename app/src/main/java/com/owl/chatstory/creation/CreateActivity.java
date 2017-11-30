@@ -406,6 +406,8 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
                             public void onFailure() {
                                 mLoadingView.setVisibility(View.GONE);
                                 Toast.makeText(CreateActivity.this, "图片上传失败", Toast.LENGTH_SHORT).show();
+                                mFirstRole = new ActorModel(ActorModel.ROLE_FIRST, name, "");
+                                updateRoleList();
                             }
 
                             @Override
@@ -421,6 +423,9 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
                             public void onFailure() {
                                 mLoadingView.setVisibility(View.GONE);
                                 Toast.makeText(CreateActivity.this, "图片上传失败", Toast.LENGTH_SHORT).show();
+                                ActorModel userModel = new ActorModel(ActorModel.ROLE_SECOND, name, "");
+                                mSecondRoleList.add(userModel);
+                                updateRoleList();
                             }
 
                             @Override
