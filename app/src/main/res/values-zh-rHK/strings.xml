@@ -19,6 +19,8 @@
     <string name="common_next">繼續閱讀</string>
     <string name="common_continue">未完待續</string>
     <string name="common_create">創作</string>
+    <string name="common_preview">預覽</string>
+    <string name="common_update">更新</string>
 
     <string name="feedback_app_version">版本 V%1$s</string>
     <string name="feedback_message">"設備:%1$s\r\n版本信息:%2$s\r\n-------------------\r\n"</string>
@@ -52,4 +54,52 @@
     <string name="read_click_tips">點我試試</string>
 
     <string name="share_content">我發現了一個不錯的對話小說App，快來一起體驗吧～</string>
+
+    <string name="create_publish_chapter">是否發佈當前內容？發佈審核通過後讀者將可見</string>
+    <string name="create_save_chapter">是否保存當前內容？僅保存到本地，可之後發佈</string>
+    <string name="create_delete_chapter">是否要刪除當前章節？不可找回</string>
+    <string name="create_offline_fiction">是否下架當前小說？下架後讀者將不可見，之後可重新上架</string>
+    <string name="create_dialog_cancel">我再想想</string>
+    <string name="create_dialog_ok">是的</string>
+    <string name="create_dialog_not_save">捨棄它</string>
+    <string name="create_title">標題</string>
+    <string name="create_title_hint">請輸入小說名（20字以內）</string>
+    <string name="create_summary">簡介</string>
+    <string name="create_summary_hint">請輸入簡介（50字以內）</string>
+    <string name="create_choose_category">選擇分類</string>
+    <string name="create_choose_language">選擇語言</string>
+    <string name="create_choose_single_or_serials">選擇創建類型</string>
+    <string name="create_single">創作單篇</string>
+    <string name="create_single_hint">短篇，僅一章完結</string>
+    <string name="create_serials">創作連載</string>
+    <string name="create_serials_hint">長篇，可持續更新連載</string>
+    <string name="create_choose_roles">選擇一個角色</string>
+    <string name="create_empty_message">發送內容不能為空</string>
+    <string name="create_role_name">角色名稱</string>
+    <string name="create_add_chapter">添加章節</string>
+
+    <string name="creation_detail_offline">下線</string>
+    <string name="creation_detail_online">上線</string>
+    <string name="creation_detail_edit">編輯</string>
+    <string name="creation_detail_delete">刪除</string>
+    <string name="creation_detail_release_failed">發佈失敗</string>
+    <string name="creation_status_reviewing">審核中</string>
+    <string name="creation_status_released">已上線</string>
+    <string name="creation_status_offline">已下線</string>
+    <string name="creation_status_creating">創作中</string>
+    <string name="creation_status_refused">已拒絕</string>
+
+    <string name="common_update_info_failed">更新信息失敗</string>
+    <string name="common_update_info_success">更新信息成功</string>
+    <string name="common_invalid_info">信息不完整</string>
+    <string name="common_upload_pic_failed">上傳圖片失敗</string>
+    <string name="common_get_pic_failed">獲取圖片失敗</string>
+    <string name="common_get_info_failed">獲取信息失敗</string>
+    <string name="common_detail">詳情</string>
+    <string name="common_reload">重新加載</string>
+    <string name="common_login_first">請先登錄</string>
+    <string name="common_send">發送</string>
+    <string name="common_add">添加</string>
+    <string name="common_choose_from_gallery">從圖庫選擇</string>
+    <string name="common_choose_from_photos">拍照</string>
 </resources>

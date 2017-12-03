@@ -83,7 +83,7 @@ public class PreviewActivity extends BaseActivity {
     @Override
     protected void initToolBar() {
         if (mToolbar != null) {
-            mToolbar.setTitle("Preview");
+            mToolbar.setTitle(R.string.common_preview);
             setSupportActionBar(mToolbar);
             ActionBar ab = getSupportActionBar();
             if (ab != null) {

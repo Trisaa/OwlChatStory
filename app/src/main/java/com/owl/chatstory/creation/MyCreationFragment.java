@@ -92,7 +92,7 @@ public class MyCreationFragment extends BaseFragment implements MyCreationContra
         if (PreferencesHelper.getInstance().isLogined()) {
             BasicCreateActivity.start(getActivity(), null);
         } else {
-            Toast.makeText(getActivity(), "您还未登录", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.common_login_first, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -133,10 +133,10 @@ public class MyCreationFragment extends BaseFragment implements MyCreationContra
         mRefreshLayout.setRefreshing(false);
         if (PreferencesHelper.getInstance().isLogined()) {
             mErrorTextView.setText(R.string.common_network_error);
-            mErrorBtn.setText("重新加载");
+            mErrorBtn.setText(R.string.common_reload);
         } else {
-            mErrorTextView.setText("登录后获取更多");
-            mErrorBtn.setText("登录");
+            mErrorTextView.setText(R.string.common_login_first);
+            mErrorBtn.setText(R.string.common_login);
         }
         mErrorView.setVisibility(View.VISIBLE);
     }

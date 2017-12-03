@@ -15,7 +15,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -191,7 +190,6 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
             } else {
                 mTitleView.setText("");
             }
-            Log.i("Lebron", " status " + mFictionModel.getStatus());
         }
         mAsideRole = new ActorModel(ActorModel.ROLE_ASIDE, "", DeviceUtils.getUri(R.mipmap.create_aside_role));
         mAsideRole.setId("");
@@ -337,7 +335,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
                     break;
             }
         } else if (resultCode == UCrop.RESULT_ERROR) {
-            Toast.makeText(this, "获取图片失败", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.common_get_pic_failed, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -405,7 +403,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
                             @Override
                             public void onFailure() {
                                 mLoadingView.setVisibility(View.GONE);
-                                Toast.makeText(CreateActivity.this, "图片上传失败", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(CreateActivity.this, R.string.common_upload_pic_failed, Toast.LENGTH_SHORT).show();
                                 mFirstRole = new ActorModel(ActorModel.ROLE_FIRST, name, "");
                                 updateRoleList();
                             }
@@ -422,7 +420,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
                             @Override
                             public void onFailure() {
                                 mLoadingView.setVisibility(View.GONE);
-                                Toast.makeText(CreateActivity.this, "图片上传失败", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(CreateActivity.this, R.string.common_upload_pic_failed, Toast.LENGTH_SHORT).show();
                                 ActorModel userModel = new ActorModel(ActorModel.ROLE_SECOND, name, "");
                                 mSecondRoleList.add(userModel);
                                 updateRoleList();
@@ -440,7 +438,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
                     alertDialog.dismiss();
                     mLoadingView.setVisibility(View.VISIBLE);
                 } else {
-                    Toast.makeText(CreateActivity.this, "信息不完善", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateActivity.this, R.string.common_invalid_info, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -461,7 +459,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
         final EditText editText = (EditText) view.findViewById(R.id.add_role_edit);
         TextView textView = (TextView) view.findViewById(R.id.add_role_submit_txv);
         editText.setText(name);
-        textView.setText("更新信息");
+        textView.setText(R.string.common_update);
         ImageLoaderUtils.getInstance().loadCircleImage(this, icon, mDialogUserIcon);
         mDialogUserIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -499,7 +497,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
                                 @Override
                                 public void onFailure() {
                                     mLoadingView.setVisibility(View.GONE);
-                                    Toast.makeText(CreateActivity.this, "图片上传失败", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(CreateActivity.this, R.string.common_upload_pic_failed, Toast.LENGTH_SHORT).show();
                                 }
 
                                 @Override
@@ -514,7 +512,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
                         alertDialog.dismiss();
                         mLoadingView.setVisibility(View.VISIBLE);
                     } else {
-                        Toast.makeText(CreateActivity.this, "信息不完善", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CreateActivity.this, R.string.common_invalid_info, Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -690,17 +688,17 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
                 mRecyclerView.smoothScrollToPosition(mMessageList.size() - 1);
                 mEditText.setText("");
             } else {
-                Toast.makeText(this, "发送内容不能为空", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.create_empty_message, Toast.LENGTH_SHORT).show();
             }
         } else {
-            Toast.makeText(this, "选择一个角色", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.create_choose_roles, Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void publishSuccess() {
         EventBus.getDefault().post(new CreationDetailEvent(true));
-        Toast.makeText(this, "发布章节成功", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.common_update_info_success, Toast.LENGTH_SHORT).show();
         finish();
     }
 
@@ -720,13 +718,13 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
             }
             mRolesAdapter.notifyDataSetChanged();
         } else {
-            Toast.makeText(this, "获取角色信息失败", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.common_get_info_failed, Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void publishFailed() {
-        Toast.makeText(this, "发布章节失败", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.creation_detail_release_failed, Toast.LENGTH_SHORT).show();
     }
 
     @Override

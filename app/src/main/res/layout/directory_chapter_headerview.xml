@@ -67,7 +67,7 @@
             android:layout_marginTop="10dp"
             android:ellipsize="end"
             android:maxLines="3"
-            android:text="Life is short"
+            android:text="Summary"
             android:textColor="@color/common_text_color"
             android:textSize="16sp" />
 
@@ -99,7 +99,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="Total 5 chapters"
+            android:text="Total 0 chapters"
             android:textColor="@color/common_text_color" />
 
         <TextView
@@ -114,7 +114,7 @@
             android:paddingEnd="16dp"
             android:paddingStart="16dp"
             android:paddingTop="6dp"
-            android:text="添加章节"
+            android:text="@string/create_add_chapter"
             android:textColor="@color/common_red"
             android:textSize="12sp"
             android:visibility="gone" />

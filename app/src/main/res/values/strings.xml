@@ -21,6 +21,7 @@
     <string name="common_continue">To be continued</string>
     <string name="common_create">Creation</string>
     <string name="common_preview">Preview</string>
+    <string name="common_update">Update</string>
 
     <string name="feedback_app_version">Version V%1$s</string>
     <string name="feedback_message">"DeviceModel:%1$s\r\nSystemVersion:%2$s\r\n-------------------\r\n"</string>
@@ -56,11 +57,51 @@
     <string name="share_content">I find a good chat-fiction app, let\'s enjoy reading</string>
 
     <!--new added-->
-    <string name="create_publish_chapter">是否发布当前内容？</string>
-    <string name="create_save_chapter">是否保存当前内容？</string>
-    <string name="create_delete_chapter">是否要删除当前章节？不可找回</string>
-    <string name="create_offline_fiction">是否下架当前小说？</string>
-    <string name="create_dialog_cancel">我再想想</string>
-    <string name="create_dialog_ok">是的</string>
-    <string name="create_dialog_not_save">舍弃它</string>
+    <string name="create_publish_chapter">Sure to release current content? Readers will see it after we review it.</string>
+    <string name="create_save_chapter">Sure to save current content? Saved to the local only, you can release it later.</string>
+    <string name="create_delete_chapter">Sure to delete current content? Cann\'t be found later.</string>
+    <string name="create_offline_fiction">Sure to offline current content? Readers will not see it.</string>
+    <string name="create_dialog_cancel">Not now</string>
+    <string name="create_dialog_ok">Yes</string>
+    <string name="create_dialog_not_save">Discard it</string>
+    <string name="create_title">Title</string>
+    <string name="create_title_hint">Input title(20 words limits)</string>
+    <string name="create_summary">Summary</string>
+    <string name="create_summary_hint">Input summary(50 words limits)</string>
+    <string name="create_choose_category">Choose category</string>
+    <string name="create_choose_language">Choose language</string>
+    <string name="create_choose_single_or_serials">Choose create type</string>
+    <string name="create_single">Create short story</string>
+    <string name="create_single_hint">Short story, only one chapter</string>
+    <string name="create_serials">Create serial story</string>
+    <string name="create_serials_hint">Serial story, more chapters</string>
+    <string name="create_choose_roles">Choose a role</string>
+    <string name="create_empty_message">Message cann\'t be empty</string>
+    <string name="create_role_name">Role\'s name</string>
+    <string name="create_add_chapter">Add chapter</string>
+
+    <string name="creation_detail_offline">Offline</string>
+    <string name="creation_detail_online">Online</string>
+    <string name="creation_detail_edit">Edit</string>
+    <string name="creation_detail_delete">Delete</string>
+    <string name="creation_detail_release_failed">Released failed</string>
+    <string name="creation_status_reviewing">Reviewing</string>
+    <string name="creation_status_released">Released</string>
+    <string name="creation_status_offline">Offlined</string>
+    <string name="creation_status_creating">Creating</string>
+    <string name="creation_status_refused">Refused</string>
+
+    <string name="common_update_info_failed">Update info failed</string>
+    <string name="common_update_info_success">Update info successfully</string>
+    <string name="common_invalid_info">Incomplete info</string>
+    <string name="common_upload_pic_failed">Failed to upload pictures</string>
+    <string name="common_get_pic_failed">Failed to get pictures</string>
+    <string name="common_get_info_failed">Failed to get datas</string>
+    <string name="common_detail">Detail</string>
+    <string name="common_reload">Reload</string>
+    <string name="common_login_first">Please login first</string>
+    <string name="common_send">Send</string>
+    <string name="common_add">Add</string>
+    <string name="common_choose_from_gallery">Choose from gallery</string>
+    <string name="common_choose_from_photos">Take photos</string>
 </resources>

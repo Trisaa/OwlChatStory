@@ -214,7 +214,7 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
             mAdapter.notifyDataSetChanged();
             setChaptersView();
         } else {
-            Toast.makeText(this, "获取章节列表失败", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.common_get_info_failed, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -226,7 +226,7 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
 
     @Override
     public void operateFictionFinished(boolean success) {
-        Toast.makeText(this, "操作小说成功 " + success, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, success ? R.string.common_update_info_success : R.string.common_update_info_failed, Toast.LENGTH_SHORT).show();
         if (mPresenter != null) {
             mPresenter.getFictionDetail(mFictionId, mLanguage);
         }
@@ -234,7 +234,7 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
 
     @Override
     public void operateChapterFinished(boolean success) {
-        Toast.makeText(this, "操作章节成功 " + success, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, success ? R.string.common_update_info_success : R.string.common_update_info_failed, Toast.LENGTH_SHORT).show();
         if (mPresenter != null) {
             mPresenter.getChapterList(mFictionId, mLanguage);
         }
@@ -249,7 +249,7 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
 
     @Override
     public void publishFailed() {
-        Toast.makeText(this, "发布失败", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.creation_detail_release_failed, Toast.LENGTH_SHORT).show();
     }
 
     @Override

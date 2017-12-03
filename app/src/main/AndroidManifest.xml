@@ -69,7 +69,7 @@
 
         <activity
             android:name=".creation.ChooseCategoryActivity"
-            android:label="选择分类"
+            android:label="@string/create_choose_category"
             android:screenOrientation="portrait" />
 
         <activity
@@ -83,6 +83,7 @@
 
         <activity
             android:name=".creation.CreationDetailActivity"
+            android:label="@string/common_detail"
             android:screenOrientation="portrait" />
 
         <activity

@@ -143,7 +143,7 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
             }
         } else if (resultCode == UCrop.RESULT_ERROR) {
             Throwable cropError = UCrop.getError(data);
-            Toast.makeText(this, "获取图片失败", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.common_get_pic_failed, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -219,7 +219,7 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
         if (TextUtils.isEmpty(title) || TextUtils.isEmpty(summary)
                 || TextUtils.isEmpty(mCategory) || TextUtils.isEmpty(mCoverImagePath)
                 || TextUtils.isEmpty(mLanguage)) {
-            Toast.makeText(this, "信息不完整", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.common_invalid_info, Toast.LENGTH_SHORT).show();
         } else {
             if (mFictionDetailModel == null) {
                 mFictionDetailModel = new FictionDetailModel();
@@ -239,7 +239,7 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
                 FirebaseUtil.upLoadFile(mCoverImagePath, new FirebaseUtil.OnUploadListener() {
                     @Override
                     public void onFailure() {
-                        Toast.makeText(BasicCreateActivity.this, "图片上传失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BasicCreateActivity.this, R.string.common_upload_pic_failed, Toast.LENGTH_SHORT).show();
                         mFictionDetailModel.setCover("");
                         mPresenter.saveFictionBasicInfo(mFictionDetailModel);
                     }
@@ -318,7 +318,7 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
 
     @Override
     public void onFailure() {
-        Toast.makeText(this, "更新信息失败", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.common_update_info_failed, Toast.LENGTH_SHORT).show();
         finish();
     }
 }

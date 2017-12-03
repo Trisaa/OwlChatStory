@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="16dp"
-            android:text="从图库选择"
+            android:text="@string/common_choose_from_gallery"
             android:textSize="14sp" />
     </LinearLayout>
 
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="16dp"
-            android:text="拍照"
+            android:text="@string/common_choose_from_photos"
             android:textSize="14sp" />
     </LinearLayout>
 </LinearLayout>

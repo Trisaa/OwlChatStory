@@ -20,6 +20,8 @@
     <string name="common_next">继续阅读</string>
     <string name="common_continue">未完待续</string>
     <string name="common_create">创作</string>
+    <string name="common_preview">预览</string>
+    <string name="common_update">更新</string>
 
     <string name="feedback_app_version">版本 V%1$s</string>
     <string name="feedback_message">"设备:%1$s\r\n版本信息:%2$s\r\n-------------------\r\n"</string>
@@ -53,5 +55,54 @@
     <string name="read_click_tips">点我试试</string>
 
     <string name="share_content">我发现了一个不错的对话小说App，快来一起体验吧～</string>
+
+    <!--new added-->
+    <string name="create_publish_chapter">是否发布当前内容？发布审核通过后读者将可见</string>
+    <string name="create_save_chapter">是否保存当前内容？仅保存到本地，可之后发布</string>
+    <string name="create_delete_chapter">是否要删除当前章节？不可找回</string>
+    <string name="create_offline_fiction">是否下架当前小说？下架后读者将不可见，之后可重新上架</string>
+    <string name="create_dialog_cancel">我再想想</string>
+    <string name="create_dialog_ok">是的</string>
+    <string name="create_dialog_not_save">舍弃它</string>
+    <string name="create_title">标题</string>
+    <string name="create_title_hint">请输入小说名（20字以内）</string>
+    <string name="create_summary">简介</string>
+    <string name="create_summary_hint">请输入简介（50字以内）</string>
+    <string name="create_choose_category">选择分类</string>
+    <string name="create_choose_language">选择语言</string>
+    <string name="create_choose_single_or_serials">选择创建类型</string>
+    <string name="create_single">创作单篇</string>
+    <string name="create_single_hint">短篇，仅一章完结</string>
+    <string name="create_serials">创作连载</string>
+    <string name="create_serials_hint">长篇，可持续更新连载</string>
+    <string name="create_choose_roles">选择一个角色</string>
+    <string name="create_empty_message">发送内容不能为空</string>
+    <string name="create_role_name">角色名称</string>
+    <string name="create_add_chapter">添加章节</string>
+
+    <string name="creation_detail_offline">下线</string>
+    <string name="creation_detail_online">上线</string>
+    <string name="creation_detail_edit">编辑</string>
+    <string name="creation_detail_delete">删除</string>
+    <string name="creation_detail_release_failed">发布失败</string>
+    <string name="creation_status_reviewing">审核中</string>
+    <string name="creation_status_released">已上线</string>
+    <string name="creation_status_offline">已下线</string>
+    <string name="creation_status_creating">创作中</string>
+    <string name="creation_status_refused">已拒绝</string>
+
+    <string name="common_update_info_failed">更新信息失败</string>
+    <string name="common_update_info_success">更新信息成功</string>
+    <string name="common_invalid_info">信息不完整</string>
+    <string name="common_upload_pic_failed">上传图片失败</string>
+    <string name="common_get_pic_failed">获取图片失败</string>
+    <string name="common_get_info_failed">获取信息失败</string>
+    <string name="common_detail">详情</string>
+    <string name="common_reload">重新加载</string>
+    <string name="common_login_first">请先登录</string>
+    <string name="common_send">发送</string>
+    <string name="common_add">添加</string>
+    <string name="common_choose_from_gallery">从图库选择</string>
+    <string name="common_choose_from_photos">拍照</string>
 
 </resources>

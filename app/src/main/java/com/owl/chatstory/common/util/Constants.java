@@ -1,5 +1,8 @@
 package com.owl.chatstory.common.util;
 
+import com.owl.chatstory.MainApplication;
+import com.owl.chatstory.R;
+
 import java.util.Locale;
 
 /**
@@ -25,17 +28,17 @@ public class Constants {
     public static String getStatus(int status) {
         switch (status) {
             case STATUS_REVIEWING:
-                return "审核中";
+                return MainApplication.getAppContext().getString(R.string.creation_status_reviewing);
             case STATUS_ONLINE:
-                return "已发布";
+                return MainApplication.getAppContext().getString(R.string.creation_status_released);
             case STATUS_OFFLINE:
-                return "已下架";
+                return MainApplication.getAppContext().getString(R.string.creation_status_offline);
             case STATUS_VIOLATION:
-                return "违规下架";
+                return MainApplication.getAppContext().getString(R.string.creation_status_refused);
             case STATUS_CREATING:
-                return "创作中";
+                return MainApplication.getAppContext().getString(R.string.creation_status_creating);
             default:
-                return "审核中";
+                return MainApplication.getAppContext().getString(R.string.creation_status_reviewing);
         }
     }
 

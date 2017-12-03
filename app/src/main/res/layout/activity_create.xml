@@ -77,7 +77,7 @@
                 android:foreground="?android:attr/selectableItemBackground"
                 android:gravity="center"
                 android:padding="3dp"
-                android:text="Send" />
+                android:text="@string/common_send" />
         </RelativeLayout>
 
         <View
