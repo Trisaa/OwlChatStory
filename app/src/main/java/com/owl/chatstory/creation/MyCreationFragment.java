@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.owl.chatstory.R;
 import com.owl.chatstory.base.BaseFragment;
 import com.owl.chatstory.common.util.Constants;
+import com.owl.chatstory.common.util.DialogUtils;
 import com.owl.chatstory.common.util.ImageLoaderUtils;
 import com.owl.chatstory.common.util.PreferencesHelper;
 import com.owl.chatstory.common.util.TimeUtils;
@@ -24,6 +25,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Handler;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -96,6 +98,23 @@ public class MyCreationFragment extends BaseFragment implements MyCreationContra
         }
     }
 
+    @OnClick(R.id.mycreation_switch_img)
+    public void changeLanguage() {
+        DialogUtils.showLanguageDialog(getActivity(), new DialogUtils.OnLanguageChooseListener() {
+            @Override
+            public void onChoose(String language) {
+                mLanguage = language;
+                onRefresh();
+                new android.os.Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mRefreshLayout.setRefreshing(true);
+                    }
+                });
+            }
+        }, mLanguage);
+    }
+
     @OnClick(R.id.error_btn)
     public void clickErrorBtn() {
         if (PreferencesHelper.getInstance().isLogined()) {
@@ -131,6 +150,7 @@ public class MyCreationFragment extends BaseFragment implements MyCreationContra
     @Override
     public void showErrorView() {
         mRefreshLayout.setRefreshing(false);
+        mEmptyView.setVisibility(View.GONE);
         if (PreferencesHelper.getInstance().isLogined()) {
             mErrorTextView.setText(R.string.common_network_error);
             mErrorBtn.setText(R.string.common_reload);

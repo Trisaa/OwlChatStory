@@ -190,7 +190,7 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
                 mLanguage = language;
                 mLanguageView.setText(Constants.getLanguage(language));
             }
-        });
+        },mLanguage);
     }
 
     @OnClick(R.id.create_single_txv)

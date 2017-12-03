@@ -101,14 +101,21 @@ public class DialogUtils {
         alertDialog.show();
     }
 
-    public static void showLanguageDialog(final Activity activity, final OnLanguageChooseListener listener) {
+    public static void showLanguageDialog(final Activity activity, final OnLanguageChooseListener listener, String language) {
         if (activity == null || activity.isFinishing()) {
             return;
         }
         final String[] arrays = activity.getResources().getStringArray(R.array.language_array_tags);
+        int index = -1;
+        for (int i = 0; i < arrays.length; i++) {
+            if (arrays[i].equals(language)) {
+                index = i;
+                break;
+            }
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle("选择语言");
-        builder.setItems(R.array.language_array, new DialogInterface.OnClickListener() {
+        builder.setTitle(R.string.common_choose_language);
+        builder.setSingleChoiceItems(R.array.language_array, index, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

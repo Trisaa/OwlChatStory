@@ -104,4 +104,5 @@
     <string name="common_add">Add</string>
     <string name="common_choose_from_gallery">Choose from gallery</string>
     <string name="common_choose_from_photos">Take photos</string>
+    <string name="common_choose_language">Choose language</string>
 </resources>

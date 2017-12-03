@@ -104,5 +104,6 @@
     <string name="common_add">添加</string>
     <string name="common_choose_from_gallery">从图库选择</string>
     <string name="common_choose_from_photos">拍照</string>
+    <string name="common_choose_language">选择语言</string>
 
 </resources>
