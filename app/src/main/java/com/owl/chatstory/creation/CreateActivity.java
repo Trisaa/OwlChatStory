@@ -137,6 +137,12 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.unsubscribe();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.create_menu, menu);
         return super.onCreateOptionsMenu(menu);

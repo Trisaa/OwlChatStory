@@ -167,6 +167,7 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
     protected void onDestroy() {
         super.onDestroy();
         FileUtils.deleteFile(mCoverImagePath);
+        mPresenter.unsubscribe();
     }
 
     @Subscribe
@@ -190,7 +191,7 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
                 mLanguage = language;
                 mLanguageView.setText(Constants.getLanguage(language));
             }
-        },mLanguage);
+        }, mLanguage);
     }
 
     @OnClick(R.id.create_single_txv)

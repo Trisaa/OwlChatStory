@@ -84,6 +84,12 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.unsubscribe();
+    }
+
+    @Override
     protected void initViewsAndData() {
         mFictionId = getIntent().getStringExtra(EXTRA_FICTION_ID);
         mLanguage = getIntent().getStringExtra(EXTRA_LANGUAGE);

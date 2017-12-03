@@ -89,6 +89,12 @@ public class MyCreationFragment extends BaseFragment implements MyCreationContra
         new MyCreationPresenter(this);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPresenter.unsubscribe();
+    }
+
     @OnClick(R.id.mycreation_add_img)
     public void clickAdd() {
         if (PreferencesHelper.getInstance().isLogined()) {
