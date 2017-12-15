@@ -2,8 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 26
     defaultConfig {
         applicationId "com.owl.chatstory"
         minSdkVersion 19
@@ -27,7 +26,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -38,8 +37,8 @@ dependencies {
     compile "com.android.support:percent:$rootProject.supportLibraryVersion"
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     //RxJava
-    compile "io.reactivex:rxjava:1.1.8"
-    compile "io.reactivex:rxandroid:1.2.1"
+    compile 'io.reactivex:rxjava:1.1.8'
+    compile 'io.reactivex:rxandroid:1.2.1'
     //butter knife
     compile 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
@@ -75,7 +74,6 @@ dependencies {
     compile 'com.google.firebase:firebase-storage:11.4.0'
     //uCrop
     compile 'com.github.yalantis:ucrop:2.2.1'
-
     testCompile 'junit:junit:4.12'
 }
 
