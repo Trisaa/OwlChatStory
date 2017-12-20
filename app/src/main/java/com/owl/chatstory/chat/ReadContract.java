@@ -16,11 +16,17 @@ public interface ReadContract {
         void getChapterData(String id);
 
         void addToHistory(String id);
+
+        void collectFiction(String id);
+
+        void uncollectFiction(String id);
     }
 
     interface View extends BaseView<Presenter> {
         void showFictionData(FictionModel model);
 
         void showFictionDetailData(FictionDetailModel model);
+
+        void updateCollectState(boolean collected);
     }
 }

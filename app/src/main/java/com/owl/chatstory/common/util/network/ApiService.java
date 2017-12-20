@@ -1,8 +1,10 @@
 package com.owl.chatstory.common.util.network;
 
 
+import com.owl.chatstory.common.util.network.request.FictionListRequest;
 import com.owl.chatstory.common.util.network.request.UserRequest;
 import com.owl.chatstory.data.chatsource.model.ActorModel;
+import com.owl.chatstory.data.chatsource.model.CollectResponse;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
 import com.owl.chatstory.data.chatsource.model.FictionResponse;
@@ -162,6 +164,7 @@ public interface ApiService {
 
     /**
      * 上下架小说
+     *
      * @param request
      * @return
      */
@@ -170,9 +173,26 @@ public interface ApiService {
 
     /**
      * 上下架章节
+     *
      * @param request
      * @return
      */
     @POST("ifiction/chapterstatus")
     Observable<BaseResponse> operateChapter(@Body OperationRequest request);
+
+    @FormUrlEncoded
+    @POST("collect/add")
+    Observable<BaseResponse> collectFiction(@Field("token") String token, @Field("ifiction_id") String fictionId);
+
+    @FormUrlEncoded
+    @POST("collect/del")
+    Observable<BaseResponse> uncollectFiction(@Field("token") String token, @Field("ifiction_id") String fictionId);
+
+    @POST("collect/list")
+    Observable<BaseArrayResponse<FictionDetailModel>> getCollectionList(@Body FictionListRequest request);
+
+    @FormUrlEncoded
+    @POST("collect/check")
+    Observable<BaseResponse<CollectResponse>> isCollect(@Field("token") String token, @Field("ifiction_id") String fictionId);
+
 }

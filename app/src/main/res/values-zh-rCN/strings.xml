@@ -22,6 +22,7 @@
     <string name="common_create">创作</string>
     <string name="common_preview">预览</string>
     <string name="common_update">更新</string>
+    <string name="common_favorite">收藏</string>
 
     <string name="feedback_app_version">版本 V%1$s</string>
     <string name="feedback_message">"设备:%1$s\r\n版本信息:%2$s\r\n-------------------\r\n"</string>

@@ -8,8 +8,10 @@ import com.google.gson.GsonBuilder;
 import com.owl.chatstory.BuildConfig;
 import com.owl.chatstory.common.util.Constants;
 import com.owl.chatstory.common.util.PreferencesHelper;
+import com.owl.chatstory.common.util.network.request.FictionListRequest;
 import com.owl.chatstory.common.util.network.request.UserRequest;
 import com.owl.chatstory.data.chatsource.model.ActorModel;
+import com.owl.chatstory.data.chatsource.model.CollectResponse;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
 import com.owl.chatstory.data.chatsource.model.FictionResponse;
@@ -336,6 +338,50 @@ public class HttpUtils {
         request.setToken(token);
         Subscription subscription = mApiService.operateFiction(request)
                 .map(new BaseResponseFunc())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return subscription;
+    }
+
+    public Subscription collectFiction(Subscriber subscriber, String fictionId) {
+        String token = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_TOKEN, "");
+        Log.i("Ok", " token " + token);
+        Subscription subscription = mApiService.collectFiction(token, fictionId)
+                .map(new BaseResponseFunc())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return subscription;
+    }
+
+    public Subscription uncollectFiction(Subscriber subscriber, String fictionId) {
+        String token = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_TOKEN, "");
+        Subscription subscription = mApiService.uncollectFiction(token, fictionId)
+                .map(new BaseResponseFunc())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return subscription;
+    }
+
+    public Subscription getCollectionList(Subscriber<List<FictionDetailModel>> subscriber, FictionListRequest request) {
+        Subscription subscription = mApiService.getCollectionList(request)
+                .map(new BaseArrayResponseFunc<FictionDetailModel>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return subscription;
+    }
+
+    public Subscription isCollect(Subscriber subscriber, String fictionId) {
+        String token = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_TOKEN, "");
+        Subscription subscription = mApiService.isCollect(token, fictionId)
+                .map(new BaseResponseFunc<CollectResponse>())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

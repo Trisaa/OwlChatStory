@@ -22,6 +22,7 @@
     <string name="common_create">Creation</string>
     <string name="common_preview">Preview</string>
     <string name="common_update">Update</string>
+    <string name="common_favorite">Favorited</string>
 
     <string name="feedback_app_version">Version V%1$s</string>
     <string name="feedback_message">"DeviceModel:%1$s\r\nSystemVersion:%2$s\r\n-------------------\r\n"</string>

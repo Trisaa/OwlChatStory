@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.owl.chatstory.R;
 import com.owl.chatstory.base.BaseActivity;
@@ -70,6 +71,8 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
     private String mLastChapterId;
     private int mCurrentChapterIndex;//当前阅读的章节
     private List<String> mProgressList;//阅读进度
+    private MenuItem mFavoriteMenu;
+    private boolean isCollected;
 
     public static void start(Context context, String fictionId, String fictionName) {
         Intent intent = new Intent(context, ReadActivity.class);
@@ -204,8 +207,27 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
             case R.id.read_menu_share:
                 DialogUtils.showShareDialog(this);
                 break;
+            case R.id.read_menu_favorite:
+                if (PreferencesHelper.getInstance().isLogined()) {
+                    if (!isCollected) {
+                        mPresenter.collectFiction(mFictionDetailModel.getId());
+                        updateCollectState(true);
+                    } else {
+                        mPresenter.uncollectFiction(mFictionDetailModel.getId());
+                        updateCollectState(false);
+                    }
+                } else {
+                    Toast.makeText(this, R.string.common_login_first, Toast.LENGTH_SHORT).show();
+                }
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        mFavoriteMenu = menu.findItem(R.id.read_menu_favorite);
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Subscribe
@@ -290,6 +312,14 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
         mFictionDetailModel = model;
         mProgressList = PreferencesHelper.getInstance().getFictionProgressList(mFictionDetailModel.getId(), mFictionDetailModel.getChapters().size());
         mCurrentChapterIndex = 0;
+    }
+
+    @Override
+    public void updateCollectState(boolean collected) {
+        isCollected = collected;
+        if (mFavoriteMenu != null) {
+            mFavoriteMenu.setIcon(isCollected ? R.drawable.vector_favorited : R.drawable.vector_unfavorite);
+        }
     }
 
     @Override

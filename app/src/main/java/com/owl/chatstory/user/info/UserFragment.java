@@ -6,10 +6,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.owl.chatstory.R;
 import com.owl.chatstory.base.BaseFragment;
+import com.owl.chatstory.chat.FavoriteActivity;
 import com.owl.chatstory.chat.HistoryActivity;
 import com.owl.chatstory.common.util.ImageLoaderUtils;
 import com.owl.chatstory.common.util.PreferencesHelper;
@@ -81,7 +83,11 @@ public class UserFragment extends BaseFragment {
 
     @OnClick(R.id.user_settings_history_layout)
     public void clickHistory() {
-        HistoryActivity.start(getActivity());
+        if (PreferencesHelper.getInstance().isLogined()) {
+            HistoryActivity.start(getActivity());
+        } else {
+            Toast.makeText(getActivity(), R.string.common_login_first, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @OnClick({R.id.user_img, R.id.user_name_txv})
@@ -94,6 +100,15 @@ public class UserFragment extends BaseFragment {
     @OnClick(R.id.user_settings_settings_layout)
     public void clickSettings() {
         SettingsActivity.start(getActivity());
+    }
+
+    @OnClick(R.id.user_settings_favorite_layout)
+    public void clickFavorite() {
+        if (PreferencesHelper.getInstance().isLogined()) {
+            FavoriteActivity.start(getActivity());
+        } else {
+            Toast.makeText(getActivity(), R.string.common_login_first, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Subscribe

@@ -74,7 +74,12 @@
 
         <activity
             android:name=".creation.CreateActivity"
-            android:label="创作"
+            android:label="@string/common_create"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".chat.FavoriteActivity"
+            android:label="@string/common_favorite"
             android:screenOrientation="portrait" />
 
         <activity
