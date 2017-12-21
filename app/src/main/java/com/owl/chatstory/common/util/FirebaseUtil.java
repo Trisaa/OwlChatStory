@@ -10,6 +10,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.owl.chatstory.BuildConfig;
 
 import java.io.File;
 
@@ -22,7 +23,8 @@ public class FirebaseUtil {
         FirebaseStorage storage = FirebaseStorage.getInstance("gs://owl-android.appspot.com");
         StorageReference storageRef = storage.getReference();
         Uri file = Uri.fromFile(new File(path));
-        StorageReference riversRef = storageRef.child("images/" + file.getLastPathSegment());
+        String folder = BuildConfig.DEBUG ? "test/" : "images/";
+        StorageReference riversRef = storageRef.child(folder + file.getLastPathSegment());
         UploadTask uploadTask = riversRef.putFile(file);
 
         // Register observers to listen for when the download is done or if it fails

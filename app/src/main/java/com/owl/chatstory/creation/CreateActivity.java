@@ -167,7 +167,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
                             public void onOK() {
                                 if (mPresenter != null) {
                                     mFictionModel.setName(mChapterTitle);
-                                    mFictionModel.setList(mMessageList);
+                                    mFictionModel.setList(getRequestMessageList());
                                     mPresenter.publishChapter(mFictionModel);
                                 }
                             }
@@ -236,7 +236,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
                             public void onOK() {
                                 if (mPresenter != null) {
                                     mFictionModel.setName(mChapterTitle);
-                                    mFictionModel.setList(mMessageList);
+                                    mFictionModel.setList(getRequestMessageList());
                                     mPresenter.publishChapter(mFictionModel);
                                 }
                             }
@@ -250,6 +250,16 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
         } else {
             super.onBackPressed();
         }
+    }
+
+    private List<MessageModel> getRequestMessageList() {
+        List<MessageModel> list = new ArrayList<>();
+        list.addAll(mMessageList);
+        for (MessageModel model : list) {
+            model.setAvatar(null);
+            model.setActor(null);
+        }
+        return list;
     }
 
     private void initRoleAdapter() {
@@ -605,7 +615,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
     private void updateMessageAboutUser(ActorModel model) {
         for (int i = 0; i < mMessageList.size(); i++) {
             MessageModel messageModel = mMessageList.get(i);
-            if (messageModel.getId().equals(model.getId())) {
+            if (messageModel.getId() != null && messageModel.getId().equals(model.getId())) {
                 messageModel.setActor(model.getName());
                 messageModel.setAvatar(model.getPicture());
             }

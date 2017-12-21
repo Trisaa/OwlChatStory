@@ -34,13 +34,15 @@
         android:layout_toRightOf="@id/my_creation_img"
         android:text="12字 共两章"
         android:textColor="@color/common_text_color"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/my_creation_chapters_txv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/my_creation_texts_txv"
+        android:layout_marginBottom="16dp"
         android:layout_marginTop="16dp"
         android:layout_toRightOf="@id/my_creation_img"
         android:ellipsize="end"

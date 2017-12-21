@@ -25,7 +25,7 @@
     <string name="common_favorite">收藏</string>
 
     <string name="feedback_app_version">版本 V%1$s</string>
-    <string name="feedback_message">"设备:%1$s\r\n版本信息:%2$s\r\n-------------------\r\n"</string>
+    <string name="feedback_message">"设备:%1$s\n版本信息:%2$s\n-------------------\n"</string>
     <string name="feedback_no_email_installed_txt">未监测到邮箱应用</string>
 
     <string name="main_tab_home">首页</string>
