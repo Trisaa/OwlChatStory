@@ -420,7 +420,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
                             public void onFailure() {
                                 mLoadingView.setVisibility(View.GONE);
                                 Toast.makeText(CreateActivity.this, R.string.common_upload_pic_failed, Toast.LENGTH_SHORT).show();
-                                mFirstRole = new ActorModel(ActorModel.ROLE_FIRST, name, "");
+                                mFirstRole = new ActorModel(ActorModel.ROLE_FIRST, name, DeviceUtils.getUri(R.mipmap.user_default_icon));
                                 updateRoleList();
                             }
 
@@ -437,7 +437,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
                             public void onFailure() {
                                 mLoadingView.setVisibility(View.GONE);
                                 Toast.makeText(CreateActivity.this, R.string.common_upload_pic_failed, Toast.LENGTH_SHORT).show();
-                                ActorModel userModel = new ActorModel(ActorModel.ROLE_SECOND, name, "");
+                                ActorModel userModel = new ActorModel(ActorModel.ROLE_SECOND, name, DeviceUtils.getUri(R.mipmap.user_default_icon));
                                 mSecondRoleList.add(userModel);
                                 updateRoleList();
                             }

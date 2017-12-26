@@ -24,6 +24,7 @@ import com.owl.chatstory.R;
 import com.owl.chatstory.base.BaseActivity;
 import com.owl.chatstory.common.util.CameraUtils;
 import com.owl.chatstory.common.util.Constants;
+import com.owl.chatstory.common.util.DeviceUtils;
 import com.owl.chatstory.common.util.DialogUtils;
 import com.owl.chatstory.common.util.FileUtils;
 import com.owl.chatstory.common.util.FirebaseUtil;
@@ -241,7 +242,7 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
                     @Override
                     public void onFailure() {
                         Toast.makeText(BasicCreateActivity.this, R.string.common_upload_pic_failed, Toast.LENGTH_SHORT).show();
-                        mFictionDetailModel.setCover("");
+                        mFictionDetailModel.setCover(DeviceUtils.getUri(R.mipmap.create_default_cover));
                         mPresenter.saveFictionBasicInfo(mFictionDetailModel);
                     }
 
