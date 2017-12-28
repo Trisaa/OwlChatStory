@@ -10,7 +10,7 @@ import java.util.Date;
 public class TimeUtils {
     public static String getTimeFormat(long time) {
         SimpleDateFormat format = new SimpleDateFormat("MM-dd HH:mm:ss");
-        String t = format.format(new Date(time));
+        String t = format.format(new Date(time * 1000L));
         return t;
     }
 }
