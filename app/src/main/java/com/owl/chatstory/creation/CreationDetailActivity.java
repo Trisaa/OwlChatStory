@@ -197,7 +197,8 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
                 model.setLanguage(mLanguage);
                 model.setNum(mDatas.size() + 1);
                 model.setStatus(Constants.STATUS_CREATING);
-                model.setName(getString(R.string.chapter_num, mDatas.size() + 1, ""));
+                //model.setName(getString(R.string.chapter_num, mDatas.size() + 1, ""));
+                model.setName(mFictionDetailModel.getTitle());
                 CreateActivity.start(CreationDetailActivity.this, model);
                 break;
         }

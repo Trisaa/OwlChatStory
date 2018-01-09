@@ -1,13 +1,14 @@
 package com.owl.chatstory.data.chatsource.model;
 
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by lebron on 2017/11/21.
  */
 
-public class RoleListRequest {
+public class RoleListRequest implements Serializable {
     private String ifiction_id;
     private List<ActorModel> actors;
     private String language;

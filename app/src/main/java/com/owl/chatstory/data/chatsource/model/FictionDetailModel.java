@@ -39,7 +39,7 @@ public class FictionDetailModel implements Parcelable {
     private String language;//语言
     @SerializedName("status")
     private int status;
-
+    @SerializedName("token")
     private String token;
 
     public String getId() {

@@ -2,6 +2,7 @@ package com.owl.chatstory.common.util.network.request;
 
 import android.text.TextUtils;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,7 +10,7 @@ import java.util.Map;
  * Created by lebron on 2017/9/17.
  */
 
-public class FictionListRequest {
+public class FictionListRequest implements Serializable {
     private String categoryId;
     private int page;
     private int count;

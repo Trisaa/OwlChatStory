@@ -1,10 +1,12 @@
 package com.owl.chatstory.data.chatsource.model;
 
+import java.io.Serializable;
+
 /**
  * Created by lebron on 2017/11/23.
  */
 
-public class OperationRequest {
+public class OperationRequest implements Serializable {
     private String token;
     private String ifiction_id;
     private String chapter_id;

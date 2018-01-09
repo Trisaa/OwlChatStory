@@ -28,9 +28,11 @@ public class FictionModel implements Parcelable {
     private long createline;
     @SerializedName("updateline")
     private long updateline;
-
+    @SerializedName("token")
     private String token;
+    @SerializedName("ifiction_id")
     private String ifiction_id;
+    @SerializedName("language")
     private String language;
 
     public String getId() {

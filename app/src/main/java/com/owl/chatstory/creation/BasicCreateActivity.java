@@ -311,7 +311,8 @@ public class BasicCreateActivity extends BaseActivity implements BasicCreateCont
             fictionModel.setLanguage(mLanguage);
             fictionModel.setIfiction_id(model.getId());
             fictionModel.setNum(1);
-            fictionModel.setName(getString(R.string.chapter_num,1,""));
+            //fictionModel.setName(getString(R.string.chapter_num,1,""));
+            fictionModel.setName(model.getTitle());
             fictionModel.setStatus(Constants.STATUS_CREATING);
             CreateActivity.start(BasicCreateActivity.this, fictionModel);
             finish();
