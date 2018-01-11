@@ -72,7 +72,7 @@ public class HttpUtils {
         //声明日志类
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
         //设定日志级别
-        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        httpLoggingInterceptor.setLevel(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE);
         return new OkHttpClient.Builder()
                 .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
                 .addInterceptor(new Interceptor() {
