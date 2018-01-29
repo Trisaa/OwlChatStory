@@ -12,6 +12,7 @@ import com.owl.chatstory.data.chatsource.model.OperationRequest;
 import com.owl.chatstory.data.chatsource.model.RoleListRequest;
 import com.owl.chatstory.data.homesource.model.CategoryModel;
 import com.owl.chatstory.data.homesource.model.UpdateModel;
+import com.owl.chatstory.data.searchsource.SearchModel;
 import com.owl.chatstory.data.usersource.model.UserModel;
 import com.owl.chatstory.data.usersource.model.UserResponse;
 
@@ -194,5 +195,8 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("collect/check")
     Observable<BaseResponse<CollectResponse>> isCollect(@Field("token") String token, @Field("ifiction_id") String fictionId);
+
+    @GET("search/suggest")
+    Observable<BaseResponse<SearchModel>> searchData(@Query("kw") String keyword);
 
 }

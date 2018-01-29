@@ -5,16 +5,42 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/home_tablayout"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:elevation="1dp"
-        app:tabBackground="@drawable/main_home_tab_item_selector"
-        app:tabIndicatorColor="@color/common_tab_color_selected"
-        app:tabMode="scrollable"
-        app:tabTextAppearance="@style/TabLayoutTextStyle" />
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/home_tablayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/home_search_img"
+            android:background="@color/colorPrimary"
+            android:elevation="0dp"
+            app:tabBackground="@drawable/main_home_tab_item_selector"
+            app:tabIndicatorColor="@color/common_tab_color_selected"
+            app:tabMode="scrollable"
+            app:tabTextAppearance="@style/TabLayoutTextStyle" />
+
+        <RelativeLayout
+            android:id="@+id/home_search_img"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@id/home_tablayout"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@id/home_tablayout"
+            android:layout_centerVertical="true"
+            android:background="?android:attr/selectableItemBackground">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                app:srcCompat="@drawable/vector_search" />
+        </RelativeLayout>
+
+    </RelativeLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/home_viewpager"

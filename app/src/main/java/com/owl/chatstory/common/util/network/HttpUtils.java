@@ -19,6 +19,7 @@ import com.owl.chatstory.data.chatsource.model.OperationRequest;
 import com.owl.chatstory.data.chatsource.model.RoleListRequest;
 import com.owl.chatstory.data.homesource.model.CategoryModel;
 import com.owl.chatstory.data.homesource.model.UpdateModel;
+import com.owl.chatstory.data.searchsource.SearchModel;
 import com.owl.chatstory.data.usersource.model.UserResponse;
 
 import java.io.IOException;
@@ -382,6 +383,16 @@ public class HttpUtils {
         String token = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_TOKEN, "");
         Subscription subscription = mApiService.isCollect(token, fictionId)
                 .map(new BaseResponseFunc<CollectResponse>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return subscription;
+    }
+
+    public Subscription searchData(Subscriber<SearchModel> subscriber, String keyword) {
+        Subscription subscription = mApiService.searchData(keyword)
+                .map(new BaseResponseFunc<SearchModel>())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

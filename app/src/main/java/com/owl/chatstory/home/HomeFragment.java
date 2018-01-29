@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.owl.chatstory.R;
 import com.owl.chatstory.base.BaseFragment;
 import com.owl.chatstory.data.homesource.model.CategoryModel;
+import com.owl.chatstory.search.SearchActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by lebron on 2017/9/10.
@@ -65,6 +67,11 @@ public class HomeFragment extends BaseFragment implements HomeContract.View {
     public void setPresenter(HomeContract.Presenter presenter) {
         mPresenter = presenter;
         mPresenter.subscribe();
+    }
+
+    @OnClick(R.id.home_search_img)
+    public void clickSearch() {
+        SearchActivity.start(getActivity());
     }
 
     private class HomePagerAdapter extends FragmentStatePagerAdapter {
