@@ -66,9 +66,9 @@
     <string name="create_dialog_ok">Yes</string>
     <string name="create_dialog_not_save">Discard it</string>
     <string name="create_title">Title</string>
-    <string name="create_title_hint">Input title(20 words limits)</string>
+    <string name="create_title_hint">Input title(20 characters limits)</string>
     <string name="create_summary">Summary</string>
-    <string name="create_summary_hint">Input summary(50 words limits)</string>
+    <string name="create_summary_hint">Input summary(50 characters limits)</string>
     <string name="create_choose_category">Choose category</string>
     <string name="create_choose_language">Choose language</string>
     <string name="create_choose_single_or_serials">Choose create type</string>
@@ -106,4 +106,12 @@
     <string name="common_choose_from_gallery">Choose from gallery</string>
     <string name="common_choose_from_photos">Take photos</string>
     <string name="common_choose_language">Choose language</string>
+    <string name="common_choose_gender">Choose gender</string>
+    <string name="common_male">Male</string>
+    <string name="common_female">Female</string>
+
+    <string name="user_edit_name">Nickname</string>
+    <string name="user_edit_name_hint">Input nickname(10 characters limits)</string>
+    <string name="user_edit_gender">Choose your gender</string>
+    <string name="user_edit_toolbar_title">Edit user info</string>
 </resources>

@@ -6,6 +6,11 @@
         <item>English</item>
     </string-array>
 
+    <string-array name="gender_array" translatable="true">
+        <item>@string/common_female</item>
+        <item>@string/common_male</item>
+    </string-array>
+
     <string-array name="language_array_tags" translatable="false">
         <item>simplified</item>
         <item>traditional</item>

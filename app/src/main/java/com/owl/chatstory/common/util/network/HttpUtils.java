@@ -20,6 +20,7 @@ import com.owl.chatstory.data.chatsource.model.RoleListRequest;
 import com.owl.chatstory.data.homesource.model.CategoryModel;
 import com.owl.chatstory.data.homesource.model.UpdateModel;
 import com.owl.chatstory.data.searchsource.SearchModel;
+import com.owl.chatstory.data.usersource.model.UserModel;
 import com.owl.chatstory.data.usersource.model.UserResponse;
 
 import java.io.IOException;
@@ -393,6 +394,29 @@ public class HttpUtils {
     public Subscription searchData(Subscriber<SearchModel> subscriber, String keyword) {
         Subscription subscription = mApiService.searchData(keyword)
                 .map(new BaseResponseFunc<SearchModel>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return subscription;
+    }
+
+    public Subscription updateUserinfo(Subscriber subscriber, UserRequest userRequest) {
+        String token = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_TOKEN, "");
+        userRequest.setToken(token);
+        Subscription subscription = mApiService.updateUserInfo(userRequest)
+                .map(new BaseResponseFunc())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return subscription;
+    }
+
+    public Subscription getUserInfo(Subscriber<UserModel> subscriber) {
+        String token = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_TOKEN, "");
+        Subscription subscription = mApiService.getUserInfo(token)
+                .map(new BaseResponseFunc<UserModel>())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -127,6 +127,25 @@ public class DialogUtils {
         builder.create().show();
     }
 
+    public static void showGenderDialog(final Activity activity, int gender, final OnGenderChooseListener listener) {
+        if (activity == null || activity.isFinishing()) {
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle(R.string.common_choose_gender);
+        builder.setSingleChoiceItems(R.array.gender_array, gender, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                if (listener != null) {
+                    listener.onChoose(which);
+                }
+            }
+        });
+        builder.create().show();
+    }
+
     public interface OnDialogClickListener {
         void onOK();
 
@@ -135,5 +154,9 @@ public class DialogUtils {
 
     public interface OnLanguageChooseListener {
         void onChoose(String language);
+    }
+
+    public interface OnGenderChooseListener {
+        void onChoose(int gender);
     }
 }

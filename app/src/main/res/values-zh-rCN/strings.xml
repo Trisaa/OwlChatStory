@@ -106,5 +106,13 @@
     <string name="common_choose_from_gallery">从图库选择</string>
     <string name="common_choose_from_photos">拍照</string>
     <string name="common_choose_language">选择语言</string>
+    <string name="common_choose_gender">选择性别</string>
+    <string name="common_male">男</string>
+    <string name="common_female">女</string>
+
+    <string name="user_edit_name">昵称</string>
+    <string name="user_edit_name_hint">请输入昵称（10字以内）</string>
+    <string name="user_edit_gender">选择您的性别</string>
+    <string name="user_edit_toolbar_title">编辑用户信息</string>
 
 </resources>

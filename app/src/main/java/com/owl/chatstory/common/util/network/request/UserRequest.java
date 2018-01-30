@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by lebron on 2017/9/20.
  */
 
-public class UserRequest implements Serializable{
+public class UserRequest implements Serializable {
     @SerializedName("token")
     private String token;
     @SerializedName("name")
@@ -17,6 +17,8 @@ public class UserRequest implements Serializable{
     private int gender;
     @SerializedName("picture")
     private String avatar;
+    @SerializedName("summary")
+    private String summary;
 
     public String getToken() {
         return token;
@@ -48,5 +50,13 @@ public class UserRequest implements Serializable{
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 }

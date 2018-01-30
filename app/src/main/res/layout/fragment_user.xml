@@ -24,6 +24,15 @@
             android:text="@string/user_info_title"
             android:textColor="@color/common_toolbar_color"
             android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/toolbar_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginEnd="16dp"
+            android:background="@mipmap/ic_edit"
+            android:foreground="?android:attr/selectableItemBackground" />
     </android.support.v7.widget.Toolbar>
 
 

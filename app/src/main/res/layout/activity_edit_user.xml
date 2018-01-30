@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/common_toolbar" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/user_edit_icon_img"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@mipmap/user_default_icon"
+                    android:scaleType="centerCrop" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="16dp"
+                    android:background="@color/common_gray_pressed" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingLeft="16dp"
+                        android:text="@string/user_edit_name"
+                        android:textColor="@color/common_toolbar_color" />
+
+                    <EditText
+                        android:id="@+id/user_edit_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:background="@null"
+                        android:hint="@string/user_edit_name_hint"
+                        android:maxLength="10"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="16dp"
+                    android:background="@color/common_gray_pressed" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="90dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingEnd="10dp"
+                        android:paddingStart="16dp"
+                        android:paddingTop="16dp"
+                        android:text="@string/create_summary"
+                        android:textColor="@color/common_toolbar_color" />
+
+                    <EditText
+                        android:id="@+id/user_edit_summary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:hint="@string/create_summary_hint"
+                        android:maxLength="50"
+                        android:paddingTop="16dp"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="16dp"
+                    android:background="@color/common_gray_pressed" />
+
+                <RelativeLayout
+                    android:id="@+id/user_edit_gender_choose_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:paddingLeft="16dp"
+                        android:text="@string/user_edit_gender"
+                        android:textColor="@color/common_toolbar_color" />
+
+                    <TextView
+                        android:id="@+id/user_edit_gender_txv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="16dp"
+                        android:drawablePadding="6dp"
+                        android:drawableRight="@mipmap/ic_goto"
+                        android:text="" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="16dp"
+                    android:background="@color/common_gray_pressed" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <include layout="@layout/common_loading_layout" />
+    </FrameLayout>
+</LinearLayout>

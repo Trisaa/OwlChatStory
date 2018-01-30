@@ -96,6 +96,11 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".user.info.EditUserActivity"
+            android:label="@string/user_edit_toolbar_title"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait" />
 

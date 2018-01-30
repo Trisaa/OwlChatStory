@@ -199,4 +199,12 @@ public interface ApiService {
     @GET("search/suggest")
     Observable<BaseResponse<SearchModel>> searchData(@Query("kw") String keyword);
 
+    @POST("user/update")
+    Observable<BaseResponse> updateUserInfo(@Body UserRequest userRequest);
+
+    @FormUrlEncoded
+    @POST("user/info")
+    Observable<BaseResponse<UserModel>> getUserInfo(@Field("token") String token);
+
+
 }

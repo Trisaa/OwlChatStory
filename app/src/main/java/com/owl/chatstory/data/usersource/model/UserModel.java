@@ -22,7 +22,11 @@ public class UserModel implements Parcelable {
     private String icon; //用户头像
     @SerializedName("gender")
     private int gender;//用户性别
-    private int vipType;//用户VIP类型
+    @SerializedName("summary")
+    private String summary;//用户简介
+    @SerializedName("email")
+    private String email;
+
 
     public String getId() {
         return id;
@@ -64,20 +68,31 @@ public class UserModel implements Parcelable {
         this.icon = icon;
     }
 
-    public int getVipType() {
-        return vipType;
-    }
-
-    public void setVipType(int vipType) {
-        this.vipType = vipType;
-    }
-
     public int getGender() {
         return gender;
     }
 
     public void setGender(int gender) {
         this.gender = gender;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public UserModel() {
     }
 
     @Override
@@ -93,10 +108,8 @@ public class UserModel implements Parcelable {
         dest.writeString(this.name);
         dest.writeString(this.icon);
         dest.writeInt(this.gender);
-        dest.writeInt(this.vipType);
-    }
-
-    public UserModel() {
+        dest.writeString(this.summary);
+        dest.writeString(this.email);
     }
 
     protected UserModel(Parcel in) {
@@ -106,10 +119,11 @@ public class UserModel implements Parcelable {
         this.name = in.readString();
         this.icon = in.readString();
         this.gender = in.readInt();
-        this.vipType = in.readInt();
+        this.summary = in.readString();
+        this.email = in.readString();
     }
 
-    public static final Parcelable.Creator<UserModel> CREATOR = new Parcelable.Creator<UserModel>() {
+    public static final Creator<UserModel> CREATOR = new Creator<UserModel>() {
         @Override
         public UserModel createFromParcel(Parcel source) {
             return new UserModel(source);

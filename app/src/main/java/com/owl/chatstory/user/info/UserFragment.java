@@ -28,7 +28,7 @@ import butterknife.OnClick;
  * Created by lebron on 2017/9/11.
  */
 
-public class UserFragment extends BaseFragment {
+public class UserFragment extends BaseFragment implements UserContract.View {
     @BindView(R.id.common_toolbar)
     Toolbar mToolbar;
     @BindView(R.id.user_img)
@@ -37,6 +37,7 @@ public class UserFragment extends BaseFragment {
     TextView mNameView;
 
     private UserModel mUserModel;
+    private UserContract.Presenter mPresenter;
 
     public static UserFragment newInstance() {
         UserFragment fragment = new UserFragment();
@@ -53,6 +54,7 @@ public class UserFragment extends BaseFragment {
         initToolbar();
         mUserModel = new Gson().fromJson(PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_USER, null), UserModel.class);
         updateUserInfo();
+        new UserPresenter(this);
     }
 
     private void updateUserInfo() {
@@ -74,6 +76,11 @@ public class UserFragment extends BaseFragment {
                 ab.setDisplayShowTitleEnabled(false);
             }
         }
+    }
+
+    @OnClick(R.id.toolbar_edit)
+    public void clickEdit() {
+        EditUserActivity.start(getActivity(), mUserModel);
     }
 
     @OnClick(R.id.user_settings_vip_layout)
@@ -123,5 +130,21 @@ public class UserFragment extends BaseFragment {
             mUserModel = null;
             updateUserInfo();
         }
+    }
+
+    @Override
+    public void showUserInfo(UserModel userModel) {
+        if (userModel != null) {
+            mUserModel = userModel;
+            updateUserInfo();
+        } else {
+            Toast.makeText(getActivity(), R.string.common_network_error, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void setPresenter(UserContract.Presenter presenter) {
+        mPresenter = presenter;
+        mPresenter.subscribe();
     }
 }
