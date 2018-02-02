@@ -114,4 +114,7 @@
     <string name="user_edit_name_hint">Input nickname(10 characters limits)</string>
     <string name="user_edit_gender">Choose your gender</string>
     <string name="user_edit_toolbar_title">Edit user info</string>
+    <string name="user_vip_toolbar_title">VIP</string>
+    <string name="user_vip_not_paid">You are not vip user</string>
+    <string name="user_vip_days">Free read for %1$d days</string>
 </resources>

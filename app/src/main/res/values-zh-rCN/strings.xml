@@ -114,5 +114,8 @@
     <string name="user_edit_name_hint">请输入昵称（10字以内）</string>
     <string name="user_edit_gender">选择您的性别</string>
     <string name="user_edit_toolbar_title">编辑用户信息</string>
+    <string name="user_vip_toolbar_title">VIP</string>
+    <string name="user_vip_not_paid">你还不是任何VIP</string>
+    <string name="user_vip_days">免费畅读%1$d天</string>
 
 </resources>

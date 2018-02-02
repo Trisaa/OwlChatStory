@@ -112,4 +112,7 @@
     <string name="user_edit_name_hint">請輸入昵稱（10字以內）</string>
     <string name="user_edit_gender">選擇您的性別</string>
     <string name="user_edit_toolbar_title">編輯用戶信息</string>
+    <string name="user_vip_toolbar_title">VIP</string>
+    <string name="user_vip_not_paid">你還不是任何VIP</string>
+    <string name="user_vip_days">免費暢讀%1$d天</string>
 </resources>

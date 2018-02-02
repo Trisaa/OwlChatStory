@@ -29,6 +29,8 @@ public class PreferencesHelper {
     public static final String KEY_CATEGORY_LIST = "KEY_CATEGORY_LIST";
     //是否显示过阅读提示
     public static final String KEY_CLICK_TIPS_SHOWED = "KEY_CLICK_TIPS_SHOWED";
+    //是否有订阅过任何一种会员套餐
+    public static final String KEY_PAID_FOR_VIP = "KEY_PAID_FOR_VIP";
 
     private final static SharedPreferences mPref = MainApplication.getAppContext().getSharedPreferences(SETTING, Context.MODE_PRIVATE);
     private static PreferencesHelper mInstance = null;

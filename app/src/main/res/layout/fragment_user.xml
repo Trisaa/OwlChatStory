@@ -82,12 +82,13 @@
             android:background="@mipmap/ic_goto" />
 
         <TextView
+            android:id="@+id/user_settings_vip_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginRight="12dp"
             android:layout_toLeftOf="@id/goto_img"
-            android:text="@string/user_vip_status"
+            android:text="@string/user_vip_not_paid"
             android:textColor="@color/common_text_color"
             android:textSize="12sp" />
 

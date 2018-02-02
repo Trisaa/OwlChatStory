@@ -5,11 +5,17 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 
 import com.owl.chatstory.base.BaseActivity;
+import com.owl.chatstory.billing.IabHelper;
+import com.owl.chatstory.billing.IabResult;
+import com.owl.chatstory.billing.Inventory;
+import com.owl.chatstory.billing.Purchase;
 import com.owl.chatstory.common.util.DialogUtils;
+import com.owl.chatstory.common.util.PreferencesHelper;
 import com.owl.chatstory.common.view.UnScrollViewPager;
 import com.owl.chatstory.creation.MyCreationFragment;
 import com.owl.chatstory.data.homesource.model.UpdateModel;
@@ -21,6 +27,12 @@ import java.util.Map;
 
 import butterknife.BindView;
 
+import static com.owl.chatstory.common.util.Constants.BASE64_ENCODED_PUBLIC_KEY;
+import static com.owl.chatstory.common.util.Constants.ONE_MONTH_SKU;
+import static com.owl.chatstory.common.util.Constants.THREE_MONTHS_SKU;
+import static com.owl.chatstory.common.util.Constants.WEEK_SKU;
+import static com.owl.chatstory.common.util.Constants.YEAR_SKU;
+
 public class MainActivity extends BaseActivity implements MainContract.View {
     @BindView(R.id.main_viewpager)
     UnScrollViewPager mViewPager;
@@ -28,6 +40,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     BottomNavigationView mBottomNavigationView;
 
     private MainContract.Presenter mPresenter;
+    private IabHelper mHelper;
 
     private static final int[] HOME_TOOLBAR_TITLE = {
             R.string.main_tab_home,
@@ -42,11 +55,11 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     @Override
     protected void initToolBar() {
-
     }
 
     @Override
     protected void initViewsAndData() {
+        checkPurchase();
         mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -68,10 +81,81 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         new MainPresenter(this);
     }
 
+    private void checkPurchase() {
+        String base64EncodedPublicKey = BASE64_ENCODED_PUBLIC_KEY;
+        base64EncodedPublicKey.trim();
+        // compute your public key and store it in base64EncodedPublicKey
+        mHelper = new IabHelper(this, base64EncodedPublicKey);
+        mHelper.enableDebugLogging(true);
+        mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+            @Override
+            public void onIabSetupFinished(IabResult result) {
+                if (result.isFailure()) {
+                    // Oh no, there was a problem.
+                    Log.i("IabHelper", "Problem setting up In-app Billing: " + result);
+                    return;
+                }
+                mHelper.queryInventoryAsync(new IabHelper.QueryInventoryFinishedListener() {
+                    public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
+                        if (result.isFailure()) {
+                            Log.i("IabHelper", "onQueryInventoryFinished failed");
+                            return;
+                        }
+                        boolean hasPaid = false;
+                        Purchase purchase = inventory.getPurchase(WEEK_SKU);
+                        if (purchase != null) {
+                            Log.i("IabHelper", WEEK_SKU + " is available~~~~");
+                            hasPaid = true;
+                            PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase.getSku());
+                        } else {
+                            Log.i("IabHelper", WEEK_SKU + " is not available~~~~");
+                        }
+
+                        Purchase purchase1 = inventory.getPurchase(ONE_MONTH_SKU);
+                        if (purchase1 != null) {
+                            Log.i("IabHelper", ONE_MONTH_SKU + " is available~~~~");
+                            hasPaid = true;
+                            PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase.getSku());
+                        } else {
+                            Log.i("IabHelper", ONE_MONTH_SKU + " is not available~~~~");
+                        }
+
+                        Purchase purchase2 = inventory.getPurchase(THREE_MONTHS_SKU);
+                        if (purchase2 != null) {
+                            Log.i("IabHelper", THREE_MONTHS_SKU + " is available~~~~");
+                            hasPaid = true;
+                            PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase.getSku());
+                        } else {
+                            Log.i("IabHelper", THREE_MONTHS_SKU + " is not available~~~~");
+                        }
+
+                        Purchase purchase3 = inventory.getPurchase(YEAR_SKU);
+                        if (purchase3 != null) {
+                            Log.i("IabHelper", YEAR_SKU + " is available~~~~");
+                            hasPaid = true;
+                            PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase.getSku());
+                        } else {
+                            Log.i("IabHelper", YEAR_SKU + " is not available~~~~");
+                        }
+
+                        //没查询到任何一个购买则认为没有购买会员或者会员已经过期
+                        if (!hasPaid) {
+                            PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, null);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mPresenter.unsubscribe();
+        if (mHelper != null) {
+            mHelper.dispose();
+            mHelper = null;
+        }
     }
 
     @Override

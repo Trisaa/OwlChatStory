@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.android.vending.BILLING" />
 
     <application
         android:name=".MainApplication"
@@ -98,6 +99,11 @@
         <activity
             android:name=".user.info.EditUserActivity"
             android:label="@string/user_edit_toolbar_title"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".user.info.VIPActivity"
+            android:label="@string/user_vip_toolbar_title"
             android:screenOrientation="portrait" />
 
         <activity

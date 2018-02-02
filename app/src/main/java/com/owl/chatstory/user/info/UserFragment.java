@@ -3,6 +3,7 @@ package com.owl.chatstory.user.info;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,6 +25,11 @@ import org.greenrobot.eventbus.Subscribe;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static com.owl.chatstory.common.util.Constants.ONE_MONTH_SKU;
+import static com.owl.chatstory.common.util.Constants.THREE_MONTHS_SKU;
+import static com.owl.chatstory.common.util.Constants.WEEK_SKU;
+import static com.owl.chatstory.common.util.Constants.YEAR_SKU;
+
 /**
  * Created by lebron on 2017/9/11.
  */
@@ -35,6 +41,8 @@ public class UserFragment extends BaseFragment implements UserContract.View {
     ImageView mUserIcon;
     @BindView(R.id.user_name_txv)
     TextView mNameView;
+    @BindView(R.id.user_settings_vip_type)
+    TextView mVipView;
 
     private UserModel mUserModel;
     private UserContract.Presenter mPresenter;
@@ -54,6 +62,7 @@ public class UserFragment extends BaseFragment implements UserContract.View {
         initToolbar();
         mUserModel = new Gson().fromJson(PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_USER, null), UserModel.class);
         updateUserInfo();
+        updateVipInfo();
         new UserPresenter(this);
     }
 
@@ -64,6 +73,28 @@ public class UserFragment extends BaseFragment implements UserContract.View {
         } else {
             ImageLoaderUtils.getInstance().loadCircleImage(getActivity(), R.mipmap.user_default_icon, mUserIcon);
             mNameView.setText(R.string.login_needed);
+        }
+    }
+
+    private void updateVipInfo() {
+        String sku = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_PAID_FOR_VIP, null);
+        if (TextUtils.isEmpty(sku)) {
+            mVipView.setText(R.string.user_vip_not_paid);
+        } else {
+            switch (sku) {
+                case WEEK_SKU:
+                    mVipView.setText(getString(R.string.user_vip_days, 7));
+                    break;
+                case ONE_MONTH_SKU:
+                    mVipView.setText(getString(R.string.user_vip_days, 30));
+                    break;
+                case THREE_MONTHS_SKU:
+                    mVipView.setText(getString(R.string.user_vip_days, 90));
+                    break;
+                case YEAR_SKU:
+                    mVipView.setText(getString(R.string.user_vip_days, 365));
+                    break;
+            }
         }
     }
 
@@ -85,7 +116,7 @@ public class UserFragment extends BaseFragment implements UserContract.View {
 
     @OnClick(R.id.user_settings_vip_layout)
     public void clickVip() {
-
+        VIPActivity.start(getActivity());
     }
 
     @OnClick(R.id.user_settings_history_layout)
@@ -132,13 +163,20 @@ public class UserFragment extends BaseFragment implements UserContract.View {
         }
     }
 
+    @Subscribe
+    public void paidEvent(String event) {
+        if (VIPActivity.EVENT_PAID_FOR_VIP.equals(event)) {
+            updateVipInfo();
+        }
+    }
+
     @Override
     public void showUserInfo(UserModel userModel) {
         if (userModel != null) {
             mUserModel = userModel;
             updateUserInfo();
         } else {
-            Toast.makeText(getActivity(), R.string.common_network_error, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), R.string.common_network_error, Toast.LENGTH_SHORT).show();
         }
     }
 
