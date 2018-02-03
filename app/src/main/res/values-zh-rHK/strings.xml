@@ -115,4 +115,8 @@
     <string name="user_vip_toolbar_title">VIP</string>
     <string name="user_vip_not_paid">你還不是任何VIP</string>
     <string name="user_vip_days">免費暢讀%1$d天</string>
+    <string name="user_waitting_share">分享好友\n免費閱讀這篇</string>
+    <string name="user_waitting_pay">購買VIP\n暢讀所有小說</string>
+    <string name="user_waitting_tips">不給糖就搗亂，等待</string>
+    <string name="user_waitting_or">或者</string>
 </resources>

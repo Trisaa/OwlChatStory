@@ -1,5 +1,9 @@
 package com.owl.chatstory.chat;
 
+import android.text.TextUtils;
+import android.util.Log;
+
+import com.owl.chatstory.common.util.PreferencesHelper;
 import com.owl.chatstory.data.chatsource.ICollectData;
 import com.owl.chatstory.data.chatsource.ICollectDataImpl;
 import com.owl.chatstory.data.chatsource.IFictionData;
@@ -8,6 +12,8 @@ import com.owl.chatstory.data.chatsource.IHistoryData;
 import com.owl.chatstory.data.chatsource.IHistoryDataImpl;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
+
+import java.util.Random;
 
 /**
  * Created by lebron on 2017/9/14.
@@ -34,8 +40,23 @@ public class ReadPresenter implements ReadContract.Presenter, IFictionData.OnFic
     }
 
     @Override
-    public void getChapterData(String id) {
-        mFictionData.getChapterDetail(id, "", this);
+    public void getChapterData(String id, int vip, boolean allow) {
+        Log.i("Lebron", " getChapterData " + vip + " " + allow);
+        if (allow) {
+            mFictionData.getChapterDetail(id, "", this);
+        } else {
+            int random = new Random().nextInt(2);
+            if (random == 0) {
+                mFictionData.getChapterDetail(id, "", this);
+            } else {
+                String skuID = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_PAID_FOR_VIP, null);
+                if (!TextUtils.isEmpty(skuID)) {
+                    mFictionData.getChapterDetail(id, "", this);
+                } else {
+                    mView.showWaittingDialog(id);
+                }
+            }
+        }
     }
 
     @Override
@@ -72,7 +93,7 @@ public class ReadPresenter implements ReadContract.Presenter, IFictionData.OnFic
     public void onFictionDetail(FictionDetailModel model) {
         if (model != null && model.getChapters() != null) {
             mView.showFictionDetailData(model);
-            mFictionData.getChapterDetail(model.getChapters().get(0).getChapterId(), "", this);
+            getChapterData(model.getChapters().get(0).getChapterId(), model.getChapters().get(0).getVip(), false);
         }
     }
 

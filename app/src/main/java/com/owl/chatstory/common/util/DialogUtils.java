@@ -2,16 +2,22 @@ package com.owl.chatstory.common.util;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.owl.chatstory.R;
 import com.owl.chatstory.data.homesource.model.ShareModel;
 import com.owl.chatstory.data.homesource.model.UpdateModel;
+import com.owl.chatstory.user.info.VIPActivity;
+
 
 /**
  * Created by lebron on 2017/9/14.
@@ -48,6 +54,73 @@ public class DialogUtils {
                 alertDialog.dismiss();
             }
         });
+    }
+
+    public static void showWaittingDialog(final Activity activity, final OnDialogClickListener listener) {
+        if (activity == null || activity.isFinishing()) {
+            return;
+        }
+        View dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_need_pay, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setView(dialogView);
+        final AlertDialog alertDialog = builder.create();
+        dialogView.findViewById(R.id.share_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShareModel shareModel = new ShareModel();
+                shareModel.setContent(activity.getString(R.string.share_content));
+                ShareUtils.shareToFacebook(activity, null, shareModel);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (listener != null) {
+                            listener.onOK();
+                        }
+                    }
+                }, 5000);
+                alertDialog.dismiss();
+            }
+        });
+        dialogView.findViewById(R.id.pay_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                VIPActivity.start(activity);
+                alertDialog.dismiss();
+            }
+        });
+        dialogView.findViewById(R.id.pay_close_layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (listener != null) {
+                    listener.onCancel();
+                }
+                alertDialog.dismiss();
+            }
+        });
+        final TextView textView = dialogView.findViewById(R.id.waiting_count_txv);
+        final CountDownTimer timer = new CountDownTimer(30000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                textView.setText(millisUntilFinished / 1000 + "s");
+            }
+
+            public void onFinish() {
+                if (listener != null) {
+                    listener.onOK();
+                }
+                alertDialog.dismiss();
+            }
+        }.start();
+        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                if (timer != null) {
+                    Log.i("Lebron", "timer cancel");
+                    timer.cancel();
+                }
+            }
+        });
+        alertDialog.show();
     }
 
     public static void showDialog(final Activity activity, int title, int negative, int positive

@@ -122,7 +122,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
             mCurrentChapterIndex++;
             if (mCurrentChapterIndex < mFictionDetailModel.getChapters().size()) {
                 String chapterId = mFictionDetailModel.getChapters().get(mCurrentChapterIndex).getChapterId();
-                mPresenter.getChapterData(chapterId);
+                mPresenter.getChapterData(chapterId, mFictionDetailModel.getChapters().get(mCurrentChapterIndex).getVip(), false);
                 if (mShowDatas != null) {
                     mShowDatas.clear();
                 }
@@ -240,7 +240,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
                         break;
                     }
                 }
-                mPresenter.getChapterData(model.getChapterId());
+                mPresenter.getChapterData(model.getChapterId(), model.getVip(), false);
                 if (mShowDatas != null) {
                     mShowDatas.clear();
                 }
@@ -320,6 +320,21 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
         if (mFavoriteMenu != null) {
             mFavoriteMenu.setIcon(isCollected ? R.drawable.vector_favorited : R.drawable.vector_unfavorite);
         }
+    }
+
+    @Override
+    public void showWaittingDialog(final String chapterId) {
+        DialogUtils.showWaittingDialog(this, new DialogUtils.OnDialogClickListener() {
+            @Override
+            public void onOK() {
+                mPresenter.getChapterData(chapterId, 0, true);
+            }
+
+            @Override
+            public void onCancel() {
+                finish();
+            }
+        });
     }
 
     @Override

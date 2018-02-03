@@ -117,4 +117,8 @@
     <string name="user_vip_toolbar_title">VIP</string>
     <string name="user_vip_not_paid">You are not vip user</string>
     <string name="user_vip_days">Free read for %1$d days</string>
+    <string name="user_waitting_share">Share to friends\nGet this chapter free</string>
+    <string name="user_waitting_pay">Become VIP\nGet all chapters free</string>
+    <string name="user_waitting_tips">Trick or treat, Waiting</string>
+    <string name="user_waitting_or">Or</string>
 </resources>

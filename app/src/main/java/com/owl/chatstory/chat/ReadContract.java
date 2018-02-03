@@ -13,7 +13,7 @@ public interface ReadContract {
     interface Presenter extends BasePresenter {
         void getFictionData(String id);
 
-        void getChapterData(String id);
+        void getChapterData(String id, int vip, boolean allow);
 
         void addToHistory(String id);
 
@@ -28,5 +28,7 @@ public interface ReadContract {
         void showFictionDetailData(FictionDetailModel model);
 
         void updateCollectState(boolean collected);
+
+        void showWaittingDialog(String chapterId);
     }
 }
