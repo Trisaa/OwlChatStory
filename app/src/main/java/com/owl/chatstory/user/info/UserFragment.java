@@ -15,6 +15,7 @@ import com.owl.chatstory.base.BaseFragment;
 import com.owl.chatstory.chat.FavoriteActivity;
 import com.owl.chatstory.chat.HistoryActivity;
 import com.owl.chatstory.common.util.ImageLoaderUtils;
+import com.owl.chatstory.common.util.JumpUtils;
 import com.owl.chatstory.common.util.PreferencesHelper;
 import com.owl.chatstory.data.usersource.model.UserModel;
 import com.owl.chatstory.settings.SettingsActivity;
@@ -147,6 +148,11 @@ public class UserFragment extends BaseFragment implements UserContract.View {
         } else {
             Toast.makeText(getActivity(), R.string.common_login_first, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @OnClick(R.id.user_settings_hire_layout)
+    public void clickWiter() {
+        JumpUtils.jumpToBrowser("https://d.eqxiu.com/s/G5q5drtz");
     }
 
     @Subscribe

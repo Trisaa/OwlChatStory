@@ -111,7 +111,7 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
                         if (fictionModel.getStatus() == Constants.STATUS_CREATING) {
                             CreateActivity.start(CreationDetailActivity.this, fictionModel);
                         } else {
-                            if (mPresenter != null) {
+                            if (mPresenter != null && mFictionDetailModel != null) {
                                 mPresenter.getChapterDetail(fictionModel.getId(), mFictionDetailModel.getLanguage());
                                 mLoadingView.setVisibility(View.VISIBLE);
                             }
@@ -198,7 +198,9 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
                 model.setNum(mDatas.size() + 1);
                 model.setStatus(Constants.STATUS_CREATING);
                 //model.setName(getString(R.string.chapter_num, mDatas.size() + 1, ""));
-                model.setName(mFictionDetailModel.getTitle());
+                if (mFictionDetailModel != null) {
+                    model.setName(mFictionDetailModel.getTitle());
+                }
                 CreateActivity.start(CreationDetailActivity.this, model);
                 break;
         }
@@ -297,7 +299,7 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
                 if (model.getStatus() == Constants.STATUS_CREATING) {
                     CreateActivity.start(CreationDetailActivity.this, model);
                 } else {
-                    if (mPresenter != null) {
+                    if (mPresenter != null && mFictionDetailModel != null) {
                         mPresenter.getChapterDetail(model.getId(), mFictionDetailModel.getLanguage());
                         mLoadingView.setVisibility(View.VISIBLE);
                     }

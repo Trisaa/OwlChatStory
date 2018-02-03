@@ -77,7 +77,10 @@ public class CategoryFragment extends BaseFragment implements CategoryContract.V
         mAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                ReadActivity.start(getActivity(), mDatas.get(position).getId(), mDatas.get(position).getTitle());
+                try {
+                    ReadActivity.start(getActivity(), mDatas.get(position).getId(), mDatas.get(position).getTitle());
+                } catch (Exception e) {
+                }
             }
 
             @Override

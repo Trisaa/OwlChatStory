@@ -77,6 +77,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                 return true;
             }
         });
+        mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(new MainPagerAdapter(getSupportFragmentManager()));
         new MainPresenter(this);
     }

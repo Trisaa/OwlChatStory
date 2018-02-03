@@ -180,13 +180,16 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
     @Override
     protected void onPause() {
         super.onPause();
-        if (mShowDatas != null && mDatas != null) {
-            int progress = (mShowDatas.size() - 1) * 100 / mDatas.size();
-            if (progress < 0) {
-                progress = 0;
+        try {
+            if (mShowDatas != null && mDatas != null) {
+                int progress = (mShowDatas.size() - 1) * 100 / mDatas.size();
+                if (progress < 0) {
+                    progress = 0;
+                }
+                mProgressList.set(mCurrentChapterIndex, String.valueOf(progress));
+                PreferencesHelper.getInstance().setFictionProgressList(mFictionDetailModel.getId(), mProgressList);
             }
-            mProgressList.set(mCurrentChapterIndex, String.valueOf(progress));
-            PreferencesHelper.getInstance().setFictionProgressList(mFictionDetailModel.getId(), mProgressList);
+        } catch (Exception e) {
         }
     }
 
@@ -208,7 +211,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
                 DialogUtils.showShareDialog(this);
                 break;
             case R.id.read_menu_favorite:
-                if (PreferencesHelper.getInstance().isLogined()) {
+                if (PreferencesHelper.getInstance().isLogined() && mFictionDetailModel != null) {
                     if (!isCollected) {
                         mPresenter.collectFiction(mFictionDetailModel.getId());
                         updateCollectState(true);
@@ -260,25 +263,28 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
 
     private void clickNext() {
         if (mDatas != null && mShowDatas.size() > 0) {
-            int i = mShowDatas.size() - 1;
-            mProgressbar.setProgress(100 * i / mDatas.size());
-            if (i < mDatas.size()) {
-                mShowDatas.add(i, mDatas.get(i));
-                mAdapter.notifyItemInserted(i);
-                mRecyclerView.smoothScrollToPosition(i + 1);
-                mAppBarLayout.setExpanded(false);
-            } else {
-                mShowDatas.get(i).setEnded(true);
-                if (mCurrentChapterIndex + 1 == mFictionDetailModel.getChapters().size()) {
-                    mShowDatas.get(i).setLastChapter(true);
+            try {
+                int i = mShowDatas.size() - 1;
+                mProgressbar.setProgress(100 * i / mDatas.size());
+                if (i < mDatas.size()) {
+                    mShowDatas.add(i, mDatas.get(i));
+                    mAdapter.notifyItemInserted(i);
+                    mRecyclerView.smoothScrollToPosition(i + 1);
+                    mAppBarLayout.setExpanded(false);
                 } else {
-                    mShowDatas.get(i).setLastChapter(false);
-                    mShowDatas.get(i).setNextChapterModel(mFictionDetailModel.getChapters().get(mCurrentChapterIndex + 1));
-                    mShowDatas.get(i).setFictionName(mFictionDetailModel.getTitle());
+                    mShowDatas.get(i).setEnded(true);
+                    if (mCurrentChapterIndex + 1 == mFictionDetailModel.getChapters().size()) {
+                        mShowDatas.get(i).setLastChapter(true);
+                    } else {
+                        mShowDatas.get(i).setLastChapter(false);
+                        mShowDatas.get(i).setNextChapterModel(mFictionDetailModel.getChapters().get(mCurrentChapterIndex + 1));
+                        mShowDatas.get(i).setFictionName(mFictionDetailModel.getTitle());
+                    }
+                    mAdapter.notifyItemChanged(i);
+                    mRecyclerView.smoothScrollToPosition(i + 1);
+                    mPresenter.addToHistory(getIntent().getStringExtra(EXTRA_FICTION_ID));
                 }
-                mAdapter.notifyItemChanged(i);
-                mRecyclerView.smoothScrollToPosition(i + 1);
-                mPresenter.addToHistory(getIntent().getStringExtra(EXTRA_FICTION_ID));
+            } catch (Exception e) {
             }
         }
     }
