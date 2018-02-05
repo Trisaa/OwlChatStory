@@ -64,6 +64,7 @@ public class DialogUtils {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setView(dialogView);
         final AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
         dialogView.findViewById(R.id.share_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,6 +86,7 @@ public class DialogUtils {
             @Override
             public void onClick(View v) {
                 VIPActivity.start(activity);
+                activity.finish();
                 alertDialog.dismiss();
             }
         });
@@ -98,7 +100,7 @@ public class DialogUtils {
             }
         });
         final TextView textView = dialogView.findViewById(R.id.waiting_count_txv);
-        final CountDownTimer timer = new CountDownTimer(30000, 1000) {
+        final CountDownTimer timer = new CountDownTimer(60000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 textView.setText(millisUntilFinished / 1000 + "s");
