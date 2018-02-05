@@ -16,12 +16,15 @@ import android.widget.TextView;
 
 import com.owl.chatstory.R;
 import com.owl.chatstory.base.BaseActivity;
+import com.owl.chatstory.chat.FavoriteActivity;
+import com.owl.chatstory.chat.ReadActivity;
 import com.owl.chatstory.common.util.CommonVerticalItemDecoration;
 import com.owl.chatstory.common.util.ImageLoaderUtils;
 import com.owl.chatstory.common.util.KeyboardUtils;
 import com.owl.chatstory.data.searchsource.SearchDetailModel;
 import com.owl.chatstory.data.searchsource.SearchModel;
 import com.zhy.adapter.recyclerview.CommonAdapter;
+import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 import java.util.ArrayList;
@@ -89,6 +92,17 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
                 holder.setVisible(R.id.category_item_watchers_txv, false);
             }
         };
+        mAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                ReadActivity.start(SearchActivity.this, mDatas.get(position).getId(), mDatas.get(position).getTitle());
+            }
+
+            @Override
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                return false;
+            }
+        });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.addItemDecoration(new CommonVerticalItemDecoration(32));
         mRecyclerView.setAdapter(mAdapter);

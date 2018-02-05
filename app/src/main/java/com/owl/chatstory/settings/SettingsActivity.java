@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import com.owl.chatstory.R;
 import com.owl.chatstory.base.BaseActivity;
 import com.owl.chatstory.common.util.FeedbackUtils;
+import com.owl.chatstory.common.util.JumpUtils;
 import com.owl.chatstory.common.util.PreferencesHelper;
 import com.owl.chatstory.data.usersource.model.UserModel;
 
@@ -15,6 +16,8 @@ import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static com.owl.chatstory.common.util.JumpUtils.PRIVACY_POLICY_URL;
 
 /**
  * Created by lebron on 2017/9/17.
@@ -68,5 +71,10 @@ public class SettingsActivity extends BaseActivity {
         PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_USER, null);
         EventBus.getDefault().post(EVENT_LOG_OUT);
         finish();
+    }
+
+    @OnClick(R.id.settings_privacy_layout)
+    public void clickPrivacy() {
+        JumpUtils.jumpToBrowser(PRIVACY_POLICY_URL);
     }
 }

@@ -121,5 +121,7 @@
     <string name="user_waitting_pay">购买VIP\n畅读所有小说</string>
     <string name="user_waitting_tips">不给糖就捣乱，等待</string>
     <string name="user_waitting_or">或者</string>
+    <string name="user_vip_questions">有任何疑问请联系</string>
+    <string name="user_vip_facebook_page">或访问我们的主页</string>
 
 </resources>

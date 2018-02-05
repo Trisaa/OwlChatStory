@@ -121,4 +121,6 @@
     <string name="user_waitting_pay">Become VIP\nGet all chapters free</string>
     <string name="user_waitting_tips">Trick or treat, Waiting</string>
     <string name="user_waitting_or">Or</string>
+    <string name="user_vip_questions">Any question ask us:</string>
+    <string name="user_vip_facebook_page">Or visit us</string>
 </resources>

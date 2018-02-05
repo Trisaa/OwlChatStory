@@ -11,6 +11,8 @@ import com.owl.chatstory.base.BaseActivity;
 import com.owl.chatstory.billing.IabHelper;
 import com.owl.chatstory.billing.IabResult;
 import com.owl.chatstory.billing.Purchase;
+import com.owl.chatstory.common.util.FeedbackUtils;
+import com.owl.chatstory.common.util.JumpUtils;
 import com.owl.chatstory.common.util.PreferencesHelper;
 
 import org.greenrobot.eventbus.EventBus;
@@ -23,6 +25,7 @@ import static com.owl.chatstory.common.util.Constants.ONE_MONTH_SKU;
 import static com.owl.chatstory.common.util.Constants.THREE_MONTHS_SKU;
 import static com.owl.chatstory.common.util.Constants.WEEK_SKU;
 import static com.owl.chatstory.common.util.Constants.YEAR_SKU;
+import static com.owl.chatstory.common.util.JumpUtils.PRIVACY_POLICY_URL;
 
 /**
  * Created by lebron on 2018/1/30.
@@ -33,6 +36,18 @@ public class VIPActivity extends BaseActivity {
     @BindView(R.id.common_toolbar)
     Toolbar mToolbar;
     private IabHelper mHelper;
+    IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
+        public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
+            if (mHelper == null || result.isFailure()) {
+                Log.i("Lebron", " Purchase failed " + result.getMessage());
+                return;
+            }
+            Log.i("Lebron", "Purchase successful." + purchase.getSku());
+            PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase.getSku());
+            EventBus.getDefault().post(EVENT_PAID_FOR_VIP);
+            finish();
+        }
+    };
 
     public static void start(Context context) {
         Intent intent = new Intent(context, VIPActivity.class);
@@ -105,18 +120,15 @@ public class VIPActivity extends BaseActivity {
         mHelper.launchSubscriptionPurchaseFlow(this, YEAR_SKU, 1000, mPurchaseFinishedListener);
     }
 
-    IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
-        public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
-            if (mHelper == null || result.isFailure()) {
-                Log.i("Lebron", " Purchase failed " + result.getMessage());
-                return;
-            }
-            Log.i("Lebron", "Purchase successful."+purchase.getSku());
-            PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase.getSku());
-            EventBus.getDefault().post(EVENT_PAID_FOR_VIP);
-            finish();
-        }
-    };
+    @OnClick(R.id.facebook_page_txv)
+    public void clickFacebookPage() {
+        JumpUtils.jumpToBrowser(PRIVACY_POLICY_URL);
+    }
+
+    @OnClick(R.id.login_privacy_txv)
+    public void clickGmail() {
+        FeedbackUtils.startFeedbackActivity(this);
+    }
 
     @Override
     public void onDestroy() {

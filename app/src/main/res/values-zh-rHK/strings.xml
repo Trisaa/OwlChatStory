@@ -119,4 +119,6 @@
     <string name="user_waitting_pay">購買VIP\n暢讀所有小說</string>
     <string name="user_waitting_tips">不給糖就搗亂，等待</string>
     <string name="user_waitting_or">或者</string>
+    <string name="user_vip_questions">有任何疑問請聯系</string>
+    <string name="user_vip_facebook_page">或訪問我們的主頁</string>
 </resources>
