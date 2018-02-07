@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -65,6 +66,16 @@ public class DialogUtils {
         builder.setView(dialogView);
         final AlertDialog alertDialog = builder.create();
         alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
+                if (i == KeyEvent.KEYCODE_BACK && keyEvent.getRepeatCount() == 0) {
+                    alertDialog.dismiss();
+                    activity.finish();
+                }
+                return false;
+            }
+        });
         dialogView.findViewById(R.id.share_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
