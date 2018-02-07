@@ -72,6 +72,7 @@ public class CategoryFragment extends BaseFragment implements CategoryContract.V
                 holder.setText(R.id.category_item_title_txv, fictionModel.getTitle());
                 holder.setText(R.id.category_item_description_txv, fictionModel.getSummary());
                 holder.setText(R.id.category_item_watchers_txv, fictionModel.getViews() + "");
+                holder.setVisible(R.id.category_item_vip_img, fictionModel.getVip() == 0 ? false : true);
             }
         };
         mAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {

@@ -21,6 +21,8 @@ public class SearchDetailModel {
     private String tags;
     @SerializedName("summary")
     private String summary;
+    @SerializedName("vip")
+    private int vip;
 
     public String getId() {
         return id;
@@ -76,5 +78,13 @@ public class SearchDetailModel {
 
     public void setSummary(String summary) {
         this.summary = summary;
+    }
+
+    public int getVip() {
+        return vip;
+    }
+
+    public void setVip(int vip) {
+        this.vip = vip;
     }
 }

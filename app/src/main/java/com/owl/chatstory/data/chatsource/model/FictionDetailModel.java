@@ -13,6 +13,17 @@ import java.util.List;
  */
 
 public class FictionDetailModel implements Parcelable {
+    public static final Creator<FictionDetailModel> CREATOR = new Creator<FictionDetailModel>() {
+        @Override
+        public FictionDetailModel createFromParcel(Parcel source) {
+            return new FictionDetailModel(source);
+        }
+
+        @Override
+        public FictionDetailModel[] newArray(int size) {
+            return new FictionDetailModel[size];
+        }
+    };
     @SerializedName("id")
     private String id;
     @SerializedName("title")
@@ -41,6 +52,29 @@ public class FictionDetailModel implements Parcelable {
     private int status;
     @SerializedName("token")
     private String token;
+    @SerializedName("vip")
+    private int vip;
+
+    public FictionDetailModel() {
+    }
+
+    protected FictionDetailModel(Parcel in) {
+        this.id = in.readString();
+        this.title = in.readString();
+        this.cover = in.readString();
+        this.tags = in.createStringArrayList();
+        this.summary = in.readString();
+        this.views = in.readInt();
+        this.writer = in.readParcelable(UserModel.class.getClassLoader());
+        this.chapters = in.createTypedArrayList(ChapterModel.CREATOR);
+        this.createLine = (Long) in.readValue(Long.class.getClassLoader());
+        this.ended = in.readInt();
+        this.serials = in.readInt();
+        this.language = in.readString();
+        this.status = in.readInt();
+        this.token = in.readString();
+        this.vip = in.readInt();
+    }
 
     public String getId() {
         return id;
@@ -154,7 +188,12 @@ public class FictionDetailModel implements Parcelable {
         this.status = status;
     }
 
-    public FictionDetailModel() {
+    public int getVip() {
+        return vip;
+    }
+
+    public void setVip(int vip) {
+        this.vip = vip;
     }
 
     @Override
@@ -178,34 +217,6 @@ public class FictionDetailModel implements Parcelable {
         dest.writeString(this.language);
         dest.writeInt(this.status);
         dest.writeString(this.token);
+        dest.writeInt(this.vip);
     }
-
-    protected FictionDetailModel(Parcel in) {
-        this.id = in.readString();
-        this.title = in.readString();
-        this.cover = in.readString();
-        this.tags = in.createStringArrayList();
-        this.summary = in.readString();
-        this.views = in.readInt();
-        this.writer = in.readParcelable(UserModel.class.getClassLoader());
-        this.chapters = in.createTypedArrayList(ChapterModel.CREATOR);
-        this.createLine = (Long) in.readValue(Long.class.getClassLoader());
-        this.ended = in.readInt();
-        this.serials = in.readInt();
-        this.language = in.readString();
-        this.status = in.readInt();
-        this.token = in.readString();
-    }
-
-    public static final Creator<FictionDetailModel> CREATOR = new Creator<FictionDetailModel>() {
-        @Override
-        public FictionDetailModel createFromParcel(Parcel source) {
-            return new FictionDetailModel(source);
-        }
-
-        @Override
-        public FictionDetailModel[] newArray(int size) {
-            return new FictionDetailModel[size];
-        }
-    };
 }
