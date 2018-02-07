@@ -70,7 +70,9 @@ public class LoginPresenter implements LoginContract.Presenter, ILoginData.OnAut
 
     @Override
     public void unsubscribe() {
-        mLoginData.clearSubscriptions();
+        if (mLoginData != null) {
+            mLoginData.clearSubscriptions();
+        }
     }
 
     @Override

@@ -498,10 +498,10 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
             public void onClick(View v) {
                 final String temp = editText.getText().toString().trim();
                 //什么都没改
-                if (name.equals(temp) && mImagePath.equals(icon)) {
+                if (name != null && name.equals(temp) && mImagePath != null && mImagePath.equals(icon)) {
                     alertDialog.dismiss();
                 } else {
-                    if (!TextUtils.isEmpty(temp)) {
+                    if (!TextUtils.isEmpty(temp) && mImagePath != null) {
                         //仅修改名称
                         if (mImagePath.equals(icon)) {
                             userModel.setName(temp);

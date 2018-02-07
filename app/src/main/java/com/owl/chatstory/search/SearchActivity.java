@@ -74,6 +74,12 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.unsubscribe();
+    }
+
     @OnClick(R.id.search_edittext_close)
     public void clickClear() {
         mEditText.setText("");

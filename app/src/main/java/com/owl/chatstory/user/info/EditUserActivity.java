@@ -104,28 +104,29 @@ public class EditUserActivity extends BaseActivity implements EditUserContract.V
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_done) {
             mLoadingView.setVisibility(View.VISIBLE);
+            if (mUserModel != null) {
+                if (!TextUtils.isEmpty(mNameEdit.getText().toString())) {
+                    mUserModel.setName(mNameEdit.getText().toString());
+                }
+                if (!TextUtils.isEmpty(mSummaryEdit.getText().toString())) {
+                    mUserModel.setSummary(mSummaryEdit.getText().toString());
+                }
+                if (mIconPath.equals(mUserModel.getIcon())) {
+                    mPresenter.updateUserInfo(mUserModel);
+                } else {
+                    FirebaseUtil.upLoadFile(mIconPath, new FirebaseUtil.OnUploadListener() {
+                        @Override
+                        public void onFailure() {
+                            Toast.makeText(EditUserActivity.this, R.string.common_upload_pic_failed, Toast.LENGTH_SHORT).show();
+                        }
 
-            if (!TextUtils.isEmpty(mNameEdit.getText().toString())) {
-                mUserModel.setName(mNameEdit.getText().toString());
-            }
-            if (!TextUtils.isEmpty(mSummaryEdit.getText().toString())) {
-                mUserModel.setSummary(mSummaryEdit.getText().toString());
-            }
-            if (mIconPath.equals(mUserModel.getIcon())) {
-                mPresenter.updateUserInfo(mUserModel);
-            } else {
-                FirebaseUtil.upLoadFile(mIconPath, new FirebaseUtil.OnUploadListener() {
-                    @Override
-                    public void onFailure() {
-                        Toast.makeText(EditUserActivity.this, R.string.common_upload_pic_failed, Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onSuccess(String url) {
-                        mUserModel.setIcon(url);
-                        mPresenter.updateUserInfo(mUserModel);
-                    }
-                });
+                        @Override
+                        public void onSuccess(String url) {
+                            mUserModel.setIcon(url);
+                            mPresenter.updateUserInfo(mUserModel);
+                        }
+                    });
+                }
             }
         }
         return super.onOptionsItemSelected(item);
