@@ -25,7 +25,7 @@ import static com.owl.chatstory.common.util.Constants.ONE_MONTH_SKU;
 import static com.owl.chatstory.common.util.Constants.THREE_MONTHS_SKU;
 import static com.owl.chatstory.common.util.Constants.WEEK_SKU;
 import static com.owl.chatstory.common.util.Constants.YEAR_SKU;
-import static com.owl.chatstory.common.util.JumpUtils.PRIVACY_POLICY_URL;
+import static com.owl.chatstory.common.util.JumpUtils.FACEBOOK_PAGE_URL;
 
 /**
  * Created by lebron on 2018/1/30.
@@ -122,7 +122,7 @@ public class VIPActivity extends BaseActivity {
 
     @OnClick(R.id.facebook_page_txv)
     public void clickFacebookPage() {
-        JumpUtils.jumpToBrowser(PRIVACY_POLICY_URL);
+        JumpUtils.jumpToBrowser(FACEBOOK_PAGE_URL);
     }
 
     @OnClick(R.id.login_privacy_txv)

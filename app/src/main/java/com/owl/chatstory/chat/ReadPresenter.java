@@ -45,8 +45,8 @@ public class ReadPresenter implements ReadContract.Presenter, IFictionData.OnFic
         if (allow) {
             mFictionData.getChapterDetail(id, "", this);
         } else {
-            int random = new Random().nextInt(2);
-            if (random == 0) {
+            //int random = new Random().nextInt(2);
+            if (vip == 0) {
                 mFictionData.getChapterDetail(id, "", this);
             } else {
                 String skuID = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_PAID_FOR_VIP, null);

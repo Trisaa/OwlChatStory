@@ -34,19 +34,17 @@ import static com.owl.chatstory.common.util.Constants.WEEK_SKU;
 import static com.owl.chatstory.common.util.Constants.YEAR_SKU;
 
 public class MainActivity extends BaseActivity implements MainContract.View {
-    @BindView(R.id.main_viewpager)
-    UnScrollViewPager mViewPager;
-    @BindView(R.id.main_content_bottombar)
-    BottomNavigationView mBottomNavigationView;
-
-    private MainContract.Presenter mPresenter;
-    private IabHelper mHelper;
-
     private static final int[] HOME_TOOLBAR_TITLE = {
             R.string.main_tab_home,
             R.string.common_create,
             R.string.main_tab_account
     };
+    @BindView(R.id.main_viewpager)
+    UnScrollViewPager mViewPager;
+    @BindView(R.id.main_content_bottombar)
+    BottomNavigationView mBottomNavigationView;
+    private MainContract.Presenter mPresenter;
+    private IabHelper mHelper;
 
     @Override
     protected int getContentViewID() {
@@ -116,7 +114,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                         if (purchase1 != null) {
                             Log.i("IabHelper", ONE_MONTH_SKU + " is available~~~~");
                             hasPaid = true;
-                            PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase.getSku());
+                            PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase1.getSku());
                         } else {
                             Log.i("IabHelper", ONE_MONTH_SKU + " is not available~~~~");
                         }
@@ -125,7 +123,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                         if (purchase2 != null) {
                             Log.i("IabHelper", THREE_MONTHS_SKU + " is available~~~~");
                             hasPaid = true;
-                            PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase.getSku());
+                            PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase2.getSku());
                         } else {
                             Log.i("IabHelper", THREE_MONTHS_SKU + " is not available~~~~");
                         }
@@ -134,7 +132,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                         if (purchase3 != null) {
                             Log.i("IabHelper", YEAR_SKU + " is available~~~~");
                             hasPaid = true;
-                            PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase.getSku());
+                            PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase3.getSku());
                         } else {
                             Log.i("IabHelper", YEAR_SKU + " is not available~~~~");
                         }

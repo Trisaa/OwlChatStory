@@ -10,14 +10,16 @@ import com.owl.chatstory.MainApplication;
  */
 
 public class JumpUtils {
-    private static final String APP_PKG_NAME_GP = "com.android.vending";
-    private static final String APP_CLASSNAME_GP = "com.android.vending.AssetBrowserActivity";
-    //应用市场跳转data
-    private static final String LOCAL_APP_MARKET_INTENT_DATA = "market://details?id=";
     //浏览器应用市场跳转data
     public static final String WEB_APP_MARKET_INTENT_DATA = "https://play.google.com/store/apps/details?id=";
     //隐私政策链接
     public static final String PRIVACY_POLICY_URL = "http://52.15.164.29:8080/more/protocol";
+    //Facebook主页
+    public static final String FACEBOOK_PAGE_URL = "https://www.facebook.com/150735542201460/";
+    private static final String APP_PKG_NAME_GP = "com.android.vending";
+    private static final String APP_CLASSNAME_GP = "com.android.vending.AssetBrowserActivity";
+    //应用市场跳转data
+    private static final String LOCAL_APP_MARKET_INTENT_DATA = "market://details?id=";
 
     /**
      * 跳转到应用市场中定指定app
