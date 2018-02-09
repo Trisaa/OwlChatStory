@@ -112,7 +112,11 @@ public class UserFragment extends BaseFragment implements UserContract.View {
 
     @OnClick(R.id.toolbar_edit)
     public void clickEdit() {
-        EditUserActivity.start(getActivity(), mUserModel);
+        if (PreferencesHelper.getInstance().isLogined()) {
+            EditUserActivity.start(getActivity(), mUserModel);
+        } else {
+            Toast.makeText(getActivity(), R.string.common_login_first, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @OnClick(R.id.user_settings_vip_layout)

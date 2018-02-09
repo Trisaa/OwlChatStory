@@ -156,6 +156,9 @@ public class EditUserActivity extends BaseActivity implements EditUserContract.V
 
     @OnClick(R.id.user_edit_gender_choose_layout)
     public void clickGender() {
+        if (mUserModel == null) {
+            return;
+        }
         DialogUtils.showGenderDialog(this, mUserModel.getGender(), new DialogUtils.OnGenderChooseListener() {
             @Override
             public void onChoose(int gender) {

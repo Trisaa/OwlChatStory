@@ -85,11 +85,11 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         base64EncodedPublicKey.trim();
         // compute your public key and store it in base64EncodedPublicKey
         mHelper = new IabHelper(this, base64EncodedPublicKey);
-        mHelper.enableDebugLogging(true);
+        mHelper.enableDebugLogging(false);
         mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
             @Override
             public void onIabSetupFinished(IabResult result) {
-                if (result.isFailure()) {
+                if (result.isFailure() || mHelper == null) {
                     // Oh no, there was a problem.
                     Log.i("IabHelper", "Problem setting up In-app Billing: " + result);
                     return;

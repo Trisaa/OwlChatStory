@@ -86,7 +86,7 @@ public class VIPActivity extends BaseActivity {
         base64EncodedPublicKey.trim();
         // compute your public key and store it in base64EncodedPublicKey
         mHelper = new IabHelper(this, base64EncodedPublicKey);
-        mHelper.enableDebugLogging(true);
+        mHelper.enableDebugLogging(false);
         mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
             @Override
             public void onIabSetupFinished(IabResult result) {
@@ -102,22 +102,30 @@ public class VIPActivity extends BaseActivity {
 
     @OnClick(R.id.week_subscribe_btn)
     public void clickPurchaseByWeek() {
-        mHelper.launchSubscriptionPurchaseFlow(this, WEEK_SKU, 1000, mPurchaseFinishedListener);
+        if (mHelper != null) {
+            mHelper.launchSubscriptionPurchaseFlow(this, WEEK_SKU, 1000, mPurchaseFinishedListener);
+        }
     }
 
     @OnClick(R.id.one_month_subscribe_btn)
     public void clickPurchaseByMonth() {
-        mHelper.launchSubscriptionPurchaseFlow(this, ONE_MONTH_SKU, 1000, mPurchaseFinishedListener);
+        if (mHelper != null) {
+            mHelper.launchSubscriptionPurchaseFlow(this, ONE_MONTH_SKU, 1000, mPurchaseFinishedListener);
+        }
     }
 
     @OnClick(R.id.three_months_subscribe_btn)
     public void clickPurchaseByMonths() {
-        mHelper.launchSubscriptionPurchaseFlow(this, THREE_MONTHS_SKU, 1000, mPurchaseFinishedListener);
+        if (mHelper != null) {
+            mHelper.launchSubscriptionPurchaseFlow(this, THREE_MONTHS_SKU, 1000, mPurchaseFinishedListener);
+        }
     }
 
     @OnClick(R.id.year_subscribe_btn)
     public void clickPurchaseByYear() {
-        mHelper.launchSubscriptionPurchaseFlow(this, YEAR_SKU, 1000, mPurchaseFinishedListener);
+        if (mHelper != null) {
+            mHelper.launchSubscriptionPurchaseFlow(this, YEAR_SKU, 1000, mPurchaseFinishedListener);
+        }
     }
 
     @OnClick(R.id.facebook_page_txv)

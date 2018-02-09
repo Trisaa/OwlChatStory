@@ -340,14 +340,22 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_CODE_GALLERY:
-                    CameraUtils.cropPhoto(this, data.getData(), 1, 1);
+                    if (data != null) {
+                        CameraUtils.cropPhoto(this, data.getData(), 1, 1);
+                    } else {
+                        Toast.makeText(this, R.string.common_get_pic_failed, Toast.LENGTH_SHORT).show();
+                    }
                     break;
                 case REQUEST_CODE_CAMERA:
                     CameraUtils.cropPhoto(this, FileUtils.getFileUri(this, FileUtils.getFilePath("temp.jpg")), 1, 1);
                     break;
                 case UCrop.REQUEST_CROP:
-                    mImagePath = UCrop.getOutput(data).getPath();
-                    ImageLoaderUtils.getInstance().loadCircleImage(this, mImagePath, mDialogUserIcon);
+                    if (data != null) {
+                        mImagePath = UCrop.getOutput(data).getPath();
+                        ImageLoaderUtils.getInstance().loadCircleImage(this, mImagePath, mDialogUserIcon);
+                    } else {
+                        Toast.makeText(this, R.string.common_get_pic_failed, Toast.LENGTH_SHORT).show();
+                    }
                     break;
             }
         } else if (resultCode == UCrop.RESULT_ERROR) {
@@ -566,7 +574,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
                 //删除配角
                 deleteMessageAboutUser(model);
                 for (ActorModel userModel : mSecondRoleList) {
-                    if (userModel.getId().equals(model.getId())) {
+                    if (userModel.getId() != null && userModel.getId().equals(model.getId())) {
                         mSecondRoleList.remove(userModel);
                         mRolesAdapter.notifyDataSetChanged();
                         break;
@@ -577,7 +585,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
                 updateMessageAboutUser(model);
                 for (int i = 0; i < mSecondRoleList.size(); i++) {
                     ActorModel userModel = mSecondRoleList.get(i);
-                    if (userModel.getId().equals(model.getId())) {
+                    if (userModel.getId() != null && userModel.getId().equals(model.getId())) {
                         userModel.setName(model.getName());
                         userModel.setPicture(model.getPicture());
                         mRolesAdapter.notifyItemChanged(i);
@@ -602,7 +610,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
         Iterator<MessageModel> it = mMessageList.iterator();
         while (it.hasNext()) {
             MessageModel x = it.next();
-            if (x.getId().equals(model.getId())) {
+            if (x.getId() != null && x.getId().equals(model.getId())) {
                 it.remove();
             }
         }
