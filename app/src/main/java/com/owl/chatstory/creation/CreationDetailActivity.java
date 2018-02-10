@@ -31,6 +31,7 @@ import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
@@ -155,6 +156,15 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
                     mPresenter.operateFiction(request);
                 }
                 break;
+            case R.id.menu_delete:
+                if (mPresenter != null) {
+                    OperationRequest request = new OperationRequest();
+                    request.setIfiction_id(mFictionId);
+                    request.setLanguage(mLanguage);
+                    request.setOp(Constants.OPERATION_DROP);
+                    mPresenter.operateFiction(request);
+                }
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -234,10 +244,15 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
     }
 
     @Override
-    public void operateFictionFinished(boolean success) {
+    public void operateFictionFinished(boolean success, String operation) {
         Toast.makeText(this, success ? R.string.common_update_info_success : R.string.common_update_info_failed, Toast.LENGTH_SHORT).show();
-        if (mPresenter != null) {
-            mPresenter.getFictionDetail(mFictionId, mLanguage);
+        if (Constants.OPERATION_DROP.equals(operation)) {
+            EventBus.getDefault().post(Constants.RELOAD_DATA_AFTER_LOGINED);
+            finish();
+        } else {
+            if (mPresenter != null) {
+                mPresenter.getFictionDetail(mFictionId, mLanguage);
+            }
         }
     }
 
@@ -293,6 +308,7 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
         TextView editView = (TextView) view.findViewById(R.id.dialog_chapter_edit_txv);
         TextView publishView = (TextView) view.findViewById(R.id.dialog_chapter_publish_txv);
         TextView deleteView = (TextView) view.findViewById(R.id.dialog_chapter_delete_txv);
+        TextView dropView = view.findViewById(R.id.dialog_chapter_drop_txv);
         editView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -354,6 +370,27 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
                         request.setLanguage(mLanguage);
                         request.setChapter_id(model.getId());
                         request.setOp(Constants.OPERATION_DELETE);
+                        mPresenter.operateChapter(request);
+                    }
+                }
+                alertDialog.dismiss();
+            }
+        });
+        dropView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (model.getStatus() == Constants.STATUS_CREATING) {
+                    PreferencesHelper.getInstance().removeLocalChapter(model);
+                    if (mPresenter != null) {
+                        mPresenter.getChapterList(mFictionId, mLanguage);
+                    }
+                } else {
+                    if (mPresenter != null) {
+                        OperationRequest request = new OperationRequest();
+                        request.setIfiction_id(mFictionId);
+                        request.setLanguage(mLanguage);
+                        request.setChapter_id(model.getId());
+                        request.setOp(Constants.OPERATION_DROP);
                         mPresenter.operateChapter(request);
                     }
                 }

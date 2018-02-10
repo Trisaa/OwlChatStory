@@ -30,12 +30,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/my_creation_title_txv"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:layout_toRightOf="@id/my_creation_img"
-        android:text="12字 共两章"
+        android:text=""
         android:textColor="@color/common_text_color"
         android:textSize="16sp"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/my_creation_chapters_txv"
@@ -43,13 +43,13 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/my_creation_texts_txv"
         android:layout_marginBottom="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:layout_toRightOf="@id/my_creation_img"
         android:ellipsize="end"
         android:maxLines="3"
         android:text="summary"
         android:textColor="@color/common_text_color"
-        android:textSize="16sp" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/my_creation_time_txv"

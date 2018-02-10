@@ -83,8 +83,8 @@ public class CreationDetailPresenter implements CreationDetailContract.Presenter
     }
 
     @Override
-    public void operateFictionFinished(boolean success) {
-        mView.operateFictionFinished(success);
+    public void operateFictionFinished(boolean success, String operation) {
+        mView.operateFictionFinished(success, operation);
     }
 
     @Override

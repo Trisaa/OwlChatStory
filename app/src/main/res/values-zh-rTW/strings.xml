@@ -53,6 +53,8 @@
     <string name="chapter_num">第%1$d章 %2$s</string>
 
     <string name="read_click_tips">點我試試</string>
+    <string name="read_please_update">求更新</string>
+    <string name="read_update_feedback">我們已經收到您的請求，保持耐心，我們會盡快更新~</string>
 
     <string name="share_content">我發現了一個不錯的對話小說App，快來一起體驗吧～</string>
 
@@ -121,4 +123,6 @@
     <string name="user_waitting_or">或者</string>
     <string name="user_vip_questions">有任何疑問請聯系</string>
     <string name="user_vip_facebook_page">或訪問我們的主頁</string>
+
+    <string name="search_key_word">輸入關鍵字</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.owl.chatstory.chat.adapter;
 
 import android.view.View;
+import android.widget.Toast;
 
 import com.owl.chatstory.MainApplication;
 import com.owl.chatstory.R;
@@ -30,7 +31,7 @@ public class ChatNextDelegate implements ItemViewDelegate<MessageModel> {
     }
 
     @Override
-    public void convert(ViewHolder holder, MessageModel messageModel, int position) {
+    public void convert(ViewHolder holder, final MessageModel messageModel, int position) {
         holder.setVisible(R.id.read_over_layout, messageModel.isEnded());
         holder.setVisible(R.id.read_next_chapter_layout, !messageModel.isLastChapter());
         if (!messageModel.isLastChapter() && messageModel.getNextChapterModel() != null) {
@@ -39,6 +40,9 @@ public class ChatNextDelegate implements ItemViewDelegate<MessageModel> {
                     messageModel.getNextChapterModel().getNum(), messageModel.getNextChapterModel().getChapterName()));
         }
         holder.setText(R.id.read_over_txv, messageModel.isLastChapter() ? MainApplication.getAppContext().getString(R.string.common_over) : MainApplication.getAppContext().getString(R.string.common_continue));
+        if (messageModel.isLastChapter()) {
+            holder.setText(R.id.read_share_txv, MainApplication.getAppContext().getString(R.string.read_please_update));
+        }
         holder.getConvertView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,8 +63,12 @@ public class ChatNextDelegate implements ItemViewDelegate<MessageModel> {
         holder.setOnClickListener(R.id.read_share_txv, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mListener != null) {
-                    mListener.onShareClick();
+                if (messageModel.isLastChapter()) {
+                    Toast.makeText(MainApplication.getAppContext(), R.string.read_update_feedback, Toast.LENGTH_SHORT).show();
+                } else {
+                    if (mListener != null) {
+                        mListener.onShareClick();
+                    }
                 }
             }
         });

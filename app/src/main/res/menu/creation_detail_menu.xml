@@ -9,4 +9,8 @@
         android:id="@+id/menu_recover"
         android:title="@string/creation_detail_online"
         app:showAsAction="never"></item>
+    <item
+        android:id="@+id/menu_delete"
+        android:title="@string/common_delete"
+        app:showAsAction="never"></item>
 </menu>

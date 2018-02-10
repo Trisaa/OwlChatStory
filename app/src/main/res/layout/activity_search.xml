@@ -42,7 +42,7 @@
                 android:elevation="2dp"
                 android:focusable="true"
                 android:gravity="center_vertical"
-                android:hint="输入关键字"
+                android:hint="@string/search_key_word"
                 android:imeOptions="actionSearch"
                 android:inputType="text"
                 android:lines="1"

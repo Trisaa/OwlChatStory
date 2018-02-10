@@ -34,7 +34,7 @@ public interface CreationDetailContract {
 
         void showFictionModel(FictionModel model);
 
-        void operateFictionFinished(boolean success);
+        void operateFictionFinished(boolean success, String operation);
 
         void operateChapterFinished(boolean success);
 

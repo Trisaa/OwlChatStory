@@ -26,7 +26,7 @@ import com.owl.chatstory.user.info.VIPActivity;
 
 public class DialogUtils {
 
-    public static void showShareDialog(final Activity activity) {
+    public static void showShareDialog(final Activity activity, final ShareModel model) {
         if (activity == null || activity.isFinishing()) {
             return;
         }
@@ -40,18 +40,14 @@ public class DialogUtils {
         dialogView.findViewById(R.id.share_facebook_txv).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShareModel shareModel = new ShareModel();
-                shareModel.setContent(activity.getString(R.string.share_content));
-                ShareUtils.shareToFacebook(activity, null, shareModel);
+                ShareUtils.shareToFacebook(activity, null, model);
                 alertDialog.dismiss();
             }
         });
         dialogView.findViewById(R.id.share_twitter_txv).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShareModel shareModel = new ShareModel();
-                shareModel.setContent(activity.getString(R.string.share_content) + "\n");
-                ShareUtils.shareToTwitter(activity, shareModel);
+                ShareUtils.shareToTwitter(activity, model);
                 alertDialog.dismiss();
             }
         });

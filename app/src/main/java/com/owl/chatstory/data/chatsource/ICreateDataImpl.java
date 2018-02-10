@@ -195,7 +195,7 @@ public class ICreateDataImpl implements ICreateData {
     }
 
     @Override
-    public void operateFiction(OperationRequest request, final OnOperateFictionListener listener) {
+    public void operateFiction(final OperationRequest request, final OnOperateFictionListener listener) {
         Subscription subscription = HttpUtils.getInstance().operateFiction(new Subscriber() {
             @Override
             public void onCompleted() {
@@ -205,14 +205,14 @@ public class ICreateDataImpl implements ICreateData {
             @Override
             public void onError(Throwable e) {
                 if (listener != null) {
-                    listener.operateFictionFinished(false);
+                    listener.operateFictionFinished(false, request.getOp());
                 }
             }
 
             @Override
             public void onNext(Object o) {
                 if (listener != null) {
-                    listener.operateFictionFinished(true);
+                    listener.operateFictionFinished(true, request.getOp());
                 }
             }
         }, request);

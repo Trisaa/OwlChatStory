@@ -21,11 +21,13 @@ import com.owl.chatstory.chat.adapter.ChatRightDelegate;
 import com.owl.chatstory.chat.adapter.ReadItemDecoration;
 import com.owl.chatstory.common.util.DialogUtils;
 import com.owl.chatstory.common.util.PreferencesHelper;
+import com.owl.chatstory.common.util.ShareUtils;
 import com.owl.chatstory.common.view.SpaceRecyclerView;
 import com.owl.chatstory.data.chatsource.model.ChapterModel;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
 import com.owl.chatstory.data.chatsource.model.MessageModel;
+import com.owl.chatstory.data.homesource.model.ShareModel;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -73,14 +75,6 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
     private List<String> mProgressList;//阅读进度
     private MenuItem mFavoriteMenu;
     private boolean isCollected;
-
-    public static void start(Context context, String fictionId, String fictionName) {
-        Intent intent = new Intent(context, ReadActivity.class);
-        intent.putExtra(EXTRA_FICTION_ID, fictionId);
-        intent.putExtra(EXTRA_FICTION_NAME, fictionName);
-        context.startActivity(intent);
-    }
-
     private ChatNextDelegate.OnClickListener mNextListener = new ChatNextDelegate.OnClickListener() {
         @Override
         public void onClick() {
@@ -90,7 +84,10 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
 
         @Override
         public void onShareClick() {
-            DialogUtils.showShareDialog(ReadActivity.this);
+            ShareModel shareModel = new ShareModel();
+            shareModel.setContent(getString(R.string.share_content));
+            shareModel.setUrl(ShareUtils.getShareChapterUrl(mFictionDetailModel.getLanguage(), mLastChapterId));
+            DialogUtils.showShareDialog(ReadActivity.this, shareModel);
         }
 
         @Override
@@ -131,6 +128,13 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
             }
         }
     };
+
+    public static void start(Context context, String fictionId, String fictionName) {
+        Intent intent = new Intent(context, ReadActivity.class);
+        intent.putExtra(EXTRA_FICTION_ID, fictionId);
+        intent.putExtra(EXTRA_FICTION_NAME, fictionName);
+        context.startActivity(intent);
+    }
 
     @Override
     protected int getContentViewID() {
@@ -208,7 +212,10 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
                 }
                 break;
             case R.id.read_menu_share:
-                DialogUtils.showShareDialog(this);
+                ShareModel shareModel = new ShareModel();
+                shareModel.setContent(getString(R.string.share_content));
+                shareModel.setUrl(ShareUtils.getShareChapterUrl(mFictionDetailModel.getLanguage(), mLastChapterId));
+                DialogUtils.showShareDialog(this, shareModel);
                 break;
             case R.id.read_menu_favorite:
                 if (PreferencesHelper.getInstance().isLogined() && mFictionDetailModel != null) {

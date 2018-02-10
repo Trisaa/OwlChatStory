@@ -1,31 +1,19 @@
 package com.owl.chatstory.common.util;
 
 import android.app.Activity;
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
-import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
-import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.messenger.MessengerUtils;
-import com.facebook.messenger.ShareToMessengerParams;
 import com.facebook.share.Sharer;
 import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.model.ShareVideo;
-import com.facebook.share.model.ShareVideoContent;
 import com.facebook.share.widget.ShareDialog;
 import com.owl.chatstory.data.homesource.model.ShareModel;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 
-import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -36,6 +24,15 @@ import java.net.URL;
 public class ShareUtils {
     //浏览器应用市场跳转data
     public static final String WEB_APP_MARKET_INTENT_DATA = "https://play.google.com/store/apps/details?id=";
+    public static final String SHARE_CHAPTER_BASE_URL = "http://47.94.243.139:9090/share/index.html?";
+
+    public static final String getShareChapterUrl(String type, String chapterId) {
+        return SHARE_CHAPTER_BASE_URL + "type=" + type + "&id=" + chapterId;
+    }
+
+    public static final String getShareAppUrl(Context context) {
+        return WEB_APP_MARKET_INTENT_DATA + context.getPackageName();
+    }
 
     public static void shareToFacebook(Activity activity, CallbackManager callbackManager, ShareModel shareModel) {
         ShareDialog shareDialog = new ShareDialog(activity);
@@ -58,7 +55,7 @@ public class ShareUtils {
             });
         }
         ShareLinkContent content = new ShareLinkContent.Builder()
-                .setContentUrl(Uri.parse(WEB_APP_MARKET_INTENT_DATA + activity.getPackageName()))
+                .setContentUrl(Uri.parse(shareModel.getUrl()))
                 .build();
         shareDialog.show(content);
     }
@@ -66,7 +63,7 @@ public class ShareUtils {
     public static void shareToTwitter(Context context, ShareModel model) {
         TweetComposer.Builder builder = new TweetComposer.Builder(context);
         try {
-            builder.url(new URL(WEB_APP_MARKET_INTENT_DATA + context.getPackageName()));
+            builder.url(new URL(model.getUrl()));
         } catch (MalformedURLException e) {
 
         }

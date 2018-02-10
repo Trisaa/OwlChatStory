@@ -54,6 +54,8 @@
     <string name="chapter_num">No.%1$d %2$s</string>
 
     <string name="read_click_tips">Try to click me</string>
+    <string name="read_please_update">Please update</string>
+    <string name="read_update_feedback">We have received your request, just keep patient~</string>
 
     <string name="share_content">I find a good chat-fiction app, let\'s enjoy reading</string>
 
@@ -123,4 +125,6 @@
     <string name="user_waitting_or">Or</string>
     <string name="user_vip_questions">Any question ask us:</string>
     <string name="user_vip_facebook_page">Or visit us</string>
+
+    <string name="search_key_word">Input key word</string>
 </resources>

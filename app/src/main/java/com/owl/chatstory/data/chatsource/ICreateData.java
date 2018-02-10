@@ -47,7 +47,7 @@ public interface ICreateData {
     }
 
     interface OnOperateFictionListener {
-        void operateFictionFinished(boolean success);
+        void operateFictionFinished(boolean success, String operation);
 
         void operateChapterFinished(boolean success);
     }

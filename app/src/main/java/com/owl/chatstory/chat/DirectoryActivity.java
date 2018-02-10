@@ -19,9 +19,11 @@ import com.owl.chatstory.base.BaseActivity;
 import com.owl.chatstory.common.util.DialogUtils;
 import com.owl.chatstory.common.util.ImageLoaderUtils;
 import com.owl.chatstory.common.util.PreferencesHelper;
+import com.owl.chatstory.common.util.ShareUtils;
 import com.owl.chatstory.common.util.TimeUtils;
 import com.owl.chatstory.data.chatsource.model.ChapterModel;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
+import com.owl.chatstory.data.homesource.model.ShareModel;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
@@ -81,7 +83,10 @@ public class DirectoryActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_share:
-                DialogUtils.showShareDialog(this);
+                ShareModel shareModel = new ShareModel();
+                shareModel.setContent(getString(R.string.share_content));
+                shareModel.setUrl(ShareUtils.getShareAppUrl(this));
+                DialogUtils.showShareDialog(this, shareModel);
                 break;
         }
         return super.onOptionsItemSelected(item);
