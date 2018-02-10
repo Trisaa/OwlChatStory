@@ -42,7 +42,9 @@ public class ILoginDataImpl implements ILoginData {
 
     @Override
     public void resultLogin(int requestCode, int resultCode, Intent data) {
-        mAuth.resultLogin(requestCode, resultCode, data);
+        if (mAuth != null) {
+            mAuth.resultLogin(requestCode, resultCode, data);
+        }
     }
 
     @Override

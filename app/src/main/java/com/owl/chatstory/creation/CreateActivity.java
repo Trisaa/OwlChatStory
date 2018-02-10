@@ -352,7 +352,9 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
                 case UCrop.REQUEST_CROP:
                     if (data != null) {
                         mImagePath = UCrop.getOutput(data).getPath();
-                        ImageLoaderUtils.getInstance().loadCircleImage(this, mImagePath, mDialogUserIcon);
+                        if (mDialogUserIcon != null) {
+                            ImageLoaderUtils.getInstance().loadCircleImage(this, mImagePath, mDialogUserIcon);
+                        }
                     } else {
                         Toast.makeText(this, R.string.common_get_pic_failed, Toast.LENGTH_SHORT).show();
                     }

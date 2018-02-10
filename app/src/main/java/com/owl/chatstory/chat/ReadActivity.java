@@ -212,10 +212,12 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
                 }
                 break;
             case R.id.read_menu_share:
-                ShareModel shareModel = new ShareModel();
-                shareModel.setContent(getString(R.string.share_content));
-                shareModel.setUrl(ShareUtils.getShareChapterUrl(mFictionDetailModel.getLanguage(), mLastChapterId));
-                DialogUtils.showShareDialog(this, shareModel);
+                if (mFictionDetailModel != null) {
+                    ShareModel shareModel = new ShareModel();
+                    shareModel.setContent(getString(R.string.share_content));
+                    shareModel.setUrl(ShareUtils.getShareChapterUrl(mFictionDetailModel.getLanguage(), mLastChapterId));
+                    DialogUtils.showShareDialog(this, shareModel);
+                }
                 break;
             case R.id.read_menu_favorite:
                 if (PreferencesHelper.getInstance().isLogined() && mFictionDetailModel != null) {
