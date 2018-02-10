@@ -92,7 +92,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
 
         @Override
         public void onLongClick() {
-            mSubscription = Observable.interval(1, TimeUnit.SECONDS).subscribe(new Subscriber<Long>() {
+            /*mSubscription = Observable.interval(1, TimeUnit.SECONDS).subscribe(new Subscriber<Long>() {
                 @Override
                 public void onCompleted() {
 
@@ -107,7 +107,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
                 public void onNext(Long aLong) {
                     clickNext();
                 }
-            });
+            });*/
         }
 
         @Override
