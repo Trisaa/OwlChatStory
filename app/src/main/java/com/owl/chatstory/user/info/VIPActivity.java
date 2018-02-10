@@ -36,6 +36,7 @@ public class VIPActivity extends BaseActivity {
     @BindView(R.id.common_toolbar)
     Toolbar mToolbar;
     private IabHelper mHelper;
+
     IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
         public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
             if (mHelper == null || result.isFailure()) {
@@ -82,22 +83,24 @@ public class VIPActivity extends BaseActivity {
 
     @Override
     protected void initViewsAndData() {
-        String base64EncodedPublicKey = BASE64_ENCODED_PUBLIC_KEY;
-        base64EncodedPublicKey.trim();
-        // compute your public key and store it in base64EncodedPublicKey
-        mHelper = new IabHelper(this, base64EncodedPublicKey);
-        mHelper.enableDebugLogging(false);
-        mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
-            @Override
-            public void onIabSetupFinished(IabResult result) {
-                if (result.isFailure()) {
-                    // Oh no, there was a problem.
-                    Log.i("Lebron", "Problem setting up In-app Billing: " + result);
-                    return;
+        try {
+            String base64EncodedPublicKey = BASE64_ENCODED_PUBLIC_KEY;
+            base64EncodedPublicKey.trim();
+            // compute your public key and store it in base64EncodedPublicKey
+            mHelper = new IabHelper(this, base64EncodedPublicKey);
+            mHelper.enableDebugLogging(false);
+            mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+                @Override
+                public void onIabSetupFinished(IabResult result) {
+                    if (result.isFailure()) {
+                        // Oh no, there was a problem.
+                        Log.i("Lebron", "Problem setting up In-app Billing: " + result);
+                        return;
+                    }
                 }
-            }
-        });
-
+            });
+        } catch (Exception e) {
+        }
     }
 
     @OnClick(R.id.week_subscribe_btn)

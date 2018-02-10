@@ -81,70 +81,73 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     }
 
     private void checkPurchase() {
-        String base64EncodedPublicKey = BASE64_ENCODED_PUBLIC_KEY;
-        base64EncodedPublicKey.trim();
-        // compute your public key and store it in base64EncodedPublicKey
-        mHelper = new IabHelper(this, base64EncodedPublicKey);
-        mHelper.enableDebugLogging(false);
-        mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
-            @Override
-            public void onIabSetupFinished(IabResult result) {
-                if (result.isFailure() || mHelper == null) {
-                    // Oh no, there was a problem.
-                    Log.i("IabHelper", "Problem setting up In-app Billing: " + result);
-                    return;
-                }
-                mHelper.queryInventoryAsync(new IabHelper.QueryInventoryFinishedListener() {
-                    public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
-                        if (result.isFailure()) {
-                            Log.i("IabHelper", "onQueryInventoryFinished failed");
-                            return;
-                        }
-                        boolean hasPaid = false;
-                        Purchase purchase = inventory.getPurchase(WEEK_SKU);
-                        if (purchase != null) {
-                            Log.i("IabHelper", WEEK_SKU + " is available~~~~");
-                            hasPaid = true;
-                            PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase.getSku());
-                        } else {
-                            Log.i("IabHelper", WEEK_SKU + " is not available~~~~");
-                        }
-
-                        Purchase purchase1 = inventory.getPurchase(ONE_MONTH_SKU);
-                        if (purchase1 != null) {
-                            Log.i("IabHelper", ONE_MONTH_SKU + " is available~~~~");
-                            hasPaid = true;
-                            PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase1.getSku());
-                        } else {
-                            Log.i("IabHelper", ONE_MONTH_SKU + " is not available~~~~");
-                        }
-
-                        Purchase purchase2 = inventory.getPurchase(THREE_MONTHS_SKU);
-                        if (purchase2 != null) {
-                            Log.i("IabHelper", THREE_MONTHS_SKU + " is available~~~~");
-                            hasPaid = true;
-                            PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase2.getSku());
-                        } else {
-                            Log.i("IabHelper", THREE_MONTHS_SKU + " is not available~~~~");
-                        }
-
-                        Purchase purchase3 = inventory.getPurchase(YEAR_SKU);
-                        if (purchase3 != null) {
-                            Log.i("IabHelper", YEAR_SKU + " is available~~~~");
-                            hasPaid = true;
-                            PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase3.getSku());
-                        } else {
-                            Log.i("IabHelper", YEAR_SKU + " is not available~~~~");
-                        }
-
-                        //没查询到任何一个购买则认为没有购买会员或者会员已经过期
-                        if (!hasPaid) {
-                            PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, null);
-                        }
+        try {
+            String base64EncodedPublicKey = BASE64_ENCODED_PUBLIC_KEY;
+            base64EncodedPublicKey.trim();
+            // compute your public key and store it in base64EncodedPublicKey
+            mHelper = new IabHelper(this, base64EncodedPublicKey);
+            mHelper.enableDebugLogging(false);
+            mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+                @Override
+                public void onIabSetupFinished(IabResult result) {
+                    if (result.isFailure() || mHelper == null) {
+                        // Oh no, there was a problem.
+                        Log.i("IabHelper", "Problem setting up In-app Billing: " + result);
+                        return;
                     }
-                });
-            }
-        });
+                    mHelper.queryInventoryAsync(new IabHelper.QueryInventoryFinishedListener() {
+                        public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
+                            if (result.isFailure()) {
+                                Log.i("IabHelper", "onQueryInventoryFinished failed");
+                                return;
+                            }
+                            boolean hasPaid = false;
+                            Purchase purchase = inventory.getPurchase(WEEK_SKU);
+                            if (purchase != null) {
+                                Log.i("IabHelper", WEEK_SKU + " is available~~~~");
+                                hasPaid = true;
+                                PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase.getSku());
+                            } else {
+                                Log.i("IabHelper", WEEK_SKU + " is not available~~~~");
+                            }
+
+                            Purchase purchase1 = inventory.getPurchase(ONE_MONTH_SKU);
+                            if (purchase1 != null) {
+                                Log.i("IabHelper", ONE_MONTH_SKU + " is available~~~~");
+                                hasPaid = true;
+                                PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase1.getSku());
+                            } else {
+                                Log.i("IabHelper", ONE_MONTH_SKU + " is not available~~~~");
+                            }
+
+                            Purchase purchase2 = inventory.getPurchase(THREE_MONTHS_SKU);
+                            if (purchase2 != null) {
+                                Log.i("IabHelper", THREE_MONTHS_SKU + " is available~~~~");
+                                hasPaid = true;
+                                PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase2.getSku());
+                            } else {
+                                Log.i("IabHelper", THREE_MONTHS_SKU + " is not available~~~~");
+                            }
+
+                            Purchase purchase3 = inventory.getPurchase(YEAR_SKU);
+                            if (purchase3 != null) {
+                                Log.i("IabHelper", YEAR_SKU + " is available~~~~");
+                                hasPaid = true;
+                                PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase3.getSku());
+                            } else {
+                                Log.i("IabHelper", YEAR_SKU + " is not available~~~~");
+                            }
+
+                            //没查询到任何一个购买则认为没有购买会员或者会员已经过期
+                            if (!hasPaid) {
+                                PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, null);
+                            }
+                        }
+                    });
+                }
+            });
+        } catch (Exception e) {
+        }
     }
 
     @Override
