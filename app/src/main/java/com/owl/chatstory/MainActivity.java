@@ -102,42 +102,43 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                                 return;
                             }
                             boolean hasPaid = false;
-                            Purchase purchase = inventory.getPurchase(WEEK_SKU);
-                            if (purchase != null) {
-                                Log.i("IabHelper", WEEK_SKU + " is available~~~~");
-                                hasPaid = true;
-                                PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase.getSku());
-                            } else {
-                                Log.i("IabHelper", WEEK_SKU + " is not available~~~~");
-                            }
+                            if (inventory != null) {
+                                Purchase purchase = inventory.getPurchase(WEEK_SKU);
+                                if (purchase != null) {
+                                    Log.i("IabHelper", WEEK_SKU + " is available~~~~");
+                                    hasPaid = true;
+                                    PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase.getSku());
+                                } else {
+                                    Log.i("IabHelper", WEEK_SKU + " is not available~~~~");
+                                }
 
-                            Purchase purchase1 = inventory.getPurchase(ONE_MONTH_SKU);
-                            if (purchase1 != null) {
-                                Log.i("IabHelper", ONE_MONTH_SKU + " is available~~~~");
-                                hasPaid = true;
-                                PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase1.getSku());
-                            } else {
-                                Log.i("IabHelper", ONE_MONTH_SKU + " is not available~~~~");
-                            }
+                                Purchase purchase1 = inventory.getPurchase(ONE_MONTH_SKU);
+                                if (purchase1 != null) {
+                                    Log.i("IabHelper", ONE_MONTH_SKU + " is available~~~~");
+                                    hasPaid = true;
+                                    PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase1.getSku());
+                                } else {
+                                    Log.i("IabHelper", ONE_MONTH_SKU + " is not available~~~~");
+                                }
 
-                            Purchase purchase2 = inventory.getPurchase(THREE_MONTHS_SKU);
-                            if (purchase2 != null) {
-                                Log.i("IabHelper", THREE_MONTHS_SKU + " is available~~~~");
-                                hasPaid = true;
-                                PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase2.getSku());
-                            } else {
-                                Log.i("IabHelper", THREE_MONTHS_SKU + " is not available~~~~");
-                            }
+                                Purchase purchase2 = inventory.getPurchase(THREE_MONTHS_SKU);
+                                if (purchase2 != null) {
+                                    Log.i("IabHelper", THREE_MONTHS_SKU + " is available~~~~");
+                                    hasPaid = true;
+                                    PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase2.getSku());
+                                } else {
+                                    Log.i("IabHelper", THREE_MONTHS_SKU + " is not available~~~~");
+                                }
 
-                            Purchase purchase3 = inventory.getPurchase(YEAR_SKU);
-                            if (purchase3 != null) {
-                                Log.i("IabHelper", YEAR_SKU + " is available~~~~");
-                                hasPaid = true;
-                                PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase3.getSku());
-                            } else {
-                                Log.i("IabHelper", YEAR_SKU + " is not available~~~~");
+                                Purchase purchase3 = inventory.getPurchase(YEAR_SKU);
+                                if (purchase3 != null) {
+                                    Log.i("IabHelper", YEAR_SKU + " is available~~~~");
+                                    hasPaid = true;
+                                    PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase3.getSku());
+                                } else {
+                                    Log.i("IabHelper", YEAR_SKU + " is not available~~~~");
+                                }
                             }
-
                             //没查询到任何一个购买则认为没有购买会员或者会员已经过期
                             if (!hasPaid) {
                                 PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, null);
