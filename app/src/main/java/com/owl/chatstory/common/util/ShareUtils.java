@@ -24,7 +24,9 @@ import java.net.URL;
 public class ShareUtils {
     //浏览器应用市场跳转data
     public static final String WEB_APP_MARKET_INTENT_DATA = "https://play.google.com/store/apps/details?id=";
-    public static final String SHARE_CHAPTER_BASE_URL = "http://47.94.243.139:9090/share/index.html?";
+    public static final String SHARE_CHAPTER_BASE_URL = "http://52.15.164.29:8080/share/index.html?";
+    //public static final String SHARE_CHAPTER_BASE_URL = "http://47.94.243.139:9090/share/index.html?";
+
 
     public static final String getShareChapterUrl(String type, String chapterId) {
         return SHARE_CHAPTER_BASE_URL + "type=" + type + "&id=" + chapterId;
@@ -54,16 +56,26 @@ public class ShareUtils {
                 }
             });
         }
-        ShareLinkContent content = new ShareLinkContent.Builder()
-                .setContentUrl(Uri.parse(shareModel.getUrl()))
-                .build();
-        shareDialog.show(content);
+        Uri uri = Uri.parse(getShareAppUrl(activity));
+        if (shareModel != null && shareModel.getUrl() != null) {
+            uri = Uri.parse(shareModel.getUrl());
+        }
+        if (uri != null) {
+            ShareLinkContent content = new ShareLinkContent.Builder()
+                    .setContentUrl(uri)
+                    .build();
+            shareDialog.show(content);
+        }
     }
 
     public static void shareToTwitter(Context context, ShareModel model) {
         TweetComposer.Builder builder = new TweetComposer.Builder(context);
         try {
-            builder.url(new URL(model.getUrl()));
+            if (model != null && model.getUrl() != null) {
+                builder.url(new URL(model.getUrl()));
+            } else {
+                builder.url(new URL(getShareAppUrl(context)));
+            }
         } catch (MalformedURLException e) {
 
         }

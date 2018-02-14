@@ -86,7 +86,11 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
         public void onShareClick() {
             ShareModel shareModel = new ShareModel();
             shareModel.setContent(getString(R.string.share_content));
-            shareModel.setUrl(ShareUtils.getShareChapterUrl(mFictionDetailModel.getLanguage(), mLastChapterId));
+            if (mFictionDetailModel.getLanguage() == null || mLastChapterId == null) {
+                shareModel.setUrl(ShareUtils.getShareAppUrl(ReadActivity.this));
+            } else {
+                shareModel.setUrl(ShareUtils.getShareChapterUrl(mFictionDetailModel.getLanguage(), mLastChapterId));
+            }
             DialogUtils.showShareDialog(ReadActivity.this, shareModel);
         }
 
@@ -215,7 +219,11 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
                 if (mFictionDetailModel != null) {
                     ShareModel shareModel = new ShareModel();
                     shareModel.setContent(getString(R.string.share_content));
-                    shareModel.setUrl(ShareUtils.getShareChapterUrl(mFictionDetailModel.getLanguage(), mLastChapterId));
+                    if (mFictionDetailModel.getLanguage() == null || mLastChapterId == null) {
+                        shareModel.setUrl(ShareUtils.getShareAppUrl(this));
+                    } else {
+                        shareModel.setUrl(ShareUtils.getShareChapterUrl(mFictionDetailModel.getLanguage(), mLastChapterId));
+                    }
                     DialogUtils.showShareDialog(this, shareModel);
                 }
                 break;
