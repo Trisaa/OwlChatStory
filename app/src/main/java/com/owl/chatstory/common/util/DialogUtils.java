@@ -77,7 +77,9 @@ public class DialogUtils {
             public void onClick(View v) {
                 ShareModel shareModel = new ShareModel();
                 shareModel.setContent(activity.getString(R.string.share_content));
-                ShareUtils.shareToFacebook(activity, null, shareModel);
+                shareModel.setUrl(ShareUtils.getShareAppUrl(activity));
+                //ShareUtils.shareToFacebook(activity, null, shareModel);
+                DialogUtils.showShareDialog(activity,shareModel);
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
