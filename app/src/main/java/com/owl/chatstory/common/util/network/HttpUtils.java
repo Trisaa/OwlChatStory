@@ -6,7 +6,9 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.owl.chatstory.BuildConfig;
+import com.owl.chatstory.MainApplication;
 import com.owl.chatstory.common.util.Constants;
+import com.owl.chatstory.common.util.DeviceUtils;
 import com.owl.chatstory.common.util.PreferencesHelper;
 import com.owl.chatstory.common.util.network.request.FictionListRequest;
 import com.owl.chatstory.common.util.network.request.UserRequest;
@@ -53,10 +55,9 @@ public class HttpUtils {
     private static final String BASE_TEST_URL = "http://47.94.243.139:8080/android/";
     private static final String BASE_URL = "http://52.15.164.29:8080/android/";
     private static final int DEFAULT_TIMEOUT = 5;
-
+    private static HttpUtils mInstance, mLanguageInstance;
     private Retrofit mRetrofit;
     private ApiService mApiService;
-    private static HttpUtils mInstance, mLanguageInstance;
 
     private HttpUtils(String language) {
         String url = BuildConfig.DEBUG ? BASE_TEST_URL : BASE_URL;
@@ -68,38 +69,6 @@ public class HttpUtils {
                 .build();
 
         mApiService = mRetrofit.create(ApiService.class);
-    }
-
-    private OkHttpClient.Builder getHttpClientBuilder(final String language) {
-        //声明日志类
-        HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
-        //设定日志级别
-        httpLoggingInterceptor.setLevel(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE);
-        return new OkHttpClient.Builder()
-                .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-                .addInterceptor(new Interceptor() {
-                    @Override
-                    public Response intercept(Chain chain) throws IOException {
-                        Request originalRequest = chain.request();
-                        HttpUrl originalHttpUrl = originalRequest.url();
-                        HttpUrl url = originalHttpUrl.newBuilder()
-                                .addQueryParameter("type", language)
-                                .build();
-                        Request request = originalRequest.newBuilder()
-                                .url(url)
-                                .method(originalRequest.method(), originalRequest.body())
-                                .build();
-                        return chain.proceed(request);
-                    }
-                })
-                .addInterceptor(httpLoggingInterceptor);
-    }
-
-    private Gson getGson() {
-        Gson gson = new GsonBuilder()
-                .setLenient()  // 设置GSON的非严格模式setLenient()
-                .create();
-        return gson;
     }
 
     private static String getType() {
@@ -137,27 +106,38 @@ public class HttpUtils {
         }
     }
 
-    private class BaseResponseFunc<T> implements Func1<BaseResponse<T>, T> {
-        @Override
-        public T call(BaseResponse<T> httpResult) {
-            if (httpResult.getCode() != 1) {
-                Log.e("HttpError", httpResult.getMessage());
-                throw new ApiException(httpResult.getMessage());
-            }
-            return httpResult.getData();
-        }
+    private OkHttpClient.Builder getHttpClientBuilder(final String language) {
+        //声明日志类
+        HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
+        //设定日志级别
+        httpLoggingInterceptor.setLevel(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE);
+        return new OkHttpClient.Builder()
+                .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+                .addInterceptor(new Interceptor() {
+                    @Override
+                    public Response intercept(Chain chain) throws IOException {
+                        Request originalRequest = chain.request();
+                        HttpUrl originalHttpUrl = originalRequest.url();
+                        HttpUrl url = originalHttpUrl.newBuilder()
+                                .addQueryParameter("type", language)
+                                .addQueryParameter("version", DeviceUtils.getVersionName(MainApplication.getAppContext()))
+                                .addQueryParameter("version_code", String.valueOf(DeviceUtils.getVersionCode(MainApplication.getAppContext())))
+                                .build();
+                        Request request = originalRequest.newBuilder()
+                                .url(url)
+                                .method(originalRequest.method(), originalRequest.body())
+                                .build();
+                        return chain.proceed(request);
+                    }
+                })
+                .addInterceptor(httpLoggingInterceptor);
     }
 
-
-    private class BaseArrayResponseFunc<T> implements Func1<BaseArrayResponse<T>, ArrayList<T>> {
-        @Override
-        public ArrayList<T> call(BaseArrayResponse<T> httpResult) {
-            if (httpResult.getCode() != 1) {
-                Log.e("HttpError", httpResult.getMessage());
-                throw new ApiException(httpResult.getMessage());
-            }
-            return httpResult.getData();
-        }
+    private Gson getGson() {
+        Gson gson = new GsonBuilder()
+                .setLenient()  // 设置GSON的非严格模式setLenient()
+                .create();
+        return gson;
     }
 
     public Subscription checkUpdate(Subscriber<UpdateModel> subscriber) {
@@ -230,7 +210,6 @@ public class HttpUtils {
                 .subscribe(subscriber);
         return subscription;
     }
-
 
     public Subscription getHistoryList(Subscriber<List<FictionDetailModel>> subscriber, Map<String, String> map) {
         Subscription subscription = mApiService.getHistoryList(map)
@@ -422,6 +401,28 @@ public class HttpUtils {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
         return subscription;
+    }
+
+    private class BaseResponseFunc<T> implements Func1<BaseResponse<T>, T> {
+        @Override
+        public T call(BaseResponse<T> httpResult) {
+            if (httpResult.getCode() != 1) {
+                Log.e("HttpError", httpResult.getMessage());
+                throw new ApiException(httpResult.getMessage());
+            }
+            return httpResult.getData();
+        }
+    }
+
+    private class BaseArrayResponseFunc<T> implements Func1<BaseArrayResponse<T>, ArrayList<T>> {
+        @Override
+        public ArrayList<T> call(BaseArrayResponse<T> httpResult) {
+            if (httpResult.getCode() != 1) {
+                Log.e("HttpError", httpResult.getMessage());
+                throw new ApiException(httpResult.getMessage());
+            }
+            return httpResult.getData();
+        }
     }
 
 }
