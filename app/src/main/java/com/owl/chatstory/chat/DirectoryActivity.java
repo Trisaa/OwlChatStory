@@ -103,7 +103,6 @@ public class DirectoryActivity extends BaseActivity {
                 protected void convert(ViewHolder holder, final ChapterModel chapterModel, int position) {
                     try {
                         holder.setText(R.id.chapter_item_title_txv, getString(R.string.chapter_num, position, chapterModel.getChapterName()));
-                        holder.setText(R.id.chapter_item_progress_txv, list.get(position - 1) + "%");
                         holder.setText(R.id.chapter_item_time_txv, TimeUtils.getTimeFormat(chapterModel.getCreateTime()));
                         holder.setVisible(R.id.chapter_item_vip_img, chapterModel.getVip() == 0 ? false : true);
                         holder.getConvertView().setOnClickListener(new View.OnClickListener() {
@@ -113,6 +112,11 @@ public class DirectoryActivity extends BaseActivity {
                                 finish();
                             }
                         });
+                        if (position - 1 < list.size()) {
+                            holder.setText(R.id.chapter_item_progress_txv, list.get(position - 1) + "%");
+                        } else {
+                            holder.setText(R.id.chapter_item_progress_txv, 0 + "%");
+                        }
                     } catch (Exception e) {
                     }
                 }

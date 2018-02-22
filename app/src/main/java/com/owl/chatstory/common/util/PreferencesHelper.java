@@ -107,6 +107,16 @@ public class PreferencesHelper {
         String temp = mPref.getString(fictionId, "");
         if (!TextUtils.isEmpty(temp)) {
             List<String> list = Arrays.asList(temp.split(","));
+            int preSize = list.size();
+            //说明章节有更新
+            if (preSize < size) {
+                List<String> newlist = new ArrayList();
+                newlist.addAll(list);
+                for (int i = preSize; i < size; i++) {
+                    newlist.add(String.valueOf(0));
+                }
+                return newlist;
+            }
             return list;
         } else {
             List<String> list = new ArrayList();
