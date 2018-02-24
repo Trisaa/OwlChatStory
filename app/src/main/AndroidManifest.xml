@@ -138,6 +138,10 @@
             </intent-filter>
         </activity>
 
+        <provider android:name="com.facebook.FacebookContentProvider"
+            android:authorities="com.facebook.app.FacebookContentProvider154478538623491"
+            android:exported="true"/>
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="dc34240161e62021570b3644826fd0bb90794dec" />

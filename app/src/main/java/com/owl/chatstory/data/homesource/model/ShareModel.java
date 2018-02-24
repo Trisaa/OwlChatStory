@@ -7,6 +7,7 @@ package com.owl.chatstory.data.homesource.model;
 public class ShareModel {
     private String content;
     private String url;
+    private String image;
 
     public String getContent() {
         return content;
@@ -22,5 +23,13 @@ public class ShareModel {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

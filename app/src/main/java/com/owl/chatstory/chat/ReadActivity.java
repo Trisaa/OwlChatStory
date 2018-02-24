@@ -90,6 +90,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
                 shareModel.setUrl(ShareUtils.getShareAppUrl(ReadActivity.this));
             } else {
                 shareModel.setUrl(ShareUtils.getShareChapterUrl(mFictionDetailModel.getLanguage(), mLastChapterId));
+                shareModel.setImage(mFictionDetailModel.getCover());
             }
             DialogUtils.showShareDialog(ReadActivity.this, shareModel);
         }
@@ -223,6 +224,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
                         shareModel.setUrl(ShareUtils.getShareAppUrl(this));
                     } else {
                         shareModel.setUrl(ShareUtils.getShareChapterUrl(mFictionDetailModel.getLanguage(), mLastChapterId));
+                        shareModel.setImage(mFictionDetailModel.getCover());
                     }
                     DialogUtils.showShareDialog(this, shareModel);
                 }

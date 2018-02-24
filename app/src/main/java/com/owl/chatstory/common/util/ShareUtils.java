@@ -56,14 +56,22 @@ public class ShareUtils {
                 }
             });
         }
-        Uri uri = Uri.parse(getShareAppUrl(activity));
+        ShareLinkContent.Builder builder = new ShareLinkContent.Builder();
         if (shareModel != null && shareModel.getUrl() != null) {
-            uri = Uri.parse(shareModel.getUrl());
+            builder.setContentUrl(Uri.parse(shareModel.getUrl()));
+        } else {
+            builder.setContentUrl(Uri.parse(getShareAppUrl(activity)));
         }
-        if (uri != null) {
-            ShareLinkContent content = new ShareLinkContent.Builder()
-                    .setContentUrl(uri)
-                    .build();
+        if (shareModel != null && shareModel.getImage() != null) {
+            Log.i("ShareUtils", " image " + shareModel.getImage());
+            builder.setImageUrl(Uri.parse(shareModel.getImage()));
+        }
+        if (shareModel != null && shareModel.getContent() != null) {
+            builder.setContentTitle(shareModel.getContent());
+        }
+
+        if (builder != null) {
+            ShareLinkContent content = builder.build();
             shareDialog.show(content);
         }
     }
@@ -76,8 +84,10 @@ public class ShareUtils {
             } else {
                 builder.url(new URL(getShareAppUrl(context)));
             }
+            if (model != null && model.getImage() != null) {
+                builder.image(Uri.parse(model.getImage()));
+            }
         } catch (MalformedURLException e) {
-
         }
         builder.text(model.getContent());
         builder.show();
