@@ -86,7 +86,9 @@ public class FavoriteActivity extends BaseActivity implements FavoriteContract.V
         mAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                ReadActivity.start(FavoriteActivity.this, mDatas.get(position).getId(), mDatas.get(position).getTitle());
+                if (position < mDatas.size()) {
+                    ReadActivity.start(FavoriteActivity.this, mDatas.get(position).getId(), mDatas.get(position).getTitle());
+                }
             }
 
             @Override

@@ -79,7 +79,7 @@ public class DialogUtils {
                 shareModel.setContent(activity.getString(R.string.share_content));
                 shareModel.setUrl(ShareUtils.getShareAppUrl(activity));
                 //ShareUtils.shareToFacebook(activity, null, shareModel);
-                DialogUtils.showShareDialog(activity,shareModel);
+                DialogUtils.showShareDialog(activity, shareModel);
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -119,7 +119,12 @@ public class DialogUtils {
                 if (listener != null) {
                     listener.onOK();
                 }
-                alertDialog.dismiss();
+                if (activity != null && !activity.isFinishing()) {
+                    try {
+                        alertDialog.dismiss();
+                    } catch (Exception e) {
+                    }
+                }
             }
         }.start();
         alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
