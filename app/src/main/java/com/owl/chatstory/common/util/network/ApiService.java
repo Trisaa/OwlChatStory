@@ -14,6 +14,7 @@ import com.owl.chatstory.data.homesource.model.CategoryModel;
 import com.owl.chatstory.data.homesource.model.UpdateModel;
 import com.owl.chatstory.data.searchsource.SearchModel;
 import com.owl.chatstory.data.usersource.model.UserModel;
+import com.owl.chatstory.data.usersource.model.UserPageModel;
 import com.owl.chatstory.data.usersource.model.UserResponse;
 
 import java.util.Map;
@@ -205,6 +206,9 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("user/info")
     Observable<BaseResponse<UserModel>> getUserInfo(@Field("token") String token);
+
+    @GET("writer/info")
+    Observable<BaseResponse<UserPageModel>> getUserPageInfo(@Query("id") String id);
 
 
 }

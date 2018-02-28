@@ -36,7 +36,6 @@ public class VIPActivity extends BaseActivity {
     @BindView(R.id.common_toolbar)
     Toolbar mToolbar;
     private IabHelper mHelper;
-
     IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
         public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
             if (mHelper == null || result.isFailure()) {
@@ -49,6 +48,7 @@ public class VIPActivity extends BaseActivity {
             finish();
         }
     };
+    private boolean isIabHelperReady;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, VIPActivity.class);
@@ -95,7 +95,10 @@ public class VIPActivity extends BaseActivity {
                     if (result.isFailure()) {
                         // Oh no, there was a problem.
                         Log.i("Lebron", "Problem setting up In-app Billing: " + result);
+                        isIabHelperReady = false;
                         return;
+                    } else {
+                        isIabHelperReady = true;
                     }
                 }
             });
@@ -105,28 +108,28 @@ public class VIPActivity extends BaseActivity {
 
     @OnClick(R.id.week_subscribe_btn)
     public void clickPurchaseByWeek() {
-        if (mHelper != null) {
+        if (mHelper != null && isIabHelperReady) {
             mHelper.launchSubscriptionPurchaseFlow(this, WEEK_SKU, 1000, mPurchaseFinishedListener);
         }
     }
 
     @OnClick(R.id.one_month_subscribe_btn)
     public void clickPurchaseByMonth() {
-        if (mHelper != null) {
+        if (mHelper != null && isIabHelperReady) {
             mHelper.launchSubscriptionPurchaseFlow(this, ONE_MONTH_SKU, 1000, mPurchaseFinishedListener);
         }
     }
 
     @OnClick(R.id.three_months_subscribe_btn)
     public void clickPurchaseByMonths() {
-        if (mHelper != null) {
+        if (mHelper != null && isIabHelperReady) {
             mHelper.launchSubscriptionPurchaseFlow(this, THREE_MONTHS_SKU, 1000, mPurchaseFinishedListener);
         }
     }
 
     @OnClick(R.id.year_subscribe_btn)
     public void clickPurchaseByYear() {
-        if (mHelper != null) {
+        if (mHelper != null && isIabHelperReady) {
             mHelper.launchSubscriptionPurchaseFlow(this, YEAR_SKU, 1000, mPurchaseFinishedListener);
         }
     }

@@ -5,6 +5,7 @@ import android.util.Log;
 import com.owl.chatstory.common.util.network.HttpUtils;
 import com.owl.chatstory.common.util.network.request.UserRequest;
 import com.owl.chatstory.data.usersource.model.UserModel;
+import com.owl.chatstory.data.usersource.model.UserPageModel;
 
 import rx.Subscriber;
 import rx.Subscription;
@@ -76,6 +77,31 @@ public class IUserDataImpl implements IUserData {
                 Log.i("Lebron", " getUserInfo success ");
             }
         });
+        mSubscriptions.add(subscription);
+    }
+
+    @Override
+    public void getUserPageInfo(final OnUserPageListener listener, String id) {
+        Subscription subscription = HttpUtils.getInstance().getUserPageInfo(new Subscriber<UserPageModel>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                if (listener != null) {
+                    listener.onUserPageInfo(null);
+                }
+            }
+
+            @Override
+            public void onNext(UserPageModel userPageModel) {
+                if (listener != null) {
+                    listener.onUserPageInfo(userPageModel);
+                }
+            }
+        }, id);
         mSubscriptions.add(subscription);
     }
 

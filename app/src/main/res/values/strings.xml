@@ -125,6 +125,7 @@
     <string name="user_waitting_or">Or</string>
     <string name="user_vip_questions">Any question ask us:</string>
     <string name="user_vip_facebook_page">Or visit us</string>
+    <string name="user_page_title">User Page</string>
 
     <string name="search_key_word">Input key word</string>
 </resources>

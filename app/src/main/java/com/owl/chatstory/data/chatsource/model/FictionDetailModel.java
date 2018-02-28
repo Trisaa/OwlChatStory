@@ -54,6 +54,12 @@ public class FictionDetailModel implements Parcelable {
     private String token;
     @SerializedName("vip")
     private int vip;
+    @SerializedName("favorite")
+    private int favorites;
+    @SerializedName("upinfo")
+    private int upinfo;
+    @SerializedName("thumbsup")
+    private int likes;
 
     public FictionDetailModel() {
     }
@@ -74,6 +80,9 @@ public class FictionDetailModel implements Parcelable {
         this.status = in.readInt();
         this.token = in.readString();
         this.vip = in.readInt();
+        this.favorites = in.readInt();
+        this.upinfo = in.readInt();
+        this.likes = in.readInt();
     }
 
     public String getId() {
@@ -196,6 +205,30 @@ public class FictionDetailModel implements Parcelable {
         this.vip = vip;
     }
 
+    public int getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(int favorites) {
+        this.favorites = favorites;
+    }
+
+    public int getUpinfo() {
+        return upinfo;
+    }
+
+    public void setUpinfo(int upinfo) {
+        this.upinfo = upinfo;
+    }
+
+    public int getLikes() {
+        return likes;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -218,5 +251,8 @@ public class FictionDetailModel implements Parcelable {
         dest.writeInt(this.status);
         dest.writeString(this.token);
         dest.writeInt(this.vip);
+        dest.writeInt(this.favorites);
+        dest.writeInt(this.upinfo);
+        dest.writeInt(this.likes);
     }
 }

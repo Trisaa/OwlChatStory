@@ -2,4 +2,8 @@
 <resources>
     <string name="facebook_app_id" translatable="false">154478538623491</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb154478538623491</string>
+
+    <!--Share elements-->
+    <string name="share_user_icon" translatable="false">share_user_icon</string>
+    <string name="share_user_name" translatable="false">share_user_name</string>
 </resources>

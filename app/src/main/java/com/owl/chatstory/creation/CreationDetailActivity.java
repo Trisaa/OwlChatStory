@@ -52,6 +52,12 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
     RecyclerView mRecyclerView;
     @BindView(R.id.common_progressbar_layout)
     View mLoadingView;
+    @BindView(R.id.directory_fiction_cover)
+    ImageView mCoverImage;
+    @BindView(R.id.chapter_header_title_txv)
+    TextView mTitleView;
+    @BindView(R.id.chapter_header_tags_txv)
+    TextView mTagsView;
 
     private CreationDetailContract.Presenter mPresenter;
     private HeaderAndFooterWrapper<FictionDetailModel> mAdapter;
@@ -80,6 +86,7 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
             ActionBar ab = getSupportActionBar();
             if (ab != null) {
                 ab.setDisplayHomeAsUpEnabled(true);
+                ab.setDisplayShowTitleEnabled(false);
             }
         }
     }
@@ -170,16 +177,20 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
     }
 
     private void setFictionDetail(FictionDetailModel fictionDetailModel) {
-        ImageLoaderUtils.getInstance().loadImage(this, fictionDetailModel.getCover(), (ImageView) mHeaderView.findViewById(R.id.chapter_header_cover_img), R.color.colorPrimaryDark);
-        ((TextView) mHeaderView.findViewById(R.id.chapter_header_title_txv)).setText(fictionDetailModel.getTitle());
+        mTitleView.setText(fictionDetailModel.getTitle());
+        mTagsView.setText(fictionDetailModel.getTags().get(0));
+        ImageLoaderUtils.getInstance().loadImage(this, fictionDetailModel.getCover(), mCoverImage, R.color.colorPrimaryDark);
+
         String author = TextUtils.isEmpty(fictionDetailModel.getWriter().getName()) ? getString(R.string.app_name) : fictionDetailModel.getWriter().getName();
         ((TextView) mHeaderView.findViewById(R.id.chapter_header_author_txv)).setText(author);
         ((TextView) mHeaderView.findViewById(R.id.chapter_header_describe_txv)).setText(fictionDetailModel.getSummary());
-        ((TextView) mHeaderView.findViewById(R.id.chapter_header_tags_txv)).setText(fictionDetailModel.getTags().get(0));
-        mChaptersView = ((TextView) mHeaderView.findViewById(R.id.chapter_header_chapters_txv));
-        mHeaderView.findViewById(R.id.chapter_header_edit_img).setVisibility(View.VISIBLE);
-        mHeaderView.findViewById(R.id.chapter_header_edit_img).setOnClickListener(this);
-        TextView addChapterView = (TextView) (mHeaderView.findViewById(R.id.chapter_header_add_chapters_txv));
+        ((TextView) mHeaderView.findViewById(R.id.chapter_header_watches_txv)).setText(fictionDetailModel.getViews() + "");
+        ((TextView) mHeaderView.findViewById(R.id.chapter_header_likes_txv)).setText(fictionDetailModel.getLikes() + "");
+        ((TextView) mHeaderView.findViewById(R.id.chapter_header_collects_txv)).setText(fictionDetailModel.getFavorites() + "");
+        mHeaderView.findViewById(R.id.chapter_header_author_layout).setVisibility(View.GONE);
+        mHeaderView.findViewById(R.id.chapter_header_author_divider).setVisibility(View.GONE);
+        mChaptersView = mHeaderView.findViewById(R.id.chapter_header_chapters_txv);
+        TextView addChapterView = (mHeaderView.findViewById(R.id.chapter_header_add_chapters_txv));
         addChapterView.setOnClickListener(this);
         setChaptersView();
     }
@@ -198,9 +209,9 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.chapter_header_edit_img:
+            /*case R.id.chapter_header_edit_img:
                 BasicCreateActivity.start(this, mFictionDetailModel);
-                break;
+                break;*/
             case R.id.chapter_header_add_chapters_txv:
                 FictionModel model = new FictionModel();
                 model.setIfiction_id(mFictionId);

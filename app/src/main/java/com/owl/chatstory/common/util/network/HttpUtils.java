@@ -23,6 +23,7 @@ import com.owl.chatstory.data.homesource.model.CategoryModel;
 import com.owl.chatstory.data.homesource.model.UpdateModel;
 import com.owl.chatstory.data.searchsource.SearchModel;
 import com.owl.chatstory.data.usersource.model.UserModel;
+import com.owl.chatstory.data.usersource.model.UserPageModel;
 import com.owl.chatstory.data.usersource.model.UserResponse;
 
 import java.io.IOException;
@@ -396,6 +397,16 @@ public class HttpUtils {
         String token = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_TOKEN, "");
         Subscription subscription = mApiService.getUserInfo(token)
                 .map(new BaseResponseFunc<UserModel>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return subscription;
+    }
+
+    public Subscription getUserPageInfo(Subscriber<UserPageModel> subscriber, String id) {
+        Subscription subscription = mApiService.getUserPageInfo(id)
+                .map(new BaseResponseFunc<UserPageModel>())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

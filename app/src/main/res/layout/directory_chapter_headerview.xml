@@ -1,99 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#ffffff">
+    android:background="#ffffff"
+    android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/chapter_header_cover_img"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_margin="16dp"
-        android:scaleType="centerCrop"
-        android:src="@color/colorPrimaryDark"
-        app:layout_aspectRatio="71%"
-        app:layout_widthPercent="30%" />
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/chapter_header_cover_img"
-        android:layout_alignTop="@id/chapter_header_cover_img"
-        android:layout_toRightOf="@id/chapter_header_cover_img"
-        android:orientation="vertical">
+        android:layout_margin="6dp"
+        android:orientation="horizontal">
 
-        <RelativeLayout
-            android:id="@+id/chapter_header_title_layout"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp">
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/chapter_header_title_txv"
+                android:id="@+id/chapter_header_watches_txv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:maxLines="1"
-                android:text="Title"
+                android:layout_gravity="center_horizontal"
+                android:text="50w"
                 android:textColor="@color/common_toolbar_color"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
-            <ImageView
-                android:id="@+id/chapter_header_edit_img"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="16dp"
-                android:background="@mipmap/ic_edit"
-                android:visibility="gone" />
-        </RelativeLayout>
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="0dp"
+                android:text="Watches"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/chapter_header_likes_txv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="50w"
+                android:textColor="@color/common_toolbar_color"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="0dp"
+                android:text="Watches"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/chapter_header_collects_txv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="50w"
+                android:textColor="@color/common_toolbar_color"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="0dp"
+                android:text="Watches"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:background="@color/common_gray_pressed" />
+
+    <TextView
+        android:id="@+id/chapter_header_describe_txv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/chapter_header_author_txv"
+        android:layout_marginBottom="6dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="6dp"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:text="Summary"
+        android:textColor="@color/common_text_color"
+        android:textSize="14sp" />
+
+    <View
+        android:id="@+id/chapter_header_author_divider"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:background="@color/common_gray_pressed" />
+
+    <RelativeLayout
+        android:id="@+id/chapter_header_author_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:orientation="vertical"
+        android:paddingBottom="10dp"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:paddingTop="10dp">
+
+        <ImageView
+            android:id="@+id/chapter_header_author_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@mipmap/user_default_icon"
+            android:transitionName="@string/share_user_icon" />
 
         <TextView
             android:id="@+id/chapter_header_author_txv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/chapter_header_title_layout"
-            android:layout_marginTop="10dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_toRightOf="@id/chapter_header_author_icon"
             android:textColor="@color/common_text_color"
             android:textSize="14sp"
-            tools:text="Lebron" />
+            android:transitionName="@string/share_user_name"
+            tools:text="Lebron"/>
 
-        <TextView
-            android:id="@+id/chapter_header_describe_txv"
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/chapter_header_author_txv"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:ellipsize="end"
-            android:maxLines="3"
-            android:text="Summary"
-            android:textColor="@color/common_text_color"
-            android:textSize="14sp" />
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@mipmap/ic_goto" />
 
-        <TextView
-            android:id="@+id/chapter_header_tags_txv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="2dp"
-            android:background="@drawable/common_tags_bg"
-            android:paddingBottom="2dp"
-            android:paddingLeft="6dp"
-            android:paddingRight="6dp"
-            android:paddingTop="2dp"
-            android:text="comedy"
-            android:textColor="@color/common_text_color"
-            android:textSize="12sp" />
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/chapter_header_cover_img"
         android:background="#ecedf1"
         android:padding="16dp">
 
@@ -123,4 +187,4 @@
             android:visibility="gone" />
     </RelativeLayout>
 
-</android.support.percent.PercentRelativeLayout>
+</LinearLayout>

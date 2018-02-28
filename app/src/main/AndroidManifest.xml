@@ -107,6 +107,10 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".user.page.UserPageActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait" />
 
@@ -138,9 +142,10 @@
             </intent-filter>
         </activity>
 
-        <provider android:name="com.facebook.FacebookContentProvider"
+        <provider
+            android:name="com.facebook.FacebookContentProvider"
             android:authorities="com.facebook.app.FacebookContentProvider154478538623491"
-            android:exported="true"/>
+            android:exported="true" />
 
         <meta-data
             android:name="io.fabric.ApiKey"

@@ -1,5 +1,7 @@
 package com.owl.chatstory.user.info;
 
+import android.content.Intent;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +14,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.owl.chatstory.R;
 import com.owl.chatstory.base.BaseFragment;
+import com.owl.chatstory.chat.DirectoryActivity;
 import com.owl.chatstory.chat.FavoriteActivity;
 import com.owl.chatstory.chat.HistoryActivity;
 import com.owl.chatstory.common.util.ImageLoaderUtils;
@@ -20,6 +23,7 @@ import com.owl.chatstory.common.util.PreferencesHelper;
 import com.owl.chatstory.data.usersource.model.UserModel;
 import com.owl.chatstory.settings.SettingsActivity;
 import com.owl.chatstory.user.login.LoginActivity;
+import com.owl.chatstory.user.page.UserPageActivity;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -122,6 +126,16 @@ public class UserFragment extends BaseFragment implements UserContract.View {
     @OnClick(R.id.user_settings_vip_layout)
     public void clickVip() {
         VIPActivity.start(getActivity());
+    }
+
+    @OnClick(R.id.user_settings_userpage_layout)
+    public void clickUserPage() {
+        if (mUserModel != null) {
+            Intent intent = new Intent(getActivity(), UserPageActivity.class);
+            intent.putExtra(UserPageActivity.EXTRA_USER_ID, mUserModel.getId());
+            ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), mUserIcon, getString(R.string.share_user_icon));
+            startActivity(intent, transitionActivityOptions.toBundle());
+        }
     }
 
     @OnClick(R.id.user_settings_history_layout)
