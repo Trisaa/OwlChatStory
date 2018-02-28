@@ -8,8 +8,15 @@ import com.owl.chatstory.base.BaseView;
  */
 
 public interface DirectoryContract {
-    interface Presenter extends BasePresenter {
+    String COLLECT_FICTION = "COLLECT_FICTION";
+    String UNCOLLECT_FICTION = "UNCOLLECT_FICTION";
+    int LIKE_FICTION = 1;
+    int DISLIKE_FICTION = 0;
 
+    interface Presenter extends BasePresenter {
+        void collectFiction(String operation, String id);
+
+        void likeFiction(int status, String id);
     }
 
     interface View extends BaseView<Presenter> {

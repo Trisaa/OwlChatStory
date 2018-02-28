@@ -22,7 +22,8 @@
     <string name="common_create">Creation</string>
     <string name="common_preview">Preview</string>
     <string name="common_update">Update</string>
-    <string name="common_favorite">Favorited</string>
+    <string name="common_star">Stared</string>
+    <string name="common_favorite">Liked</string>
 
     <string name="feedback_app_version">Version V%1$s</string>
     <string name="feedback_message">"DeviceModel:%1$s\r\nSystemVersion:%2$s\r\n-------------------\r\n"</string>
@@ -111,6 +112,9 @@
     <string name="common_choose_gender">Choose gender</string>
     <string name="common_male">Male</string>
     <string name="common_female">Female</string>
+    <string name="common_likes">%1$d LIKES</string>
+    <string name="common_stars">%1$d STARS</string>
+    <string name="common_views">%1$d VIEWS</string>
 
     <string name="user_edit_name">Nickname</string>
     <string name="user_edit_name_hint">Input nickname(10 characters limits)</string>

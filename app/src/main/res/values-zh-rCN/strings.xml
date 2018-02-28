@@ -22,7 +22,7 @@
     <string name="common_create">创作</string>
     <string name="common_preview">预览</string>
     <string name="common_update">更新</string>
-    <string name="common_favorite">收藏</string>
+    <string name="common_star">收藏</string>
 
     <string name="feedback_app_version">版本 V%1$s</string>
     <string name="feedback_message">"设备:%1$s\n版本信息:%2$s\n-------------------\n"</string>
@@ -111,6 +111,9 @@
     <string name="common_choose_gender">选择性别</string>
     <string name="common_male">男</string>
     <string name="common_female">女</string>
+    <string name="common_likes">%1$d 喜欢</string>
+    <string name="common_stars">%1$d 收藏</string>
+    <string name="common_views">%1$d 阅读</string>
 
     <string name="user_edit_name">昵称</string>
     <string name="user_edit_name_hint">请输入昵称（10字以内）</string>

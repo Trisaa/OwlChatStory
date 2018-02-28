@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.owl.chatstory.common.util.network.HttpUtils;
 import com.owl.chatstory.common.util.network.request.FictionListRequest;
-import com.owl.chatstory.data.chatsource.model.CollectResponse;
+import com.owl.chatstory.data.chatsource.model.FictionStatusResponse;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 
 import java.util.List;
@@ -72,6 +72,27 @@ public class ICollectDataImpl implements ICollectData {
     }
 
     @Override
+    public void likeFiction(int status, String fictionId) {
+        Subscription subscription = HttpUtils.getInstance().likeFiction(new Subscriber() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.i("Lebron", "likeFiction " + e.toString());
+            }
+
+            @Override
+            public void onNext(Object o) {
+                Log.i("Lebron", "likeFiction success");
+            }
+        }, status, fictionId);
+        mSubscriptions.add(subscription);
+    }
+
+    @Override
     public void getCollectionList(final OnFictionListListener listener, FictionListRequest request, final boolean refresh) {
         Subscription subscription = HttpUtils.getInstance().getCollectionList(new Subscriber<List<FictionDetailModel>>() {
             @Override
@@ -95,8 +116,8 @@ public class ICollectDataImpl implements ICollectData {
     }
 
     @Override
-    public void isFictionCollected(String fictionId, final CollectListener listener) {
-        Subscription subscription = HttpUtils.getInstance().isCollect(new Subscriber<CollectResponse>() {
+    public void isFictionCollected(String fictionId, final FictionStatusListener listener) {
+        Subscription subscription = HttpUtils.getInstance().isCollect(new Subscriber<FictionStatusResponse>() {
             @Override
             public void onCompleted() {
 
@@ -108,9 +129,9 @@ public class ICollectDataImpl implements ICollectData {
             }
 
             @Override
-            public void onNext(CollectResponse collectResponse) {
+            public void onNext(FictionStatusResponse collectResponse) {
                 if (listener != null && collectResponse != null) {
-                    listener.isCollect(collectResponse.getCollect());
+                    listener.onStatus(collectResponse);
                 }
             }
         }, fictionId);

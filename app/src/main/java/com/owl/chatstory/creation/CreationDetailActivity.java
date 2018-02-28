@@ -184,11 +184,7 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
         String author = TextUtils.isEmpty(fictionDetailModel.getWriter().getName()) ? getString(R.string.app_name) : fictionDetailModel.getWriter().getName();
         ((TextView) mHeaderView.findViewById(R.id.chapter_header_author_txv)).setText(author);
         ((TextView) mHeaderView.findViewById(R.id.chapter_header_describe_txv)).setText(fictionDetailModel.getSummary());
-        ((TextView) mHeaderView.findViewById(R.id.chapter_header_watches_txv)).setText(fictionDetailModel.getViews() + "");
-        ((TextView) mHeaderView.findViewById(R.id.chapter_header_likes_txv)).setText(fictionDetailModel.getLikes() + "");
-        ((TextView) mHeaderView.findViewById(R.id.chapter_header_collects_txv)).setText(fictionDetailModel.getFavorites() + "");
-        mHeaderView.findViewById(R.id.chapter_header_author_layout).setVisibility(View.GONE);
-        mHeaderView.findViewById(R.id.chapter_header_author_divider).setVisibility(View.GONE);
+
         mChaptersView = mHeaderView.findViewById(R.id.chapter_header_chapters_txv);
         TextView addChapterView = (mHeaderView.findViewById(R.id.chapter_header_add_chapters_txv));
         addChapterView.setOnClickListener(this);

@@ -26,6 +26,7 @@ import com.owl.chatstory.common.view.SpaceRecyclerView;
 import com.owl.chatstory.data.chatsource.model.ChapterModel;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
+import com.owl.chatstory.data.chatsource.model.FictionStatusResponse;
 import com.owl.chatstory.data.chatsource.model.MessageModel;
 import com.owl.chatstory.data.homesource.model.ShareModel;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
@@ -34,12 +35,9 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import rx.Observable;
-import rx.Subscriber;
 import rx.Subscription;
 
 /**
@@ -74,7 +72,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
     private int mCurrentChapterIndex;//当前阅读的章节
     private List<String> mProgressList;//阅读进度
     private MenuItem mFavoriteMenu;
-    private boolean isCollected;
+    private FictionStatusResponse mFictionStatus;
     private ChatNextDelegate.OnClickListener mNextListener = new ChatNextDelegate.OnClickListener() {
         @Override
         public void onClick() {
@@ -213,7 +211,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
         switch (item.getItemId()) {
             case R.id.read_menu_directory:
                 if (mFictionDetailModel != null) {
-                    DirectoryActivity.start(this, mFictionDetailModel);
+                    DirectoryActivity.start(this, mFictionDetailModel, mFictionStatus);
                 }
                 break;
             case R.id.read_menu_share:
@@ -231,12 +229,14 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
                 break;
             case R.id.read_menu_favorite:
                 if (PreferencesHelper.getInstance().isLogined() && mFictionDetailModel != null) {
-                    if (!isCollected) {
+                    if (!mFictionStatus.getCollect()) {
                         mPresenter.collectFiction(mFictionDetailModel.getId());
-                        updateCollectState(true);
+                        mFictionStatus.setCollect(true);
+                        updateFictionStatus(mFictionStatus);
                     } else {
                         mPresenter.uncollectFiction(mFictionDetailModel.getId());
-                        updateCollectState(false);
+                        mFictionStatus.setCollect(false);
+                        updateFictionStatus(mFictionStatus);
                     }
                 } else {
                     Toast.makeText(this, R.string.common_login_first, Toast.LENGTH_SHORT).show();
@@ -270,6 +270,13 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
                 mAdapter.notifyDataSetChanged();
                 mLoadingView.setVisibility(View.VISIBLE);
             }
+        }
+    }
+
+    @Subscribe
+    public void onStatusEvent(FictionStatusResponse response) {
+        if (response != null) {
+            updateFictionStatus(response);
         }
     }
 
@@ -340,10 +347,10 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
     }
 
     @Override
-    public void updateCollectState(boolean collected) {
-        isCollected = collected;
+    public void updateFictionStatus(FictionStatusResponse response) {
+        mFictionStatus = response;
         if (mFavoriteMenu != null) {
-            mFavoriteMenu.setIcon(isCollected ? R.drawable.vector_stared : R.drawable.vector_unstar);
+            mFavoriteMenu.setIcon(mFictionStatus.getCollect() ? R.drawable.vector_stared : R.drawable.vector_unstar);
         }
     }
 

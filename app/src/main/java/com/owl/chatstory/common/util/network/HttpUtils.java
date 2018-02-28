@@ -13,7 +13,7 @@ import com.owl.chatstory.common.util.PreferencesHelper;
 import com.owl.chatstory.common.util.network.request.FictionListRequest;
 import com.owl.chatstory.common.util.network.request.UserRequest;
 import com.owl.chatstory.data.chatsource.model.ActorModel;
-import com.owl.chatstory.data.chatsource.model.CollectResponse;
+import com.owl.chatstory.data.chatsource.model.FictionStatusResponse;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
 import com.owl.chatstory.data.chatsource.model.FictionResponse;
@@ -125,6 +125,7 @@ public class HttpUtils {
                                 .addQueryParameter("version_code", String.valueOf(DeviceUtils.getVersionCode(MainApplication.getAppContext())))
                                 .build();
                         Request request = originalRequest.newBuilder()
+                                .header("utoken", PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_TOKEN, ""))
                                 .url(url)
                                 .method(originalRequest.method(), originalRequest.body())
                                 .build();
@@ -373,7 +374,7 @@ public class HttpUtils {
     public Subscription isCollect(Subscriber subscriber, String fictionId) {
         String token = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_TOKEN, "");
         Subscription subscription = mApiService.isCollect(token, fictionId)
-                .map(new BaseResponseFunc<CollectResponse>())
+                .map(new BaseResponseFunc<FictionStatusResponse>())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -417,6 +418,16 @@ public class HttpUtils {
     public Subscription getUserPageInfo(Subscriber<UserPageModel> subscriber, String id) {
         Subscription subscription = mApiService.getUserPageInfo(id)
                 .map(new BaseResponseFunc<UserPageModel>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return subscription;
+    }
+
+    public Subscription likeFiction(Subscriber subscriber, int status, String id) {
+        Subscription subscription = mApiService.likeFiction(status, id)
+                .map(new BaseResponseFunc())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

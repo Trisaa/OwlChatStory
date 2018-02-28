@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.owl.chatstory.R;
 import com.owl.chatstory.base.BaseActivity;
@@ -25,6 +26,7 @@ import com.owl.chatstory.common.util.ShareUtils;
 import com.owl.chatstory.common.util.TimeUtils;
 import com.owl.chatstory.data.chatsource.model.ChapterModel;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
+import com.owl.chatstory.data.chatsource.model.FictionStatusResponse;
 import com.owl.chatstory.data.homesource.model.ShareModel;
 import com.owl.chatstory.user.page.UserPageActivity;
 import com.zhy.adapter.recyclerview.CommonAdapter;
@@ -42,8 +44,9 @@ import butterknife.BindView;
  * Created by lebron on 2017/10/30.
  */
 
-public class DirectoryActivity extends BaseActivity {
+public class DirectoryActivity extends BaseActivity implements DirectoryContract.View {
     private static final String EXTRA_FICTION_MODEL = "EXTRA_FICTION_MODEL";
+    private static final String EXTRA_FICTION_STATUS = "EXTRA_FICTION_STATUS";
     private static final int COLLAPSE_STATE_EXPANDED = 0;
     private static final int COLLAPSE_STATE_INTERNEDIATE = 1;
     private static final int COLLAPSE_STATE_COLLAPSED = 2;
@@ -62,8 +65,10 @@ public class DirectoryActivity extends BaseActivity {
     @BindView(R.id.userpage_appbar_layout)
     AppBarLayout mAppBarLayout;
 
+    private DirectoryContract.Presenter mPresenter;
     private HeaderAndFooterWrapper<FictionDetailModel> mAdapter;
     private List<ChapterModel> mDatas = new ArrayList<>();
+    private FictionStatusResponse mFictionStatusResponse;
     private int mCollapsingState = COLLAPSE_STATE_EXPANDED;
     private AppBarLayout.OnOffsetChangedListener onOffsetChangedListener = new AppBarLayout.OnOffsetChangedListener() {
         @Override
@@ -90,10 +95,11 @@ public class DirectoryActivity extends BaseActivity {
         }
     };
 
-    public static void start(Context context, FictionDetailModel model) {
+    public static void start(Context context, FictionDetailModel model, FictionStatusResponse response) {
         Intent intent = new Intent(context, DirectoryActivity.class);
         Bundle bundle = new Bundle();
         bundle.putParcelable(EXTRA_FICTION_MODEL, model);
+        bundle.putParcelable(EXTRA_FICTION_STATUS, response);
         intent.putExtras(bundle);
         context.startActivity(intent);
     }
@@ -168,31 +174,94 @@ public class DirectoryActivity extends BaseActivity {
             mTagsView.setText(fictionDetailModel.getTags().get(0));
             ImageLoaderUtils.getInstance().loadImage(this, fictionDetailModel.getCover(), mCoverImage, R.color.colorPrimaryDark);
 
-            View view = getLayoutInflater().inflate(R.layout.directory_chapter_headerview, null);
-            final ImageView icon = view.findViewById(R.id.chapter_header_author_icon);
-            ImageLoaderUtils.getInstance().loadCircleImage(this, fictionDetailModel.getWriter().getIcon(), icon, R.mipmap.user_default_icon);
-            String author = TextUtils.isEmpty(fictionDetailModel.getWriter().getName()) ? getString(R.string.app_name) : fictionDetailModel.getWriter().getName();
-            ((TextView) view.findViewById(R.id.chapter_header_author_txv)).setText(author);
-            ((TextView) view.findViewById(R.id.chapter_header_describe_txv)).setText(fictionDetailModel.getSummary());
-            ((TextView) view.findViewById(R.id.chapter_header_watches_txv)).setText(fictionDetailModel.getViews() + "");
-            ((TextView) view.findViewById(R.id.chapter_header_likes_txv)).setText(fictionDetailModel.getLikes() + "");
-            ((TextView) view.findViewById(R.id.chapter_header_collects_txv)).setText(fictionDetailModel.getFavorites() + "");
-            ((TextView) view.findViewById(R.id.chapter_header_chapters_txv)).setText(getString(R.string.chapter_total_chapters, fictionDetailModel.getChapters().size()));
-            view.findViewById(R.id.chapter_header_author_layout).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(DirectoryActivity.this, UserPageActivity.class);
-                    intent.putExtra(UserPageActivity.EXTRA_USER_ID, fictionDetailModel.getWriter().getId());
-                    ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(DirectoryActivity.this, icon, getString(R.string.share_user_icon));
-                    startActivity(intent, transitionActivityOptions.toBundle());
-                }
-            });
-
             mAdapter = new HeaderAndFooterWrapper<>(adapter);
-            mAdapter.addHeaderView(view);
+            mAdapter.addHeaderView(getHeaderView(fictionDetailModel));
             mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             mRecyclerView.setAdapter(mAdapter);
             mAppBarLayout.addOnOffsetChangedListener(onOffsetChangedListener);
+            new DirectoryPresenter(this);
         }
+    }
+
+    private View getHeaderView(final FictionDetailModel fictionDetailModel) {
+        mFictionStatusResponse = getIntent().getParcelableExtra(EXTRA_FICTION_STATUS);
+        View view = getLayoutInflater().inflate(R.layout.directory_chapter_headerview, null);
+        view.findViewById(R.id.chapter_header_author_layout).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.chapter_header_author_divider).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.chapter_header_status_layout).setVisibility(View.VISIBLE);
+        final ImageView icon = view.findViewById(R.id.chapter_header_author_icon);
+        TextView mWatchesView = view.findViewById(R.id.chapter_header_watches_txv);
+        TextView mLikesView = view.findViewById(R.id.chapter_header_likes_txv);
+        TextView mStarsView = view.findViewById(R.id.chapter_header_collects_txv);
+        final ImageView mLikeImage = view.findViewById(R.id.chapter_header_likes_img);
+        final ImageView mStarImage = view.findViewById(R.id.chapter_header_collects_img);
+
+        ImageLoaderUtils.getInstance().loadCircleImage(this, fictionDetailModel.getWriter().getIcon(), icon, R.mipmap.user_default_icon);
+        String author = TextUtils.isEmpty(fictionDetailModel.getWriter().getName()) ? getString(R.string.app_name) : fictionDetailModel.getWriter().getName();
+        ((TextView) view.findViewById(R.id.chapter_header_author_txv)).setText(author);
+        ((TextView) view.findViewById(R.id.chapter_header_describe_txv)).setText(fictionDetailModel.getSummary());
+        ((TextView) view.findViewById(R.id.chapter_header_chapters_txv)).setText(getString(R.string.chapter_total_chapters, fictionDetailModel.getChapters().size()));
+        mWatchesView.setText(getString(R.string.common_views, fictionDetailModel.getViews()));
+        mLikesView.setText(getString(R.string.common_likes, fictionDetailModel.getLikes()));
+        mStarsView.setText(getString(R.string.common_stars, fictionDetailModel.getFavorites()));
+        updateFictionStatus(mStarImage, mLikeImage, mFictionStatusResponse);
+
+        view.findViewById(R.id.chapter_header_author_layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DirectoryActivity.this, UserPageActivity.class);
+                intent.putExtra(UserPageActivity.EXTRA_USER_ID, fictionDetailModel.getWriter().getId());
+                ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(DirectoryActivity.this, icon, getString(R.string.share_user_icon));
+                startActivity(intent, transitionActivityOptions.toBundle());
+            }
+        });
+        view.findViewById(R.id.chapter_header_collects_layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (PreferencesHelper.getInstance().isLogined() && mFictionStatusResponse != null) {
+                    if (!mFictionStatusResponse.getCollect()) {
+                        mPresenter.collectFiction(DirectoryContract.COLLECT_FICTION, fictionDetailModel.getId());
+                        mFictionStatusResponse.setCollect(true);
+                        updateFictionStatus(mStarImage, mLikeImage, mFictionStatusResponse);
+                    } else {
+                        mPresenter.collectFiction(DirectoryContract.UNCOLLECT_FICTION, fictionDetailModel.getId());
+                        mFictionStatusResponse.setCollect(false);
+                        updateFictionStatus(mStarImage, mLikeImage, mFictionStatusResponse);
+                    }
+                    EventBus.getDefault().post(mFictionStatusResponse);
+                } else {
+                    Toast.makeText(DirectoryActivity.this, R.string.common_login_first, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        view.findViewById(R.id.chapter_header_likes_layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (PreferencesHelper.getInstance().isLogined() && mFictionStatusResponse != null) {
+                    if (!mFictionStatusResponse.getLiked()) {
+                        mPresenter.likeFiction(DirectoryContract.LIKE_FICTION, fictionDetailModel.getId());
+                        mFictionStatusResponse.setLiked(true);
+                        updateFictionStatus(mStarImage, mLikeImage, mFictionStatusResponse);
+                    } else {
+                        mPresenter.likeFiction(DirectoryContract.DISLIKE_FICTION, fictionDetailModel.getId());
+                        mFictionStatusResponse.setLiked(false);
+                        updateFictionStatus(mStarImage, mLikeImage, mFictionStatusResponse);
+                    }
+                } else {
+                    Toast.makeText(DirectoryActivity.this, R.string.common_login_first, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        return view;
+    }
+
+    private void updateFictionStatus(ImageView view1, ImageView view2, FictionStatusResponse response) {
+        view1.setBackgroundResource(response.getCollect() ? R.drawable.vector_stared : R.drawable.vector_unstar);
+        view2.setBackgroundResource(response.getLiked() ? R.drawable.vector_favorited : R.drawable.vector_unfavorite);
+    }
+
+    @Override
+    public void setPresenter(DirectoryContract.Presenter presenter) {
+        mPresenter = presenter;
     }
 }

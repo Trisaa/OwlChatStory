@@ -80,7 +80,7 @@
 
         <activity
             android:name=".chat.FavoriteActivity"
-            android:label="@string/common_favorite"
+            android:label="@string/common_star"
             android:screenOrientation="portrait" />
 
         <activity

@@ -193,7 +193,7 @@
                     android:drawableLeft="@drawable/vector_user_stared"
                     android:drawablePadding="12dp"
                     android:gravity="center_vertical"
-                    android:text="@string/common_favorite"
+                    android:text="@string/common_star"
                     android:textColor="@color/common_text_color" />
 
                 <ImageView

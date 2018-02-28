@@ -12,14 +12,13 @@ import com.owl.chatstory.data.chatsource.IHistoryData;
 import com.owl.chatstory.data.chatsource.IHistoryDataImpl;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
-
-import java.util.Random;
+import com.owl.chatstory.data.chatsource.model.FictionStatusResponse;
 
 /**
  * Created by lebron on 2017/9/14.
  */
 
-public class ReadPresenter implements ReadContract.Presenter, IFictionData.OnFictionListener, ICollectData.CollectListener {
+public class ReadPresenter implements ReadContract.Presenter, IFictionData.OnFictionListener, ICollectData.FictionStatusListener {
     private ReadContract.View mView;
     private IFictionData mFictionData;
     private IHistoryData mHistoryData;
@@ -98,7 +97,7 @@ public class ReadPresenter implements ReadContract.Presenter, IFictionData.OnFic
     }
 
     @Override
-    public void isCollect(boolean collected) {
-        mView.updateCollectState(collected);
+    public void onStatus(FictionStatusResponse response) {
+        mView.updateFictionStatus(response);
     }
 }

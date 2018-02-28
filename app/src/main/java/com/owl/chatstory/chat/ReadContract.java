@@ -4,6 +4,7 @@ import com.owl.chatstory.base.BasePresenter;
 import com.owl.chatstory.base.BaseView;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
+import com.owl.chatstory.data.chatsource.model.FictionStatusResponse;
 
 /**
  * Created by lebron on 2017/9/14.
@@ -27,7 +28,7 @@ public interface ReadContract {
 
         void showFictionDetailData(FictionDetailModel model);
 
-        void updateCollectState(boolean collected);
+        void updateFictionStatus(FictionStatusResponse response);
 
         void showWaittingDialog(String chapterId);
     }

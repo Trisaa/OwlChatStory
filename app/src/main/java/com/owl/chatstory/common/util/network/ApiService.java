@@ -4,7 +4,7 @@ package com.owl.chatstory.common.util.network;
 import com.owl.chatstory.common.util.network.request.FictionListRequest;
 import com.owl.chatstory.common.util.network.request.UserRequest;
 import com.owl.chatstory.data.chatsource.model.ActorModel;
-import com.owl.chatstory.data.chatsource.model.CollectResponse;
+import com.owl.chatstory.data.chatsource.model.FictionStatusResponse;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
 import com.owl.chatstory.data.chatsource.model.FictionResponse;
@@ -195,7 +195,7 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST("collect/check")
-    Observable<BaseResponse<CollectResponse>> isCollect(@Field("token") String token, @Field("ifiction_id") String fictionId);
+    Observable<BaseResponse<FictionStatusResponse>> isCollect(@Field("token") String token, @Field("ifiction_id") String fictionId);
 
     @GET("search/suggest")
     Observable<BaseResponse<SearchModel>> searchData(@Query("kw") String keyword);
@@ -212,6 +212,9 @@ public interface ApiService {
 
     @GET("ifiction/switchcategory")
     Observable<BaseArrayResponse<CategoryModel>> getCreateCategoryList();
+
+    @GET("thumbsup/like")
+    Observable<BaseResponse> likeFiction(@Query("status") int status, @Query("ifiction_id") String id);
 
 
 }
