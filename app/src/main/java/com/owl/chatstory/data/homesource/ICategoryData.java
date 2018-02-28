@@ -15,6 +15,8 @@ public interface ICategoryData {
 
     void getCategoryList(OnCategoryListListener listener);
 
+    void getCreateCategoryList(OnCategoryListListener listener);
+
     void getFictionList(OnFictionListListener listener, FictionListRequest request, boolean refresh);
 
     interface OnCategoryListListener {

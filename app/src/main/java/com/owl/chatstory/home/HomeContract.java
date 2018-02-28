@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface HomeContract {
     interface Presenter extends BasePresenter {
-
+        void getCreateCategoryList();
     }
 
     interface View extends BaseView<Presenter> {

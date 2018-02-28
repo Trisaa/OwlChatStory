@@ -34,4 +34,9 @@ public class HomePresenter implements HomeContract.Presenter, ICategoryData.OnCa
     public void onCategoryList(List<CategoryModel> list) {
         mView.showCategoryList(list);
     }
+
+    @Override
+    public void getCreateCategoryList() {
+        mCategoryData.getCreateCategoryList(this);
+    }
 }

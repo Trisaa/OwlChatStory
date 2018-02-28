@@ -210,5 +210,8 @@ public interface ApiService {
     @GET("writer/info")
     Observable<BaseResponse<UserPageModel>> getUserPageInfo(@Query("id") String id);
 
+    @GET("ifiction/switchcategory")
+    Observable<BaseArrayResponse<CategoryModel>> getCreateCategoryList();
+
 
 }

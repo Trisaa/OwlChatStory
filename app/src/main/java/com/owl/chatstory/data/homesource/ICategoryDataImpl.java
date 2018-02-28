@@ -73,6 +73,30 @@ public class ICategoryDataImpl implements ICategoryData {
     }
 
     @Override
+    public void getCreateCategoryList(final OnCategoryListListener listener) {
+        Subscription subscription = HttpUtils.getInstance().getCreateCategoryList(new Subscriber<List<CategoryModel>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.i("Lebron", " error " + e.toString());
+                Toast.makeText(MainApplication.getAppContext(), R.string.common_network_error, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNext(List<CategoryModel> list) {
+                if (listener != null) {
+                    listener.onCategoryList(list);
+                }
+            }
+        });
+        mSubscriptions.add(subscription);
+    }
+
+    @Override
     public void getFictionList(final OnFictionListListener listener, FictionListRequest request, final boolean refresh) {
         Subscription subscription = HttpUtils.getInstance().getFictionList(new Subscriber<List<FictionDetailModel>>() {
             @Override

@@ -161,6 +161,16 @@ public class HttpUtils {
         return subscription;
     }
 
+    public Subscription getCreateCategoryList(Subscriber<List<CategoryModel>> subscriber) {
+        Subscription subscription = mApiService.getCreateCategoryList()
+                .map(new BaseArrayResponseFunc<CategoryModel>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return subscription;
+    }
+
     public Subscription getChapterDetail(Subscriber<FictionModel> subscriber, String id) {
         Subscription subscription = mApiService.getChapterDetail(id)
                 .map(new BaseResponseFunc<FictionModel>())
