@@ -343,7 +343,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
     public void updateCollectState(boolean collected) {
         isCollected = collected;
         if (mFavoriteMenu != null) {
-            mFavoriteMenu.setIcon(isCollected ? R.drawable.vector_favorited : R.drawable.vector_unfavorite);
+            mFavoriteMenu.setIcon(isCollected ? R.drawable.vector_stared : R.drawable.vector_unstar);
         }
     }
 
