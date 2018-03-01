@@ -10,10 +10,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +34,7 @@ import com.owl.chatstory.user.page.UserPageActivity;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
+import com.zhy.adapter.recyclerview.wrapper.LoadMoreWrapper;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -44,7 +47,7 @@ import butterknife.BindView;
  * Created by lebron on 2017/10/30.
  */
 
-public class DirectoryActivity extends BaseActivity implements DirectoryContract.View {
+public class DirectoryActivity extends BaseActivity implements DirectoryContract.View, LoadMoreWrapper.OnLoadMoreListener {
     private static final String EXTRA_FICTION_MODEL = "EXTRA_FICTION_MODEL";
     private static final String EXTRA_FICTION_STATUS = "EXTRA_FICTION_STATUS";
     private static final int COLLAPSE_STATE_EXPANDED = 0;
@@ -66,10 +69,14 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
     AppBarLayout mAppBarLayout;
 
     private DirectoryContract.Presenter mPresenter;
-    private HeaderAndFooterWrapper<FictionDetailModel> mAdapter;
+    private LoadMoreWrapper<FictionDetailModel> mAdapter;
+    private View mLoadMoreView;
+    private int mPage = 2, mPrePage;
     private List<ChapterModel> mDatas = new ArrayList<>();
     private FictionStatusResponse mFictionStatusResponse;
+    private FictionDetailModel fictionDetailModel;
     private int mCollapsingState = COLLAPSE_STATE_EXPANDED;
+
     private AppBarLayout.OnOffsetChangedListener onOffsetChangedListener = new AppBarLayout.OnOffsetChangedListener() {
         @Override
         public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
@@ -142,7 +149,7 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
 
     @Override
     protected void initViewsAndData() {
-        final FictionDetailModel fictionDetailModel = getIntent().getParcelableExtra(EXTRA_FICTION_MODEL);
+        fictionDetailModel = getIntent().getParcelableExtra(EXTRA_FICTION_MODEL);
         final List<String> list = PreferencesHelper.getInstance().getFictionProgressList(fictionDetailModel.getId(), fictionDetailModel.getChapters().size());
         if (fictionDetailModel != null) {
             mDatas = fictionDetailModel.getChapters();
@@ -174,8 +181,14 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
             mTagsView.setText(fictionDetailModel.getTags().get(0));
             ImageLoaderUtils.getInstance().loadImage(this, fictionDetailModel.getCover(), mCoverImage, R.color.colorPrimaryDark);
 
-            mAdapter = new HeaderAndFooterWrapper<>(adapter);
-            mAdapter.addHeaderView(getHeaderView(fictionDetailModel));
+            HeaderAndFooterWrapper<ChapterModel> headerAndFooterWrapper = new HeaderAndFooterWrapper<>(adapter);
+            headerAndFooterWrapper.addHeaderView(getHeaderView(fictionDetailModel));
+            mAdapter = new LoadMoreWrapper<>(headerAndFooterWrapper);
+            mLoadMoreView = LayoutInflater.from(this).inflate(R.layout.common_loading_more_layout, null);
+            mLoadMoreView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
+            mAdapter.setLoadMoreView(mLoadMoreView);
+            mAdapter.setOnLoadMoreListener(this);
+
             mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             mRecyclerView.setAdapter(mAdapter);
             mAppBarLayout.addOnOffsetChangedListener(onOffsetChangedListener);
@@ -200,7 +213,7 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
         String author = TextUtils.isEmpty(fictionDetailModel.getWriter().getName()) ? getString(R.string.app_name) : fictionDetailModel.getWriter().getName();
         ((TextView) view.findViewById(R.id.chapter_header_author_txv)).setText(author);
         ((TextView) view.findViewById(R.id.chapter_header_describe_txv)).setText(fictionDetailModel.getSummary());
-        ((TextView) view.findViewById(R.id.chapter_header_chapters_txv)).setText(getString(R.string.chapter_total_chapters, fictionDetailModel.getChapters().size()));
+        ((TextView) view.findViewById(R.id.chapter_header_chapters_txv)).setText(getString(R.string.common_update_chapter, fictionDetailModel.getUpinfo()));
         mWatchesView.setText(getString(R.string.common_views_format, fictionDetailModel.getViews()));
         mLikesView.setText(getString(R.string.common_likes_format, fictionDetailModel.getLikes()));
         mStarsView.setText(getString(R.string.common_stars_format, fictionDetailModel.getFavorites()));
@@ -273,5 +286,27 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
     @Override
     public void setPresenter(DirectoryContract.Presenter presenter) {
         mPresenter = presenter;
+    }
+
+    @Override
+    public void onLoadMoreRequested() {
+        if (mPresenter != null) {
+            if (mPage != mPrePage) {
+                mPresenter.getChapterList(fictionDetailModel.getId(), mPage);
+                mPrePage = mPage;
+            }
+        }
+    }
+
+    @Override
+    public void showChapterList(List<ChapterModel> list) {
+        if (list.size() > 0) {
+            mLoadMoreView.findViewById(R.id.loading_more_layout).setVisibility(View.VISIBLE);
+            mPage++;
+        } else {
+            mLoadMoreView.findViewById(R.id.loading_more_layout).setVisibility(View.GONE);
+        }
+        mDatas.addAll(list);
+        mAdapter.notifyDataSetChanged();
     }
 }

@@ -96,6 +96,7 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
                 holder.setText(R.id.category_item_title_txv, searchDetailModel.getTitle());
                 holder.setText(R.id.category_item_description_txv, searchDetailModel.getSummary());
                 holder.setVisible(R.id.category_item_watchers_txv, false);
+                holder.setVisible(R.id.category_upinfo_txv, false);
                 holder.setVisible(R.id.category_item_vip_img, searchDetailModel.getVip() == 0 ? false : true);
             }
         };

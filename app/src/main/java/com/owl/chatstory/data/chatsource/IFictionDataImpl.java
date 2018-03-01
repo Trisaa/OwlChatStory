@@ -1,8 +1,11 @@
 package com.owl.chatstory.data.chatsource;
 
 import com.owl.chatstory.common.util.network.HttpUtils;
+import com.owl.chatstory.data.chatsource.model.ChapterModel;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
+
+import java.util.List;
 
 import rx.Subscriber;
 import rx.Subscription;
@@ -67,6 +70,29 @@ public class IFictionDataImpl implements IFictionData {
                 }
             }
         }, id);
+        mSubscriptions.add(subscription);
+    }
+
+    @Override
+    public void getChapterList(String id, int page, final OnChapterListener listener) {
+        Subscription subscription = HttpUtils.getInstance().getFictionChapterList(new Subscriber<List<ChapterModel>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(List<ChapterModel> list) {
+                if (listener != null) {
+                    listener.onChapterList(list);
+                }
+            }
+        }, id, page);
         mSubscriptions.add(subscription);
     }
 }

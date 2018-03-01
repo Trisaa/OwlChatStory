@@ -4,6 +4,7 @@ package com.owl.chatstory.common.util.network;
 import com.owl.chatstory.common.util.network.request.FictionListRequest;
 import com.owl.chatstory.common.util.network.request.UserRequest;
 import com.owl.chatstory.data.chatsource.model.ActorModel;
+import com.owl.chatstory.data.chatsource.model.ChapterModel;
 import com.owl.chatstory.data.chatsource.model.FictionStatusResponse;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
@@ -52,9 +53,11 @@ public interface ApiService {
     /**
      * 获取小说详情
      */
-    @GET("ifiction/detail")
+    @GET("ifiction/detailv2")
     Observable<BaseResponse<FictionDetailModel>> getFictionDetail(@Query("id") String id);
 
+    @GET("ifiction/chapterlist")
+    Observable<BaseArrayResponse<ChapterModel>> getFictionChapterList(@Query("ifiction_id") String id, @Query("page") int page, @Query("count") int count);
 
     /**
      * 获取小说具体内容
@@ -210,8 +213,14 @@ public interface ApiService {
     @GET("writer/info")
     Observable<BaseResponse<UserPageModel>> getUserPageInfo(@Query("id") String id);
 
+    @GET("writer/works")
+    Observable<BaseArrayResponse<FictionDetailModel>> getUserRelatedFictionList(@Query("id") String id, @Query("page") int page, @Query("count") int count);
+
     @GET("writer/user")
     Observable<BaseResponse<UserPageModel>> getOwnPageInfo();
+
+    @GET("writer/userworks")
+    Observable<BaseArrayResponse<FictionDetailModel>> getOwnRelatedFictionList(@Query("page") int page, @Query("count") int count);
 
     @GET("ifiction/switchcategory")
     Observable<BaseArrayResponse<CategoryModel>> getCreateCategoryList();

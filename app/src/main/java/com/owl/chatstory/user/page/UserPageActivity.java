@@ -2,12 +2,15 @@ package com.owl.chatstory.user.page;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +25,7 @@ import com.owl.chatstory.data.usersource.model.UserPageModel;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
+import com.zhy.adapter.recyclerview.wrapper.LoadMoreWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +37,7 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
  * Created by lebron on 2018/2/26.
  */
 
-public class UserPageActivity extends BaseActivity implements UserPageContract.View {
+public class UserPageActivity extends BaseActivity implements UserPageContract.View, LoadMoreWrapper.OnLoadMoreListener {
     public static final String EXTRA_USER_ID = "EXTRA_USER_ID";
     @BindView(R.id.common_toolbar)
     Toolbar mToolbar;
@@ -55,11 +59,15 @@ public class UserPageActivity extends BaseActivity implements UserPageContract.V
     TextView mCollectsView;
     @BindView(R.id.empty_layout)
     View mEmptyView;
+    @BindView(R.id.userpage_appbar_layout)
+    AppBarLayout mAppBarLayout;
 
     private UserPageContract.Presenter mPresenter;
     private List<FictionDetailModel> mDatas = new ArrayList<>();
-    private CommonAdapter<FictionDetailModel> mAdapter;
+    private LoadMoreWrapper<FictionDetailModel> mAdapter;
+    private View mLoadMoreView;
     private String mUserId;
+    private int mPage = 2, mPrePage;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, UserPageActivity.class);
@@ -86,7 +94,7 @@ public class UserPageActivity extends BaseActivity implements UserPageContract.V
     @Override
     protected void initViewsAndData() {
         mUserId = getIntent().getStringExtra(EXTRA_USER_ID);
-        mAdapter = new CommonAdapter<FictionDetailModel>(this, R.layout.story_category_item, mDatas) {
+        CommonAdapter<FictionDetailModel> adapter = new CommonAdapter<FictionDetailModel>(this, R.layout.story_category_item, mDatas) {
             @Override
             protected void convert(ViewHolder holder, FictionDetailModel fictionModel, int position) {
                 ImageLoaderUtils.getInstance().loadImage(UserPageActivity.this, fictionModel.getCover(), (ImageView) holder.getView(R.id.category_item_cover_img), R.color.colorPrimaryDark);
@@ -97,7 +105,7 @@ public class UserPageActivity extends BaseActivity implements UserPageContract.V
                 holder.setVisible(R.id.category_item_vip_img, fictionModel.getVip() == 0 ? false : true);
             }
         };
-        mAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+        adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 if (position < mDatas.size()) {
@@ -110,6 +118,11 @@ public class UserPageActivity extends BaseActivity implements UserPageContract.V
                 return false;
             }
         });
+        mAdapter = new LoadMoreWrapper<>(adapter);
+        mLoadMoreView = LayoutInflater.from(this).inflate(R.layout.common_loading_more_layout, null);
+        mLoadMoreView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
+        mAdapter.setLoadMoreView(mLoadMoreView);
+        mAdapter.setOnLoadMoreListener(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.addItemDecoration(new CommonVerticalItemDecoration(32));
         mRecyclerView.setAdapter(mAdapter);
@@ -148,6 +161,28 @@ public class UserPageActivity extends BaseActivity implements UserPageContract.V
 
         } else {
             Toast.makeText(this, R.string.common_network_error, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void showFictionList(List<FictionDetailModel> list) {
+        if (list.size() > 0) {
+            mLoadMoreView.findViewById(R.id.loading_more_layout).setVisibility(View.VISIBLE);
+            mPage++;
+        } else {
+            mLoadMoreView.findViewById(R.id.loading_more_layout).setVisibility(View.GONE);
+        }
+        mDatas.addAll(list);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onLoadMoreRequested() {
+        if (mPresenter != null) {
+            if (mPage != mPrePage) {
+                mPresenter.getUserRelatedFictionList(mUserId, mPage);
+                mPrePage = mPage;
+            }
         }
     }
 }

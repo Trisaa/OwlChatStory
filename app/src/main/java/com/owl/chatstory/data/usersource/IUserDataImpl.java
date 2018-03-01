@@ -4,8 +4,11 @@ import android.util.Log;
 
 import com.owl.chatstory.common.util.network.HttpUtils;
 import com.owl.chatstory.common.util.network.request.UserRequest;
+import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.usersource.model.UserModel;
 import com.owl.chatstory.data.usersource.model.UserPageModel;
+
+import java.util.List;
 
 import rx.Subscriber;
 import rx.Subscription;
@@ -106,6 +109,29 @@ public class IUserDataImpl implements IUserData {
     }
 
     @Override
+    public void getUserFictionList(final OnUserPageListener listener, String id, int page) {
+        Subscription subscription = HttpUtils.getInstance().getUserRelatedFictionList(new Subscriber<List<FictionDetailModel>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(List<FictionDetailModel> list) {
+                if (listener != null) {
+                    listener.onUserFictionList(list);
+                }
+            }
+        }, id, page);
+        mSubscriptions.add(subscription);
+    }
+
+    @Override
     public void getOwnPageInfo(final OnUserPageListener listener) {
         Subscription subscription = HttpUtils.getInstance().getOwnPageInfo(new Subscriber<UserPageModel>() {
             @Override
@@ -127,6 +153,29 @@ public class IUserDataImpl implements IUserData {
                 }
             }
         });
+        mSubscriptions.add(subscription);
+    }
+
+    @Override
+    public void getOwnFictionList(final OnUserPageListener listener, int page) {
+        Subscription subscription = HttpUtils.getInstance().getOwnRelatedFictionList(new Subscriber<List<FictionDetailModel>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(List<FictionDetailModel> list) {
+                if (listener != null) {
+                    listener.onUserFictionList(list);
+                }
+            }
+        }, page);
         mSubscriptions.add(subscription);
     }
 

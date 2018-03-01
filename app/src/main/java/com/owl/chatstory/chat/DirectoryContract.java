@@ -2,6 +2,9 @@ package com.owl.chatstory.chat;
 
 import com.owl.chatstory.base.BasePresenter;
 import com.owl.chatstory.base.BaseView;
+import com.owl.chatstory.data.chatsource.model.ChapterModel;
+
+import java.util.List;
 
 /**
  * Created by lebron on 2017/10/30.
@@ -17,9 +20,11 @@ public interface DirectoryContract {
         void collectFiction(String operation, String id);
 
         void likeFiction(int status, String id);
+
+        void getChapterList(String id, int page);
     }
 
     interface View extends BaseView<Presenter> {
-
+        void showChapterList(List<ChapterModel> list);
     }
 }

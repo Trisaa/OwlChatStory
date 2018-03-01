@@ -13,6 +13,7 @@ import com.owl.chatstory.common.util.PreferencesHelper;
 import com.owl.chatstory.common.util.network.request.FictionListRequest;
 import com.owl.chatstory.common.util.network.request.UserRequest;
 import com.owl.chatstory.data.chatsource.model.ActorModel;
+import com.owl.chatstory.data.chatsource.model.ChapterModel;
 import com.owl.chatstory.data.chatsource.model.FictionStatusResponse;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
@@ -185,6 +186,16 @@ public class HttpUtils {
     public Subscription getFictionDetail(Subscriber<FictionDetailModel> subscriber, String id) {
         Subscription subscription = mApiService.getFictionDetail(id)
                 .map(new BaseResponseFunc<FictionDetailModel>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return subscription;
+    }
+
+    public Subscription getFictionChapterList(Subscriber<List<ChapterModel>> subscriber, String id, int page) {
+        Subscription subscription = mApiService.getFictionChapterList(id, page, 10)
+                .map(new BaseArrayResponseFunc<ChapterModel>())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -418,6 +429,26 @@ public class HttpUtils {
     public Subscription getUserPageInfo(Subscriber<UserPageModel> subscriber, String id) {
         Subscription subscription = mApiService.getUserPageInfo(id)
                 .map(new BaseResponseFunc<UserPageModel>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return subscription;
+    }
+
+    public Subscription getUserRelatedFictionList(Subscriber<List<FictionDetailModel>> subscriber, String id, int page) {
+        Subscription subscription = mApiService.getUserRelatedFictionList(id, page, 10)
+                .map(new BaseArrayResponseFunc<FictionDetailModel>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return subscription;
+    }
+
+    public Subscription getOwnRelatedFictionList(Subscriber<List<FictionDetailModel>> subscriber, int page) {
+        Subscription subscription = mApiService.getOwnRelatedFictionList(page, 10)
+                .map(new BaseArrayResponseFunc<FictionDetailModel>())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
