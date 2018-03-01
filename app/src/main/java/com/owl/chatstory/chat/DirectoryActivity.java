@@ -191,8 +191,8 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
         view.findViewById(R.id.chapter_header_status_layout).setVisibility(View.VISIBLE);
         final ImageView icon = view.findViewById(R.id.chapter_header_author_icon);
         TextView mWatchesView = view.findViewById(R.id.chapter_header_watches_txv);
-        TextView mLikesView = view.findViewById(R.id.chapter_header_likes_txv);
-        TextView mStarsView = view.findViewById(R.id.chapter_header_collects_txv);
+        final TextView mLikesView = view.findViewById(R.id.chapter_header_likes_txv);
+        final TextView mStarsView = view.findViewById(R.id.chapter_header_collects_txv);
         final ImageView mLikeImage = view.findViewById(R.id.chapter_header_likes_img);
         final ImageView mStarImage = view.findViewById(R.id.chapter_header_collects_img);
 
@@ -223,10 +223,14 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
                         mPresenter.collectFiction(DirectoryContract.COLLECT_FICTION, fictionDetailModel.getId());
                         mFictionStatusResponse.setCollect(true);
                         updateFictionStatus(mStarImage, mLikeImage, mFictionStatusResponse);
+                        fictionDetailModel.setFavorites(fictionDetailModel.getFavorites() + 1);
+                        mStarsView.setText(getString(R.string.common_stars, fictionDetailModel.getFavorites()));
                     } else {
                         mPresenter.collectFiction(DirectoryContract.UNCOLLECT_FICTION, fictionDetailModel.getId());
                         mFictionStatusResponse.setCollect(false);
                         updateFictionStatus(mStarImage, mLikeImage, mFictionStatusResponse);
+                        fictionDetailModel.setFavorites(fictionDetailModel.getFavorites() - 1 > 0 ? fictionDetailModel.getFavorites() - 1 : 0);
+                        mStarsView.setText(getString(R.string.common_stars, fictionDetailModel.getFavorites()));
                     }
                     EventBus.getDefault().post(mFictionStatusResponse);
                 } else {
@@ -242,10 +246,14 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
                         mPresenter.likeFiction(DirectoryContract.LIKE_FICTION, fictionDetailModel.getId());
                         mFictionStatusResponse.setLiked(true);
                         updateFictionStatus(mStarImage, mLikeImage, mFictionStatusResponse);
+                        fictionDetailModel.setLikes(fictionDetailModel.getLikes() + 1);
+                        mLikesView.setText(getString(R.string.common_likes, fictionDetailModel.getLikes()));
                     } else {
                         mPresenter.likeFiction(DirectoryContract.DISLIKE_FICTION, fictionDetailModel.getId());
                         mFictionStatusResponse.setLiked(false);
                         updateFictionStatus(mStarImage, mLikeImage, mFictionStatusResponse);
+                        fictionDetailModel.setLikes(fictionDetailModel.getLikes() - 1 > 0 ? fictionDetailModel.getLikes() - 1 : 0);
+                        mLikesView.setText(getString(R.string.common_likes, fictionDetailModel.getLikes()));
                     }
                 } else {
                     Toast.makeText(DirectoryActivity.this, R.string.common_login_first, Toast.LENGTH_SHORT).show();
@@ -256,8 +264,10 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
     }
 
     private void updateFictionStatus(ImageView view1, ImageView view2, FictionStatusResponse response) {
-        view1.setBackgroundResource(response.getCollect() ? R.drawable.vector_stared : R.drawable.vector_unstar);
-        view2.setBackgroundResource(response.getLiked() ? R.drawable.vector_favorited : R.drawable.vector_unfavorite);
+        if (response != null) {
+            view1.setBackgroundResource(response.getCollect() ? R.drawable.vector_stared : R.drawable.vector_unstar);
+            view2.setBackgroundResource(response.getLiked() ? R.drawable.vector_favorited : R.drawable.vector_unfavorite);
+        }
     }
 
     @Override
