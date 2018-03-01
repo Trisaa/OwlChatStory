@@ -93,6 +93,7 @@ public class UserPageActivity extends BaseActivity implements UserPageContract.V
                 holder.setText(R.id.category_item_title_txv, fictionModel.getTitle());
                 holder.setText(R.id.category_item_description_txv, fictionModel.getSummary());
                 holder.setText(R.id.category_item_watchers_txv, fictionModel.getViews() + "");
+                holder.setText(R.id.category_upinfo_txv, getString(R.string.common_update_chapter, fictionModel.getUpinfo()));
                 holder.setVisible(R.id.category_item_vip_img, fictionModel.getVip() == 0 ? false : true);
             }
         };

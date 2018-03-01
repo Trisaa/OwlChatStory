@@ -118,6 +118,7 @@
     <string name="common_likes">LIKES</string>
     <string name="common_stars">STARS</string>
     <string name="common_views">VIEWS</string>
+    <string name="common_update_chapter">Ep. %1$d</string>
 
     <string name="user_edit_name">Nickname</string>
     <string name="user_edit_name_hint">Input nickname(10 characters limits)</string>

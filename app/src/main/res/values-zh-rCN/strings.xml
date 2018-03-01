@@ -117,6 +117,7 @@
     <string name="common_likes">喜欢</string>
     <string name="common_stars">收藏</string>
     <string name="common_views">阅读</string>
+    <string name="common_update_chapter">更至%1$d章</string>
 
     <string name="user_edit_name">昵称</string>
     <string name="user_edit_name_hint">请输入昵称（10字以内）</string>
