@@ -30,7 +30,11 @@ public class UserPagePresenter implements UserPageContract.Presenter, IUserData.
 
     @Override
     public void getUserPageInfo(String id) {
-        mData.getUserPageInfo(this, id);
+        if (id != null) {
+            mData.getUserPageInfo(this, id);
+        } else {
+            mData.getOwnPageInfo(this);
+        }
     }
 
     @Override

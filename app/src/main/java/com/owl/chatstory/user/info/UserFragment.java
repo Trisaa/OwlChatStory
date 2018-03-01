@@ -132,7 +132,6 @@ public class UserFragment extends BaseFragment implements UserContract.View {
     public void clickUserPage() {
         if (mUserModel != null) {
             Intent intent = new Intent(getActivity(), UserPageActivity.class);
-            intent.putExtra(UserPageActivity.EXTRA_USER_ID, mUserModel.getId());
             ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), mUserIcon, getString(R.string.share_user_icon));
             startActivity(intent, transitionActivityOptions.toBundle());
         }

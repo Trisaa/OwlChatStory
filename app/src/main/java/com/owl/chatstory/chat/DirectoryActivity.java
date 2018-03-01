@@ -201,9 +201,9 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
         ((TextView) view.findViewById(R.id.chapter_header_author_txv)).setText(author);
         ((TextView) view.findViewById(R.id.chapter_header_describe_txv)).setText(fictionDetailModel.getSummary());
         ((TextView) view.findViewById(R.id.chapter_header_chapters_txv)).setText(getString(R.string.chapter_total_chapters, fictionDetailModel.getChapters().size()));
-        mWatchesView.setText(getString(R.string.common_views, fictionDetailModel.getViews()));
-        mLikesView.setText(getString(R.string.common_likes, fictionDetailModel.getLikes()));
-        mStarsView.setText(getString(R.string.common_stars, fictionDetailModel.getFavorites()));
+        mWatchesView.setText(getString(R.string.common_views_format, fictionDetailModel.getViews()));
+        mLikesView.setText(getString(R.string.common_likes_format, fictionDetailModel.getLikes()));
+        mStarsView.setText(getString(R.string.common_stars_format, fictionDetailModel.getFavorites()));
         updateFictionStatus(mStarImage, mLikeImage, mFictionStatusResponse);
 
         view.findViewById(R.id.chapter_header_author_layout).setOnClickListener(new View.OnClickListener() {
@@ -224,13 +224,13 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
                         mFictionStatusResponse.setCollect(true);
                         updateFictionStatus(mStarImage, mLikeImage, mFictionStatusResponse);
                         fictionDetailModel.setFavorites(fictionDetailModel.getFavorites() + 1);
-                        mStarsView.setText(getString(R.string.common_stars, fictionDetailModel.getFavorites()));
+                        mStarsView.setText(getString(R.string.common_stars_format, fictionDetailModel.getFavorites()));
                     } else {
                         mPresenter.collectFiction(DirectoryContract.UNCOLLECT_FICTION, fictionDetailModel.getId());
                         mFictionStatusResponse.setCollect(false);
                         updateFictionStatus(mStarImage, mLikeImage, mFictionStatusResponse);
                         fictionDetailModel.setFavorites(fictionDetailModel.getFavorites() - 1 > 0 ? fictionDetailModel.getFavorites() - 1 : 0);
-                        mStarsView.setText(getString(R.string.common_stars, fictionDetailModel.getFavorites()));
+                        mStarsView.setText(getString(R.string.common_stars_format, fictionDetailModel.getFavorites()));
                     }
                     EventBus.getDefault().post(mFictionStatusResponse);
                 } else {
@@ -247,13 +247,13 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
                         mFictionStatusResponse.setLiked(true);
                         updateFictionStatus(mStarImage, mLikeImage, mFictionStatusResponse);
                         fictionDetailModel.setLikes(fictionDetailModel.getLikes() + 1);
-                        mLikesView.setText(getString(R.string.common_likes, fictionDetailModel.getLikes()));
+                        mLikesView.setText(getString(R.string.common_likes_format, fictionDetailModel.getLikes()));
                     } else {
                         mPresenter.likeFiction(DirectoryContract.DISLIKE_FICTION, fictionDetailModel.getId());
                         mFictionStatusResponse.setLiked(false);
                         updateFictionStatus(mStarImage, mLikeImage, mFictionStatusResponse);
                         fictionDetailModel.setLikes(fictionDetailModel.getLikes() - 1 > 0 ? fictionDetailModel.getLikes() - 1 : 0);
-                        mLikesView.setText(getString(R.string.common_likes, fictionDetailModel.getLikes()));
+                        mLikesView.setText(getString(R.string.common_likes_format, fictionDetailModel.getLikes()));
                     }
                 } else {
                     Toast.makeText(DirectoryActivity.this, R.string.common_login_first, Toast.LENGTH_SHORT).show();

@@ -12,7 +12,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="60dp"
         android:src="@mipmap/user_default_icon"
-        android:transitionName="@string/share_user_icon"/>
+        android:transitionName="@string/share_user_icon" />
 
     <TextView
         android:id="@+id/userpage_user_name"
@@ -21,9 +21,9 @@
         android:layout_below="@id/userpage_user_icon"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:text="Lebron"
         android:textColor="#ffffff"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        tools:text="Lebron" />
 
     <TextView
         android:id="@+id/userpage_user_describe"
@@ -32,9 +32,10 @@
         android:layout_below="@id/userpage_user_name"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="6dp"
-        android:text="I am a bad guy"
         android:textColor="#99ffffff"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:visibility="invisible"
+        tools:text="I am a bad guy" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -55,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="1000"
+                android:text="0"
                 android:textColor="#ffffff"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -65,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="2dp"
-                android:text="watches"
+                android:text="@string/common_views"
                 android:textColor="#ffffff"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -82,7 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="1000"
+                android:text="0"
                 android:textColor="#ffffff"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -92,7 +93,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="2dp"
-                android:text="likes"
+                android:text="@string/common_likes"
                 android:textColor="#ffffff"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -109,7 +110,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="1000"
+                android:text="0"
                 android:textColor="#ffffff"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -119,7 +120,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="2dp"
-                android:text="collects"
+                android:text="@string/common_stars"
                 android:textColor="#ffffff"
                 android:textSize="14sp" />
         </LinearLayout>

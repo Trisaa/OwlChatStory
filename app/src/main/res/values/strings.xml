@@ -112,9 +112,12 @@
     <string name="common_choose_gender">Choose gender</string>
     <string name="common_male">Male</string>
     <string name="common_female">Female</string>
-    <string name="common_likes">%1$d LIKES</string>
-    <string name="common_stars">%1$d STARS</string>
-    <string name="common_views">%1$d VIEWS</string>
+    <string name="common_likes_format">%1$d LIKES</string>
+    <string name="common_stars_format">%1$d STARS</string>
+    <string name="common_views_format">%1$d VIEWS</string>
+    <string name="common_likes">LIKES</string>
+    <string name="common_stars">STARS</string>
+    <string name="common_views">VIEWS</string>
 
     <string name="user_edit_name">Nickname</string>
     <string name="user_edit_name_hint">Input nickname(10 characters limits)</string>

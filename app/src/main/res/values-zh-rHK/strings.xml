@@ -109,9 +109,12 @@
     <string name="common_choose_gender">選擇性別</string>
     <string name="common_male">男</string>
     <string name="common_female">女</string>
-    <string name="common_likes">%1$d 喜欢</string>
-    <string name="common_stars">%1$d 收藏</string>
-    <string name="common_views">%1$d 阅读</string>
+    <string name="common_likes_format">%1$d 喜歡</string>
+    <string name="common_stars_format">%1$d 收藏</string>
+    <string name="common_views_format">%1$d 閱讀</string>
+    <string name="common_likes">喜歡</string>
+    <string name="common_stars">收藏</string>
+    <string name="common_views">閱讀</string>
 
     <string name="user_edit_name">昵稱</string>
     <string name="user_edit_name_hint">請輸入昵稱（10字以內）</string>
@@ -126,6 +129,7 @@
     <string name="user_waitting_or">或者</string>
     <string name="user_vip_questions">有任何疑問請聯系</string>
     <string name="user_vip_facebook_page">或訪問我們的主頁</string>
+    <string name="user_page_title">我的主頁</string>
 
     <string name="search_key_word">輸入關鍵字</string>
 </resources>

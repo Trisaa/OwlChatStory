@@ -425,6 +425,16 @@ public class HttpUtils {
         return subscription;
     }
 
+    public Subscription getOwnPageInfo(Subscriber<UserPageModel> subscriber) {
+        Subscription subscription = mApiService.getOwnPageInfo()
+                .map(new BaseResponseFunc<UserPageModel>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return subscription;
+    }
+
     public Subscription likeFiction(Subscriber subscriber, int status, String id) {
         Subscription subscription = mApiService.likeFiction(status, id)
                 .map(new BaseResponseFunc())

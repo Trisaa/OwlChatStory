@@ -105,6 +105,31 @@ public class IUserDataImpl implements IUserData {
         mSubscriptions.add(subscription);
     }
 
+    @Override
+    public void getOwnPageInfo(final OnUserPageListener listener) {
+        Subscription subscription = HttpUtils.getInstance().getOwnPageInfo(new Subscriber<UserPageModel>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                if (listener != null) {
+                    listener.onUserPageInfo(null);
+                }
+            }
+
+            @Override
+            public void onNext(UserPageModel userPageModel) {
+                if (listener != null) {
+                    listener.onUserPageInfo(userPageModel);
+                }
+            }
+        });
+        mSubscriptions.add(subscription);
+    }
+
     private UserRequest convertModel2Request(UserModel model) {
         UserRequest request = new UserRequest();
         request.setName(model.getName());

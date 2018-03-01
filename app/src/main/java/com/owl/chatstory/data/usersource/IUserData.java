@@ -16,6 +16,8 @@ public interface IUserData {
 
     void getUserPageInfo(OnUserPageListener listener, String id);
 
+    void getOwnPageInfo(OnUserPageListener listener);
+
     interface OnUpdateListener {
         void onResult(boolean success);
     }
