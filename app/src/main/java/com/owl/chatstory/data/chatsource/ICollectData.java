@@ -20,6 +20,8 @@ public interface ICollectData {
 
     void isFictionCollected(String fictionId, FictionStatusListener listener);
 
+    void prayUpdate(String fictionId);
+
     interface FictionStatusListener {
         void onStatus(FictionStatusResponse response);
     }

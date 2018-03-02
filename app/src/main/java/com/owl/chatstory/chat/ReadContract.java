@@ -21,6 +21,8 @@ public interface ReadContract {
         void collectFiction(String id);
 
         void uncollectFiction(String id);
+
+        void prayUpdate(String id);
     }
 
     interface View extends BaseView<Presenter> {

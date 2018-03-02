@@ -228,5 +228,11 @@ public interface ApiService {
     @GET("thumbsup/like")
     Observable<BaseResponse> likeFiction(@Query("status") int status, @Query("ifiction_id") String id);
 
+    @GET("index/prayupdate")
+    Observable<BaseResponse> prayUpdate(@Query("ifiction_id") String id);
+
+    @GET("index/devicetoken")
+    Observable<BaseResponse> uploadDeviceToken(@Query("device_token") String deviceToken);
+
 
 }

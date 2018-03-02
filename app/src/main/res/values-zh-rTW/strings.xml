@@ -109,10 +109,10 @@
     <string name="common_choose_gender">選擇性別</string>
     <string name="common_male">男</string>
     <string name="common_female">女</string>
-    <string name="common_likes_format">%1$d 喜歡</string>
+    <string name="common_likes_format">%1$d 讚</string>
     <string name="common_stars_format">%1$d 收藏</string>
     <string name="common_views_format">%1$d 閱讀</string>
-    <string name="common_likes">喜歡</string>
+    <string name="common_likes">讚</string>
     <string name="common_stars">收藏</string>
     <string name="common_views">閱讀</string>
     <string name="common_update_chapter">更至%1$d章</string>

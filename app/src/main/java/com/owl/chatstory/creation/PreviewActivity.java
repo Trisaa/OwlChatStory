@@ -47,15 +47,6 @@ public class PreviewActivity extends BaseActivity {
     private MultiItemTypeAdapter<MessageModel> mAdapter;
     private List<MessageModel> mDatas;
     private List<MessageModel> mShowDatas = new ArrayList<>();
-
-    public static void start(Context context, ArrayList<MessageModel> list) {
-        Intent intent = new Intent(context, PreviewActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(EXTRA_MESSAGE_LIST, list);
-        intent.putExtras(bundle);
-        context.startActivity(intent);
-    }
-
     private ChatNextDelegate.OnClickListener mNextListener = new ChatNextDelegate.OnClickListener() {
         @Override
         public void onClick() {
@@ -63,7 +54,7 @@ public class PreviewActivity extends BaseActivity {
         }
 
         @Override
-        public void onShareClick() {
+        public void onShareClick(boolean shareOrUpdate) {
         }
 
         @Override
@@ -74,6 +65,14 @@ public class PreviewActivity extends BaseActivity {
         public void onNextClick() {
         }
     };
+
+    public static void start(Context context, ArrayList<MessageModel> list) {
+        Intent intent = new Intent(context, PreviewActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(EXTRA_MESSAGE_LIST, list);
+        intent.putExtras(bundle);
+        context.startActivity(intent);
+    }
 
     @Override
     protected int getContentViewID() {

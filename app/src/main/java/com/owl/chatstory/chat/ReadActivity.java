@@ -81,7 +81,13 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
         }
 
         @Override
-        public void onShareClick() {
+        public void onShareClick(boolean shareOrUpdate) {
+            if (!shareOrUpdate) {
+                if (mPresenter != null) {
+                    mPresenter.prayUpdate(mFictionDetailModel.getId());
+                }
+                return;
+            }
             ShareModel shareModel = new ShareModel();
             shareModel.setContent(getString(R.string.share_content));
             if (mFictionDetailModel.getLanguage() == null || mLastChapterId == null) {

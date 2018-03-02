@@ -64,10 +64,13 @@ public class ChatNextDelegate implements ItemViewDelegate<MessageModel> {
             @Override
             public void onClick(View v) {
                 if (messageModel.isLastChapter()) {
+                    if (mListener != null) {
+                        mListener.onShareClick(false);
+                    }
                     Toast.makeText(MainApplication.getAppContext(), R.string.read_update_feedback, Toast.LENGTH_SHORT).show();
                 } else {
                     if (mListener != null) {
-                        mListener.onShareClick();
+                        mListener.onShareClick(true);
                     }
                 }
             }
@@ -85,7 +88,7 @@ public class ChatNextDelegate implements ItemViewDelegate<MessageModel> {
     public interface OnClickListener {
         void onClick();
 
-        void onShareClick();
+        void onShareClick(boolean shareOrUpdate);
 
         void onLongClick();
 

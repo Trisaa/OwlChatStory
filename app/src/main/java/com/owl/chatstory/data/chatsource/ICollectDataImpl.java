@@ -137,4 +137,25 @@ public class ICollectDataImpl implements ICollectData {
         }, fictionId);
         mSubscriptions.add(subscription);
     }
+
+    @Override
+    public void prayUpdate(String fictionId) {
+        Subscription subscription = HttpUtils.getInstance().prayUpdate(new Subscriber() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(Object o) {
+
+            }
+        }, fictionId);
+        mSubscriptions.add(subscription);
+    }
 }

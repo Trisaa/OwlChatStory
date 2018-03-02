@@ -476,6 +476,26 @@ public class HttpUtils {
         return subscription;
     }
 
+    public Subscription prayUpdate(Subscriber subscriber, String id) {
+        Subscription subscription = mApiService.prayUpdate(id)
+                .map(new BaseResponseFunc())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return subscription;
+    }
+
+    public Subscription uploadDeviceToken(Subscriber subscriber, String deviceToken) {
+        Subscription subscription = mApiService.uploadDeviceToken(deviceToken)
+                .map(new BaseResponseFunc())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return subscription;
+    }
+
     private class BaseResponseFunc<T> implements Func1<BaseResponse<T>, T> {
         @Override
         public T call(BaseResponse<T> httpResult) {

@@ -74,6 +74,11 @@ public class ReadPresenter implements ReadContract.Presenter, IFictionData.OnFic
     }
 
     @Override
+    public void prayUpdate(String id) {
+        mCollectData.prayUpdate(id);
+    }
+
+    @Override
     public void subscribe() {
 
     }
