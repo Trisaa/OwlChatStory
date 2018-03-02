@@ -25,6 +25,8 @@ public interface IUserData {
 
     void getOwnFictionList(OnUserPageListener listener, int page);
 
+    void uploadDeviceToken(String token);
+
     interface OnUpdateListener {
         void onResult(boolean success);
     }

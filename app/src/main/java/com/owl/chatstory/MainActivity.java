@@ -53,6 +53,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     @Override
     protected void initToolBar() {
+        Log.i("Lebron", "the key is " + getIntent().getStringExtra("key"));
     }
 
     @Override

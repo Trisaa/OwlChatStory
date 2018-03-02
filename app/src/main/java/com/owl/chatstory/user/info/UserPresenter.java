@@ -32,4 +32,9 @@ public class UserPresenter implements UserContract.Presenter, IUserData.OnUserIn
     public void onUserInfo(UserModel model) {
         mView.showUserInfo(model);
     }
+
+    @Override
+    public void uploadDeviceToken(String token) {
+        mData.uploadDeviceToken(token);
+    }
 }

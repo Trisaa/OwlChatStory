@@ -6,15 +6,16 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.owl.chatstory.R;
 import com.owl.chatstory.base.BaseFragment;
-import com.owl.chatstory.chat.DirectoryActivity;
 import com.owl.chatstory.chat.FavoriteActivity;
 import com.owl.chatstory.chat.HistoryActivity;
 import com.owl.chatstory.common.util.ImageLoaderUtils;
@@ -69,6 +70,14 @@ public class UserFragment extends BaseFragment implements UserContract.View {
         updateUserInfo();
         updateVipInfo();
         new UserPresenter(this);
+    }
+
+    private void checkDeviceTokenUploaded() {
+        if (!PreferencesHelper.getInstance().getBoolean(PreferencesHelper.KEY_DEVICE_TOKEN_UPLOADED, false) && PreferencesHelper.getInstance().isLogined()) {
+            String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+            Log.i("Lebron", "device token " + refreshedToken);
+            mPresenter.uploadDeviceToken(refreshedToken);
+        }
     }
 
     private void updateUserInfo() {
@@ -207,5 +216,6 @@ public class UserFragment extends BaseFragment implements UserContract.View {
     public void setPresenter(UserContract.Presenter presenter) {
         mPresenter = presenter;
         mPresenter.subscribe();
+        checkDeviceTokenUploaded();
     }
 }

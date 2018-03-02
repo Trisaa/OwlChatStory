@@ -31,6 +31,8 @@ public class PreferencesHelper {
     public static final String KEY_CLICK_TIPS_SHOWED = "KEY_CLICK_TIPS_SHOWED";
     //是否有订阅过任何一种会员套餐
     public static final String KEY_PAID_FOR_VIP = "KEY_PAID_FOR_VIP";
+    //是否已经上传过DeviceToken
+    public static final String KEY_DEVICE_TOKEN_UPLOADED = "KEY_DEVICE_TOKEN_UPLOADED";
 
     private final static SharedPreferences mPref = MainApplication.getAppContext().getSharedPreferences(SETTING, Context.MODE_PRIVATE);
     private static PreferencesHelper mInstance = null;

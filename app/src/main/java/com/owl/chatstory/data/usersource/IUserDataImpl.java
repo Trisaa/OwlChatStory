@@ -2,6 +2,7 @@ package com.owl.chatstory.data.usersource;
 
 import android.util.Log;
 
+import com.owl.chatstory.common.util.PreferencesHelper;
 import com.owl.chatstory.common.util.network.HttpUtils;
 import com.owl.chatstory.common.util.network.request.UserRequest;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
@@ -176,6 +177,28 @@ public class IUserDataImpl implements IUserData {
                 }
             }
         }, page);
+        mSubscriptions.add(subscription);
+    }
+
+    @Override
+    public void uploadDeviceToken(String token) {
+        Subscription subscription = HttpUtils.getInstance().uploadDeviceToken(new Subscriber() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.i("Lebron", " upload device failed");
+            }
+
+            @Override
+            public void onNext(Object o) {
+                Log.i("Lebron", " upload device success");
+                PreferencesHelper.getInstance().setBoolean(PreferencesHelper.KEY_DEVICE_TOKEN_UPLOADED, true);
+            }
+        }, token);
         mSubscriptions.add(subscription);
     }
 
