@@ -256,6 +256,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         mFavoriteMenu = menu.findItem(R.id.read_menu_favorite);
+        updateFictionStatus(mFictionStatus);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -363,6 +364,9 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
 
     @Override
     public void updateFictionStatus(FictionStatusResponse response) {
+        if (response == null) {
+            return;
+        }
         mFictionStatus = response;
         if (mFavoriteMenu != null) {
             mFavoriteMenu.setIcon(mFictionStatus.getCollect() ? R.drawable.vector_stared : R.drawable.vector_unstar);
