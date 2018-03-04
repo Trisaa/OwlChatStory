@@ -29,6 +29,7 @@ import com.owl.chatstory.common.util.TimeUtils;
 import com.owl.chatstory.data.chatsource.model.ChapterModel;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionStatusResponse;
+import com.owl.chatstory.data.eventsource.FictionEvent;
 import com.owl.chatstory.data.homesource.model.ShareModel;
 import com.owl.chatstory.user.page.UserPageActivity;
 import com.zhy.adapter.recyclerview.CommonAdapter;
@@ -246,6 +247,7 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
                         mStarsView.setText(getString(R.string.common_stars_format, fictionDetailModel.getFavorites()));
                     }
                     EventBus.getDefault().post(mFictionStatusResponse);
+                    EventBus.getDefault().post(new FictionEvent(fictionDetailModel.getLikes(), fictionDetailModel.getFavorites()));
                 } else {
                     Toast.makeText(DirectoryActivity.this, R.string.common_login_first, Toast.LENGTH_SHORT).show();
                 }
@@ -268,6 +270,8 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
                         fictionDetailModel.setLikes(fictionDetailModel.getLikes() - 1 > 0 ? fictionDetailModel.getLikes() - 1 : 0);
                         mLikesView.setText(getString(R.string.common_likes_format, fictionDetailModel.getLikes()));
                     }
+                    EventBus.getDefault().post(mFictionStatusResponse);
+                    EventBus.getDefault().post(new FictionEvent(fictionDetailModel.getLikes(), fictionDetailModel.getFavorites()));
                 } else {
                     Toast.makeText(DirectoryActivity.this, R.string.common_login_first, Toast.LENGTH_SHORT).show();
                 }

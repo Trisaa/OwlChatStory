@@ -28,6 +28,7 @@ import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
 import com.owl.chatstory.data.chatsource.model.FictionStatusResponse;
 import com.owl.chatstory.data.chatsource.model.MessageModel;
+import com.owl.chatstory.data.eventsource.FictionEvent;
 import com.owl.chatstory.data.homesource.model.ShareModel;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 
@@ -283,6 +284,14 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
     public void onStatusEvent(FictionStatusResponse response) {
         if (response != null) {
             updateFictionStatus(response);
+        }
+    }
+
+    @Subscribe
+    public void onFictionEvent(FictionEvent event) {
+        if (event != null) {
+            mFictionDetailModel.setLikes(event.getLikes());
+            mFictionDetailModel.setFavorites(event.getStars());
         }
     }
 

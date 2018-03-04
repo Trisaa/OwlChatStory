@@ -145,6 +145,9 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_edit:
+                BasicCreateActivity.start(this, mFictionDetailModel);
+                break;
             case R.id.menu_under:
                 if (mPresenter != null) {
                     OperationRequest request = new OperationRequest();
@@ -205,9 +208,6 @@ public class CreationDetailActivity extends BaseActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            /*case R.id.chapter_header_edit_img:
-                BasicCreateActivity.start(this, mFictionDetailModel);
-                break;*/
             case R.id.chapter_header_add_chapters_txv:
                 FictionModel model = new FictionModel();
                 model.setIfiction_id(mFictionId);
