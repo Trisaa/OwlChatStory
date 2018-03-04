@@ -14,6 +14,7 @@ import com.owl.chatstory.data.chatsource.model.RoleListRequest;
 import com.owl.chatstory.data.homesource.model.CategoryModel;
 import com.owl.chatstory.data.homesource.model.UpdateModel;
 import com.owl.chatstory.data.searchsource.SearchModel;
+import com.owl.chatstory.data.usersource.model.MessagesModel;
 import com.owl.chatstory.data.usersource.model.UserModel;
 import com.owl.chatstory.data.usersource.model.UserPageModel;
 import com.owl.chatstory.data.usersource.model.UserResponse;
@@ -234,5 +235,9 @@ public interface ApiService {
     @GET("index/devicetoken")
     Observable<BaseResponse> uploadDeviceToken(@Query("device_token") String deviceToken);
 
+    @GET("messages/list")
+    Observable<BaseArrayResponse<MessagesModel>> getMessageList(@Query("page") int page, @Query("count") int count);
 
+    @GET("messages/unreadcount")
+    Observable<BaseResponse<Integer>> getUnreadMessageCount();
 }

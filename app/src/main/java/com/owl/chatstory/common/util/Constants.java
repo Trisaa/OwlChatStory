@@ -24,6 +24,12 @@ public class Constants {
     public static final String OPERATION_RECOVER = "recover";//上线
     public static final String OPERATION_DROP = "drop";//删除
 
+    public static final int MESSAGE_LIKE = 1;
+    public static final int MESSAGE_ONLINE = 2;
+    public static final int MESSAGE_VIOLATION = 3;
+    public static final int MESSAGE_STAR = 4;
+    public static final int MESSAGE_PARY_UPDATE = 5;
+
     public static final String BASE64_ENCODED_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAigsMDHk9dIIUOBglJ6mGgBHf4R4LqT11r7VGy5v86GiC6uLGJlA9jEeUkxHzvOnAtgmvgZF7iyqJs9w5505ML7NlaCvloRdfT5OI1DW0m5H9bENIr9w7g2IZ+rArZMWnQ+dKN9tYsRJzMW2pgp19om/InDxVBJeqa79gujbf4a+0pAq7IrhMSltn1OEqIePNWy/VSZroCrCts6Yl4EP4UjpCMNKnM1LwNYu2O490U/AaxyrzRZF+nPCkC87y9revx1z0ToO6/opof2ulbLTgIun9mxWhEq65CJyX+gaeQ+mh//TIqqyKcyxJdp+LHNPt2JtkaCvuHdP9NNfaLM5xpwIDAQAB";
     public static final String WEEK_SKU = "week_vip1.99";
     public static final String ONE_MONTH_SKU = "month_vip3.99";

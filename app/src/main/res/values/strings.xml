@@ -134,6 +134,13 @@
     <string name="user_vip_questions">Any question ask us:</string>
     <string name="user_vip_facebook_page">Or visit us</string>
     <string name="user_page_title">User Page</string>
+    <string name="user_message_title">Message</string>
 
     <string name="search_key_word">Input key word</string>
+
+    <string name="message_liked">%1$s liked your《%2$s》.</string>
+    <string name="message_stared">%1$s stared your《%2$s》.</string>
+    <string name="message_pray_update">%1$s asked you to update《%2$s》.</string>
+    <string name="message_rejected">Your《%1$s》No.%2$d %3$s has been rejected because of %4$s.</string>
+    <string name="message_online">Your《%1$s》No.%2$d %3$s passed.</string>
 </resources>

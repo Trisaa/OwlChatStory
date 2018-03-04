@@ -23,6 +23,7 @@ import com.owl.chatstory.data.chatsource.model.RoleListRequest;
 import com.owl.chatstory.data.homesource.model.CategoryModel;
 import com.owl.chatstory.data.homesource.model.UpdateModel;
 import com.owl.chatstory.data.searchsource.SearchModel;
+import com.owl.chatstory.data.usersource.model.MessagesModel;
 import com.owl.chatstory.data.usersource.model.UserModel;
 import com.owl.chatstory.data.usersource.model.UserPageModel;
 import com.owl.chatstory.data.usersource.model.UserResponse;
@@ -127,6 +128,7 @@ public class HttpUtils {
                                 .build();
                         Request request = originalRequest.newBuilder()
                                 .header("utoken", PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_TOKEN, ""))
+                                //.header("utoken", "WlBWUDcyYXFkVGgrU2tFdWxKVEs5VXJIZi9hMXJzc3FIcXJkdEtLWndKZz0")
                                 .url(url)
                                 .method(originalRequest.method(), originalRequest.body())
                                 .build();
@@ -489,6 +491,26 @@ public class HttpUtils {
     public Subscription uploadDeviceToken(Subscriber subscriber, String deviceToken) {
         Subscription subscription = mApiService.uploadDeviceToken(deviceToken)
                 .map(new BaseResponseFunc())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return subscription;
+    }
+
+    public Subscription getUserMessageList(Subscriber<List<MessagesModel>> subscriber, int page) {
+        Subscription subscription = mApiService.getMessageList(page, 10)
+                .map(new BaseArrayResponseFunc<MessagesModel>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return subscription;
+    }
+
+    public Subscription getUnreadMessageCount(Subscriber<Integer> subscriber) {
+        Subscription subscription = mApiService.getUnreadMessageCount()
+                .map(new BaseResponseFunc<Integer>())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

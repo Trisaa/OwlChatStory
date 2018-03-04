@@ -15,6 +15,8 @@ public interface UserContract {
 
     interface View extends BaseView<Presenter> {
         void showUserInfo(UserModel userModel);
+
+        void showMessageCount(int count);
     }
 
 }

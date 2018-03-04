@@ -24,6 +24,7 @@ import com.owl.chatstory.common.util.PreferencesHelper;
 import com.owl.chatstory.data.usersource.model.UserModel;
 import com.owl.chatstory.settings.SettingsActivity;
 import com.owl.chatstory.user.login.LoginActivity;
+import com.owl.chatstory.user.message.MessageActivity;
 import com.owl.chatstory.user.page.UserPageActivity;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -49,6 +50,8 @@ public class UserFragment extends BaseFragment implements UserContract.View {
     TextView mNameView;
     @BindView(R.id.user_settings_vip_type)
     TextView mVipView;
+    @BindView(R.id.user_settings_message_count_txv)
+    TextView mCountView;
 
     private UserModel mUserModel;
     private UserContract.Presenter mPresenter;
@@ -146,6 +149,15 @@ public class UserFragment extends BaseFragment implements UserContract.View {
         }
     }
 
+    @OnClick(R.id.user_settings_message_layout)
+    public void clickMessage() {
+        if (PreferencesHelper.getInstance().isLogined()) {
+            MessageActivity.start(getActivity());
+        } else {
+            Toast.makeText(getActivity(), R.string.common_login_first, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @OnClick(R.id.user_settings_history_layout)
     public void clickHistory() {
         if (PreferencesHelper.getInstance().isLogined()) {
@@ -210,6 +222,11 @@ public class UserFragment extends BaseFragment implements UserContract.View {
         } else {
             //Toast.makeText(getActivity(), R.string.common_network_error, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void showMessageCount(int count) {
+        mCountView.setText(count > 99 ? "..." : String.valueOf(count));
     }
 
     @Override
