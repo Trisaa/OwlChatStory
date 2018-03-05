@@ -518,6 +518,16 @@ public class HttpUtils {
         return subscription;
     }
 
+    public Subscription readMessage(Subscriber subscriber, String messageId) {
+        Subscription subscription = mApiService.readMessage(messageId)
+                .map(new BaseResponseFunc())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return subscription;
+    }
+
     private class BaseResponseFunc<T> implements Func1<BaseResponse<T>, T> {
         @Override
         public T call(BaseResponse<T> httpResult) {

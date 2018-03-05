@@ -16,6 +16,22 @@
             android:layout_height="match_parent"
             android:background="#ecedf1" />
 
+        <RelativeLayout
+            android:id="@+id/message_detail_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#ffffff"
+            android:clickable="true"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/message_detail_txv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
         <include layout="@layout/common_loading_layout" />
     </FrameLayout>
 

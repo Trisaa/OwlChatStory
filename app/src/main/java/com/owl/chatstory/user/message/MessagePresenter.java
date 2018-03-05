@@ -27,7 +27,7 @@ public class MessagePresenter implements MessageContract.Presenter, IMessageData
 
     @Override
     public void readMessage(String id) {
-
+        mData.readMessage(id);
     }
 
     @Override

@@ -240,4 +240,7 @@ public interface ApiService {
 
     @GET("messages/unreadcount")
     Observable<BaseResponse<Integer>> getUnreadMessageCount();
+
+    @GET("messages/read")
+    Observable<BaseResponse> readMessage(@Query("id") String messageId);
 }

@@ -8,10 +8,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.owl.chatstory.R;
 import com.owl.chatstory.base.BaseActivity;
@@ -43,6 +45,10 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
     RecyclerView mRecyclerView;
     @BindView(R.id.common_progressbar_layout)
     View mLoadingView;
+    @BindView(R.id.message_detail_layout)
+    View mMessageDetailView;
+    @BindView(R.id.message_detail_txv)
+    TextView mMessageDetailText;
 
     private LoadMoreWrapper<MessagesModel> mLoadMoreWrapper;
     private List<MessagesModel> mDatas = new ArrayList<>();
@@ -72,6 +78,15 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         mPresenter.unsubscribe();
@@ -84,6 +99,7 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
             protected void convert(ViewHolder holder, MessagesModel model, int position) {
                 holder.setText(R.id.message_item_time_txv, TimeUtils.getTimeFormat(model.getCreateLine()));
                 ImageLoaderUtils.getInstance().loadCircleImage(MessageActivity.this, DeviceUtils.getUri(R.mipmap.ic_launcher), (ImageView) holder.getView(R.id.message_item_icon));
+                holder.getConvertView().setAlpha(model.getUnread() == 0 ? 0.5f : 1f);
                 switch (model.getType()) {
                     case Constants.MESSAGE_LIKE:
                         holder.setText(R.id.message_item_content_txv, getString(R.string.message_liked,
@@ -118,7 +134,42 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
         mAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-
+                mMessageDetailView.setVisibility(View.VISIBLE);
+                MessagesModel model = mDatas.get(position);
+                switch (model.getType()) {
+                    case Constants.MESSAGE_LIKE:
+                        mMessageDetailText.setText(getString(R.string.message_liked,
+                                model.getContent().getUserInfo().getUserName(), model.getContent().getFictionInfo().getTitle()));
+                        break;
+                    case Constants.MESSAGE_ONLINE:
+                        mMessageDetailText.setText(getString(R.string.message_online,
+                                model.getContent().getFictionInfo().getTitle(),
+                                model.getContent().getChapterInfo().getNum(),
+                                model.getContent().getChapterInfo().getName()));
+                        break;
+                    case Constants.MESSAGE_VIOLATION:
+                        mMessageDetailText.setText(getString(R.string.message_rejected,
+                                model.getContent().getFictionInfo().getTitle(),
+                                model.getContent().getChapterInfo().getNum(),
+                                model.getContent().getChapterInfo().getName(),
+                                model.getContent().getReason()));
+                        break;
+                    case Constants.MESSAGE_PARY_UPDATE:
+                        mMessageDetailText.setText(getString(R.string.message_pray_update,
+                                model.getContent().getUserInfo().getUserName(),
+                                model.getContent().getFictionInfo().getTitle()));
+                        break;
+                    case Constants.MESSAGE_STAR:
+                        mMessageDetailText.setText(getString(R.string.message_stared,
+                                model.getContent().getUserInfo().getUserName(),
+                                model.getContent().getFictionInfo().getTitle()));
+                        break;
+                }
+                if (mPresenter != null) {
+                    mPresenter.readMessage(model.getId());
+                    model.setUnread(0);
+                    view.setAlpha(model.getUnread() == 0 ? 0.5f : 1f);
+                }
             }
 
             @Override
@@ -136,7 +187,7 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
         mLoadMoreWrapper.setLoadMoreView(mLoadMoreView);
         mLoadMoreWrapper.setOnLoadMoreListener(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.addItemDecoration(new CommonVerticalItemDecoration(32));
+        //mRecyclerView.addItemDecoration(new CommonVerticalItemDecoration(32));
         mRecyclerView.setAdapter(mLoadMoreWrapper);
         new MessagePresenter(this);
     }
@@ -172,6 +223,15 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
         if (mPage != mPrePage) {
             mPresenter.getMessageList(mPage);
             mPrePage = mPage;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mMessageDetailView.getVisibility() == View.VISIBLE) {
+            mMessageDetailView.setVisibility(View.GONE);
+        } else {
+            super.onBackPressed();
         }
     }
 }

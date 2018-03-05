@@ -74,6 +74,22 @@ public class IMessageDataImpl implements IMessageData {
 
     @Override
     public void readMessage(String id) {
+        Subscription subscription = HttpUtils.getInstance().readMessage(new Subscriber() {
+            @Override
+            public void onCompleted() {
 
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(Object o) {
+
+            }
+        }, id);
+        mSubscriptions.add(subscription);
     }
 }
