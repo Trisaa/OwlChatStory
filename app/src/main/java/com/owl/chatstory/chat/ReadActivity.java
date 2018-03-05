@@ -6,12 +6,18 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.reward.RewardItem;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.owl.chatstory.R;
 import com.owl.chatstory.base.BaseActivity;
 import com.owl.chatstory.chat.adapter.ChatAsideDelegate;
@@ -45,7 +51,7 @@ import rx.Subscription;
  * Created by lebron on 2017/9/12.
  */
 
-public class ReadActivity extends BaseActivity implements ReadContract.View {
+public class ReadActivity extends BaseActivity implements ReadContract.View, RewardedVideoAdListener {
     public static final String EXTRA_FICTION_ID = "EXTRA_FICTION_ID";
     public static final String EXTRA_FICTION_NAME = "EXTRA_FICTION_NAME";
     @BindView(R.id.common_toolbar)
@@ -74,6 +80,10 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
     private List<String> mProgressList;//阅读进度
     private MenuItem mFavoriteMenu;
     private FictionStatusResponse mFictionStatus;
+    private RewardedVideoAd mRewardedVideoAd;
+    private String mChapterId;
+    private boolean isRewarded;
+
     private ChatNextDelegate.OnClickListener mNextListener = new ChatNextDelegate.OnClickListener() {
         @Override
         public void onClick() {
@@ -181,11 +191,28 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
                 clickNext();
             }
         });
+
+        mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this);
+        mRewardedVideoAd.setRewardedVideoAdListener(this);
+        loadRewardedVideo();
+
         new ReadPresenter(this);
+    }
+
+    private void loadRewardedVideo() {
+        mRewardedVideoAd.loadAd("ca-app-pub-8805953710729771/6340985560",
+                new AdRequest.Builder().build());
+    }
+
+    @Override
+    public void onResume() {
+        mRewardedVideoAd.resume(this);
+        super.onResume();
     }
 
     @Override
     protected void onDestroy() {
+        mRewardedVideoAd.destroy(this);
         super.onDestroy();
         stopAutoRead();
         mPresenter.unsubscribe();
@@ -193,6 +220,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
 
     @Override
     protected void onPause() {
+        mRewardedVideoAd.pause(this);
         super.onPause();
         try {
             if (mShowDatas != null && mDatas != null) {
@@ -239,10 +267,12 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
                     if (!mFictionStatus.getCollect()) {
                         mPresenter.collectFiction(mFictionDetailModel.getId());
                         mFictionStatus.setCollect(true);
+                        mFictionDetailModel.setFavorites(mFictionDetailModel.getFavorites() + 1);
                         updateFictionStatus(mFictionStatus);
                     } else {
                         mPresenter.uncollectFiction(mFictionDetailModel.getId());
                         mFictionStatus.setCollect(false);
+                        mFictionDetailModel.setFavorites(mFictionDetailModel.getFavorites() - 1);
                         updateFictionStatus(mFictionStatus);
                     }
                 } else {
@@ -375,7 +405,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
 
     @Override
     public void showWaittingDialog(final String chapterId) {
-        DialogUtils.showWaittingDialog(this, new DialogUtils.OnDialogClickListener() {
+        DialogUtils.showWaittingDialog(this, new DialogUtils.OnWaittingDialogClickListener() {
             @Override
             public void onOK() {
                 mPresenter.getChapterData(chapterId, 0, true);
@@ -385,12 +415,62 @@ public class ReadActivity extends BaseActivity implements ReadContract.View {
             public void onCancel() {
                 finish();
             }
-        });
+
+            @Override
+            public void watch() {
+                mChapterId = chapterId;
+                if (mRewardedVideoAd.isLoaded()) {
+                    mRewardedVideoAd.show();
+                }
+            }
+        }, mRewardedVideoAd.isLoaded());
     }
 
     @Override
     public void setPresenter(ReadContract.Presenter presenter) {
         mPresenter = presenter;
         mPresenter.getFictionData(getIntent().getStringExtra(EXTRA_FICTION_ID));
+    }
+
+    @Override
+    public void onRewardedVideoAdLoaded() {
+        Log.i("Lebron", "onRewardedVideoAdLoaded");
+        isRewarded = false;
+    }
+
+    @Override
+    public void onRewardedVideoAdOpened() {
+
+    }
+
+    @Override
+    public void onRewardedVideoStarted() {
+        Log.i("Lebron", "onRewardedVideoStarted");
+    }
+
+    @Override
+    public void onRewardedVideoAdClosed() {
+        Log.i("Lebron", "onRewardedVideoAdClosed");
+        loadRewardedVideo();
+        if (!isRewarded) {
+            finish();
+        }
+    }
+
+    @Override
+    public void onRewarded(RewardItem rewardItem) {
+        Log.i("Lebron", "onRewarded");
+        isRewarded = true;
+        mPresenter.getChapterData(mChapterId, 0, true);
+    }
+
+    @Override
+    public void onRewardedVideoAdLeftApplication() {
+
+    }
+
+    @Override
+    public void onRewardedVideoAdFailedToLoad(int i) {
+        Log.i("Lebron", "onRewardedVideoAdFailedToLoad");
     }
 }

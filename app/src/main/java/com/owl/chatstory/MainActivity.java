@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 
+import com.google.android.gms.ads.MobileAds;
 import com.owl.chatstory.base.BaseActivity;
 import com.owl.chatstory.billing.IabHelper;
 import com.owl.chatstory.billing.IabResult;
@@ -62,6 +63,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     @Override
     protected void initViewsAndData() {
+        MobileAds.initialize(this, "ca-app-pub-8805953710729771/6340985560");
         checkPurchase();
         mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override

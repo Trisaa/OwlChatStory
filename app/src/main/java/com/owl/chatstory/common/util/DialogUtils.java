@@ -53,7 +53,7 @@ public class DialogUtils {
         });
     }
 
-    public static void showWaittingDialog(final Activity activity, final OnDialogClickListener listener) {
+    public static void showWaittingDialog(final Activity activity, final OnWaittingDialogClickListener listener, boolean isAdLoaded) {
         if (activity == null || activity.isFinishing()) {
             return;
         }
@@ -72,6 +72,13 @@ public class DialogUtils {
                 return false;
             }
         });
+        if (isAdLoaded) {
+            dialogView.findViewById(R.id.watch_video_btn).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.share_btn).setVisibility(View.GONE);
+        } else {
+            dialogView.findViewById(R.id.watch_video_btn).setVisibility(View.GONE);
+            dialogView.findViewById(R.id.share_btn).setVisibility(View.VISIBLE);
+        }
         dialogView.findViewById(R.id.share_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,6 +103,15 @@ public class DialogUtils {
             public void onClick(View v) {
                 VIPActivity.start(activity);
                 activity.finish();
+                alertDialog.dismiss();
+            }
+        });
+        dialogView.findViewById(R.id.watch_video_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (listener != null) {
+                    listener.watch();
+                }
                 alertDialog.dismiss();
             }
         });
@@ -239,6 +255,14 @@ public class DialogUtils {
         void onOK();
 
         void onCancel();
+    }
+
+    public interface OnWaittingDialogClickListener {
+        void onOK();
+
+        void onCancel();
+
+        void watch();
     }
 
     public interface OnLanguageChooseListener {

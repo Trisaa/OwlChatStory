@@ -87,6 +87,17 @@
         android:textColor="#ffffff" />
 
     <TextView
+        android:id="@+id/watch_video_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="@drawable/common_red_btn_selector"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="@string/user_waitting_watch"
+        android:textColor="#ffffff" />
+
+    <TextView
         android:id="@+id/share_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

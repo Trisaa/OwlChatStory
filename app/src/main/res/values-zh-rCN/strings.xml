@@ -128,6 +128,7 @@
     <string name="user_vip_days">免费畅读%1$d天</string>
     <string name="user_waitting_share">分享好友\n免费阅读这篇</string>
     <string name="user_waitting_pay">购买VIP\n畅读所有小说</string>
+    <string name="user_waitting_watch">观看视频\n免费阅读这篇</string>
     <string name="user_waitting_tips">不给糖就捣乱，等待</string>
     <string name="user_waitting_or">或者</string>
     <string name="user_vip_questions">有任何疑问请联系</string>
