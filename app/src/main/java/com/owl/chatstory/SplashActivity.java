@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.owl.chatstory.base.BaseActivity;
 import com.owl.chatstory.common.util.Constants;
 
+import java.util.Locale;
+
 import butterknife.BindView;
 
 import static com.owl.chatstory.MainActivity.EXTRA_FICTION_ID;
@@ -43,8 +45,21 @@ public class SplashActivity extends BaseActivity {
 
         String type = getIntent().getStringExtra("type");
         String fictionId = getIntent().getStringExtra("ifiction_id");
-        Log.i("Lebron", "the key is " + type + " " + fictionId);
-        if (type != null && fictionId != null) {
+        String language = getIntent().getStringExtra("language");
+        boolean isLanguageSame = true;
+        try {
+            String country = Locale.getDefault().getCountry().toLowerCase();
+            String notificationLang;
+            if (language.equals(Constants.LANGUAGE_CHINESE)) {
+                notificationLang = "cn";
+            } else {
+                notificationLang = "tw";
+            }
+            isLanguageSame = country.equals(notificationLang);
+        } catch (Exception e) {
+        }
+        Log.i("Lebron", "the key is " + type + " " + fictionId + " " + isLanguageSame);
+        if (type != null && fictionId != null && isLanguageSame) {
             from = Integer.valueOf(type);
             mFictionId = fictionId;
         }

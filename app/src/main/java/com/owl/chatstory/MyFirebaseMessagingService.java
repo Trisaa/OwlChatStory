@@ -16,6 +16,7 @@ import com.owl.chatstory.chat.ReadActivity;
 import com.owl.chatstory.common.util.Constants;
 import com.owl.chatstory.user.message.MessageActivity;
 
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -50,14 +51,31 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private void sendNotification(String messageBody, Map<String, String> dataMap) {
         Intent intent = new Intent();
         String type = dataMap.get("type");
+        String language = dataMap.get("language");
+        boolean isLanguageSame = true;
         if (type == null) {
             return;
         }
+        try {
+            String country = Locale.getDefault().getCountry().toLowerCase();
+            String notificationLang;
+            if (language.equals(Constants.LANGUAGE_CHINESE)) {
+                notificationLang = "cn";
+            } else {
+                notificationLang = "tw";
+            }
+            isLanguageSame = country.equals(notificationLang);
+        } catch (Exception e) {
+        }
         if (type.equals(String.valueOf(Constants.MESSAGE_FICTION)) || type.equals(String.valueOf(Constants.MESSAGE_STAR))) {
             //推送小说或者推送收藏更新
-            intent.setClass(this, ReadActivity.class);
-            intent.putExtra(ReadActivity.EXTRA_FICTION_ID, dataMap.get("ifiction_id"));
-            intent.putExtra(ReadActivity.EXTRA_FICTION_NAME, "Owl");
+            if (isLanguageSame) {
+                intent.setClass(this, ReadActivity.class);
+                intent.putExtra(ReadActivity.EXTRA_FICTION_ID, dataMap.get("ifiction_id"));
+                intent.putExtra(ReadActivity.EXTRA_FICTION_NAME, "Owl");
+            } else {
+                intent.setClass(this, MainActivity.class);
+            }
         } else {
             intent.setClass(this, MessageActivity.class);
         }
