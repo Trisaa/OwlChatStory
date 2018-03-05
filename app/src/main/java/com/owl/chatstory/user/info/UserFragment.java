@@ -1,5 +1,6 @@
 package com.owl.chatstory.user.info;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.ActionBar;
@@ -64,6 +65,15 @@ public class UserFragment extends BaseFragment implements UserContract.View {
     @Override
     protected int getContentViewID() {
         return R.layout.fragment_user;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (PreferencesHelper.getInstance().isLogined() && mPresenter != null) {
+            mPresenter.getUnreadCount();
+        }
+
     }
 
     @Override
@@ -220,7 +230,7 @@ public class UserFragment extends BaseFragment implements UserContract.View {
             mUserModel = userModel;
             updateUserInfo();
         } else {
-            //Toast.makeText(getActivity(), R.string.common_network_error, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.common_network_error, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -232,7 +242,9 @@ public class UserFragment extends BaseFragment implements UserContract.View {
     @Override
     public void setPresenter(UserContract.Presenter presenter) {
         mPresenter = presenter;
-        mPresenter.subscribe();
-        checkDeviceTokenUploaded();
+        if (PreferencesHelper.getInstance().isLogined()) {
+            mPresenter.subscribe();
+            checkDeviceTokenUploaded();
+        }
     }
 }

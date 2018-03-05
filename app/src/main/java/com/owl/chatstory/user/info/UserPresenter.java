@@ -47,6 +47,11 @@ public class UserPresenter implements UserContract.Presenter, IUserData.OnUserIn
     }
 
     @Override
+    public void getUnreadCount() {
+        mMessageData.getUnreadCount(this);
+    }
+
+    @Override
     public void onMessageList(List<MessagesModel> list) {
 
     }

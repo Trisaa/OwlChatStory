@@ -11,6 +11,8 @@ import com.owl.chatstory.data.usersource.model.UserModel;
 public interface UserContract {
     interface Presenter extends BasePresenter {
         void uploadDeviceToken(String token);
+
+        void getUnreadCount();
     }
 
     interface View extends BaseView<Presenter> {
