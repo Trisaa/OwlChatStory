@@ -14,6 +14,8 @@ import com.owl.chatstory.billing.IabHelper;
 import com.owl.chatstory.billing.IabResult;
 import com.owl.chatstory.billing.Inventory;
 import com.owl.chatstory.billing.Purchase;
+import com.owl.chatstory.chat.ReadActivity;
+import com.owl.chatstory.common.util.Constants;
 import com.owl.chatstory.common.util.DialogUtils;
 import com.owl.chatstory.common.util.PreferencesHelper;
 import com.owl.chatstory.common.view.UnScrollViewPager;
@@ -21,6 +23,7 @@ import com.owl.chatstory.creation.MyCreationFragment;
 import com.owl.chatstory.data.homesource.model.UpdateModel;
 import com.owl.chatstory.home.HomeFragment;
 import com.owl.chatstory.user.info.UserFragment;
+import com.owl.chatstory.user.message.MessageActivity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +37,8 @@ import static com.owl.chatstory.common.util.Constants.WEEK_SKU;
 import static com.owl.chatstory.common.util.Constants.YEAR_SKU;
 
 public class MainActivity extends BaseActivity implements MainContract.View {
+    public static final String EXTRA_FROM_NOTIFICATION = "EXTRA_FROM_NOTIFICATION";
+    public static final String EXTRA_FICTION_ID = "EXTRA_FICTION_ID";
     private static final int[] HOME_TOOLBAR_TITLE = {
             R.string.main_tab_home,
             R.string.common_create,
@@ -53,7 +58,6 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     @Override
     protected void initToolBar() {
-        Log.i("Lebron", "the key is " + getIntent().getStringExtra("key"));
     }
 
     @Override
@@ -78,6 +82,20 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         });
         mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(new MainPagerAdapter(getSupportFragmentManager()));
+
+        //处理通知过来的逻辑
+        int fromNotification = getIntent().getIntExtra(EXTRA_FROM_NOTIFICATION, -1);
+        if (fromNotification != -1) {
+            if (fromNotification == Constants.MESSAGE_FICTION || fromNotification == Constants.MESSAGE_STAR) {
+                String fictionId = getIntent().getStringExtra(EXTRA_FICTION_ID);
+                if (fictionId != null) {
+                    ReadActivity.start(this, fictionId, "Owl");
+                }
+            } else {
+                MessageActivity.start(this);
+            }
+        }
+
         new MainPresenter(this);
     }
 

@@ -46,8 +46,8 @@ import rx.Subscription;
  */
 
 public class ReadActivity extends BaseActivity implements ReadContract.View {
-    private static final String EXTRA_FICTION_ID = "EXTRA_FICTION_ID";
-    private static final String EXTRA_FICTION_NAME = "EXTRA_FICTION_NAME";
+    public static final String EXTRA_FICTION_ID = "EXTRA_FICTION_ID";
+    public static final String EXTRA_FICTION_NAME = "EXTRA_FICTION_NAME";
     @BindView(R.id.common_toolbar)
     Toolbar mToolbar;
     @BindView(R.id.read_recyclerview)

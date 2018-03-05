@@ -12,6 +12,11 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.owl.chatstory.chat.ReadActivity;
+import com.owl.chatstory.common.util.Constants;
+import com.owl.chatstory.user.message.MessageActivity;
+
+import java.util.Map;
 
 /**
  * Created by lebron on 2018/3/1.
@@ -32,7 +37,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
             Log.d("Lebron", "Message Notification Body: " + remoteMessage.getNotification().getBody());
-            sendNotification(remoteMessage.getNotification().getBody());
+            sendNotification(remoteMessage.getNotification().getBody(), remoteMessage.getData());
         }
     }
 
@@ -42,8 +47,20 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      *
      * @param messageBody FCM message body received.
      */
-    private void sendNotification(String messageBody) {
-        Intent intent = new Intent(this, MainActivity.class);
+    private void sendNotification(String messageBody, Map<String, String> dataMap) {
+        Intent intent = new Intent();
+        String type = dataMap.get("type");
+        if (type == null) {
+            return;
+        }
+        if (type.equals(String.valueOf(Constants.MESSAGE_FICTION)) || type.equals(String.valueOf(Constants.MESSAGE_STAR))) {
+            //推送小说或者推送收藏更新
+            intent.setClass(this, ReadActivity.class);
+            intent.putExtra(ReadActivity.EXTRA_FICTION_ID, dataMap.get("ifiction_id"));
+            intent.putExtra(ReadActivity.EXTRA_FICTION_NAME, "Owl");
+        } else {
+            intent.setClass(this, MessageActivity.class);
+        }
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
