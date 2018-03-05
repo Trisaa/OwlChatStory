@@ -66,9 +66,9 @@ public class ILoginDataImpl implements ILoginData {
             @Override
             public void onNext(UserResponse userResponse) {
                 if (listener != null && userResponse != null) {
-                    listener.onLoginSuccess(userResponse.getUserModel());
                     Log.i("Lebron", " token " + userResponse.getToken());
                     PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_TOKEN, userResponse.getToken());
+                    listener.onLoginSuccess(userResponse.getUserModel());
                 }
             }
         }, createUserRequest(userModel));

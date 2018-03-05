@@ -10,6 +10,17 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class UserModel implements Parcelable {
+    public static final Creator<UserModel> CREATOR = new Creator<UserModel>() {
+        @Override
+        public UserModel createFromParcel(Parcel source) {
+            return new UserModel(source);
+        }
+
+        @Override
+        public UserModel[] newArray(int size) {
+            return new UserModel[size];
+        }
+    };
     @SerializedName("id")
     private String id;//这个ID是注册成功后你那边生成的用户主键
     @SerializedName("platform")
@@ -26,7 +37,23 @@ public class UserModel implements Parcelable {
     private String summary;//用户简介
     @SerializedName("email")
     private String email;
+    @SerializedName("device_token")
+    private String deviceToken;
 
+    public UserModel() {
+    }
+
+    protected UserModel(Parcel in) {
+        this.id = in.readString();
+        this.platform = in.readString();
+        this.platformId = in.readString();
+        this.name = in.readString();
+        this.icon = in.readString();
+        this.gender = in.readInt();
+        this.summary = in.readString();
+        this.email = in.readString();
+        this.deviceToken = in.readString();
+    }
 
     public String getId() {
         return id;
@@ -92,7 +119,12 @@ public class UserModel implements Parcelable {
         this.email = email;
     }
 
-    public UserModel() {
+    public String getDeviceToken() {
+        return deviceToken;
+    }
+
+    public void setDeviceToken(String deviceToken) {
+        this.deviceToken = deviceToken;
     }
 
     @Override
@@ -110,28 +142,6 @@ public class UserModel implements Parcelable {
         dest.writeInt(this.gender);
         dest.writeString(this.summary);
         dest.writeString(this.email);
+        dest.writeString(this.deviceToken);
     }
-
-    protected UserModel(Parcel in) {
-        this.id = in.readString();
-        this.platform = in.readString();
-        this.platformId = in.readString();
-        this.name = in.readString();
-        this.icon = in.readString();
-        this.gender = in.readInt();
-        this.summary = in.readString();
-        this.email = in.readString();
-    }
-
-    public static final Creator<UserModel> CREATOR = new Creator<UserModel>() {
-        @Override
-        public UserModel createFromParcel(Parcel source) {
-            return new UserModel(source);
-        }
-
-        @Override
-        public UserModel[] newArray(int size) {
-            return new UserModel[size];
-        }
-    };
 }

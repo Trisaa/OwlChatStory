@@ -191,6 +191,7 @@ public class IUserDataImpl implements IUserData {
             @Override
             public void onError(Throwable e) {
                 Log.i("Lebron", " upload device failed");
+                PreferencesHelper.getInstance().setBoolean(PreferencesHelper.KEY_DEVICE_TOKEN_UPLOADED, false);
             }
 
             @Override

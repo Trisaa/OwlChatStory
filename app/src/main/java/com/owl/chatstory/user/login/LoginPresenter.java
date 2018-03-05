@@ -3,10 +3,13 @@ package com.owl.chatstory.user.login;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.owl.chatstory.common.view.CustomTwitterLoginButton;
 import com.owl.chatstory.data.usersource.FacebookAuth;
 import com.owl.chatstory.data.usersource.ILoginData;
 import com.owl.chatstory.data.usersource.ILoginDataImpl;
+import com.owl.chatstory.data.usersource.IUserData;
+import com.owl.chatstory.data.usersource.IUserDataImpl;
 import com.owl.chatstory.data.usersource.TwitterAuth;
 import com.owl.chatstory.data.usersource.model.UserModel;
 
@@ -19,11 +22,13 @@ public class LoginPresenter implements LoginContract.Presenter, ILoginData.OnAut
     private ILoginData mLoginData;
     private TwitterAuth mTwitterAuth;
     private FacebookAuth mFacebookAuth;
+    private IUserData mUserData;
 
     public LoginPresenter(LoginContract.View view) {
         mView = view;
         mView.setPresenter(this);
         mLoginData = new ILoginDataImpl();
+        mUserData = new IUserDataImpl();
     }
 
     @Override
@@ -106,6 +111,10 @@ public class LoginPresenter implements LoginContract.Presenter, ILoginData.OnAut
         if (mView != null) {
             mView.loginResult(model);
             mView.showProgressBar(false);
+        }
+        if (mUserData != null) {
+            String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+            mUserData.uploadDeviceToken(refreshedToken);
         }
     }
 
