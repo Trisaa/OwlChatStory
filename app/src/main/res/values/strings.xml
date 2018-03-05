@@ -139,7 +139,7 @@
     <string name="search_key_word">Input key word</string>
 
     <string name="message_liked">%1$s liked your《%2$s》.</string>
-    <string name="message_stared">%1$s stared your《%2$s》.</string>
+    <string name="message_stared">Your star《%1$s》has updated No.%2$d：%3$s</string>
     <string name="message_pray_update">%1$s asked you to update《%2$s》.</string>
     <string name="message_rejected">Your《%1$s》No.%2$d %3$s has been rejected because of %4$s.</string>
     <string name="message_online">Your《%1$s》No.%2$d %3$s passed.</string>

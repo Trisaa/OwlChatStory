@@ -138,7 +138,7 @@
     <string name="search_key_word">输入关键字</string>
 
     <string name="message_liked">%1$s 觉得你的创作《%2$s》很赞</string>
-    <string name="message_stared">%1$s 收藏了你的创作《%2$s》</string>
+    <string name="message_stared">您收藏的《%1$s》已更新至 第%2$d章：%3$s</string>
     <string name="message_pray_update">%1$s 正在催您更新《%2$s》</string>
     <string name="message_rejected">您发表的《%1$s》第%2$d章 %3$s 因%4$s未通过审核</string>
     <string name="message_online">您发表的《%1$s》第%2$d章 %3$s 已上线</string>

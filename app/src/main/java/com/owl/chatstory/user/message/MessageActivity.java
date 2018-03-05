@@ -125,8 +125,9 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
                         break;
                     case Constants.MESSAGE_STAR:
                         holder.setText(R.id.message_item_content_txv, getString(R.string.message_stared,
-                                model.getContent().getUserInfo().getUserName(),
-                                model.getContent().getFictionInfo().getTitle()));
+                                model.getContent().getFictionInfo().getTitle(),
+                                model.getContent().getChapterInfo().getNum(),
+                                model.getContent().getChapterInfo().getName()));
                         break;
                 }
             }
@@ -161,8 +162,9 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
                         break;
                     case Constants.MESSAGE_STAR:
                         mMessageDetailText.setText(getString(R.string.message_stared,
-                                model.getContent().getUserInfo().getUserName(),
-                                model.getContent().getFictionInfo().getTitle()));
+                                model.getContent().getFictionInfo().getTitle(),
+                                model.getContent().getChapterInfo().getNum(),
+                                model.getContent().getChapterInfo().getName()));
                         break;
                 }
                 if (mPresenter != null) {
