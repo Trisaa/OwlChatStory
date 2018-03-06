@@ -171,4 +171,10 @@
 
     <include layout="@layout/common_loading_layout" />
 
+    <ImageView
+        android:id="@+id/create_guide_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
 </RelativeLayout>

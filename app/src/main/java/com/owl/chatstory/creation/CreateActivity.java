@@ -38,6 +38,7 @@ import com.owl.chatstory.common.util.DialogUtils;
 import com.owl.chatstory.common.util.FileUtils;
 import com.owl.chatstory.common.util.FirebaseUtil;
 import com.owl.chatstory.common.util.ImageLoaderUtils;
+import com.owl.chatstory.common.util.PreferencesHelper;
 import com.owl.chatstory.common.view.MaxWidthRecyclerView;
 import com.owl.chatstory.creation.adapter.ItemTouchCallback;
 import com.owl.chatstory.creation.adapter.RoleItemDecoration;
@@ -70,6 +71,10 @@ import static com.owl.chatstory.creation.BasicCreateActivity.PERMISSIONS_REQUEST
  */
 
 public class CreateActivity extends BaseActivity implements CreateContract.View {
+    public static final int GUIDE_IMAGES[] = {
+            R.mipmap.guide1, R.mipmap.guide2, R.mipmap.guide3,
+            R.mipmap.guide4, R.mipmap.guide5, R.mipmap.guide6
+    };
     private static final String EXTRA_FICTION_ID = "EXTRA_FICTION_ID";
     private static final String EXTRA_FICTION_MODEL = "EXTRA_FICTION_MODEL";
     @BindView(R.id.common_toolbar)
@@ -98,6 +103,8 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
     View mLoadingView;
     @BindView(R.id.toolbar_title)
     TextView mTitleView;
+    @BindView(R.id.create_guide_img)
+    ImageView mGuideImg;
 
     private CreateContract.Presenter mPresenter;
     private ImageView mDialogUserIcon;
@@ -110,6 +117,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
     private CommonAdapter<ActorModel> mEditRolesAdapter;
     private MultiItemTypeAdapter<MessageModel> mAdapter;
     private FictionModel mFictionModel;
+    private int mGuideIndex = 0;
 
     public static void start(Context context, FictionModel model) {
         Intent intent = new Intent(context, CreateActivity.class);
@@ -184,6 +192,7 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
 
     @Override
     protected void initViewsAndData() {
+        checkGuideImageVisibility();
         mFictionModel = getIntent().getParcelableExtra(EXTRA_FICTION_MODEL);
         if (mFictionModel != null) {
             if (mFictionModel.getList() != null) {
@@ -202,6 +211,28 @@ public class CreateActivity extends BaseActivity implements CreateContract.View 
         initRoleAdapter();
         initMessageAdapter();
         new CreatePresenter(this);
+    }
+
+    private void checkGuideImageVisibility() {
+        if (!PreferencesHelper.getInstance().getBoolean(PreferencesHelper.KEY_CREATE_GUIDE_SHOWED, false)) {
+            mGuideIndex = 0;
+            mToolbar.setVisibility(View.GONE);
+            mGuideImg.setVisibility(View.VISIBLE);
+            mGuideImg.setBackgroundResource(GUIDE_IMAGES[mGuideIndex]);
+            mGuideImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mGuideIndex++;
+                    if (mGuideIndex >= GUIDE_IMAGES.length) {
+                        mToolbar.setVisibility(View.VISIBLE);
+                        mGuideImg.setVisibility(View.GONE);
+                        PreferencesHelper.getInstance().setBoolean(PreferencesHelper.KEY_CREATE_GUIDE_SHOWED, true);
+                    } else {
+                        mGuideImg.setBackgroundResource(GUIDE_IMAGES[mGuideIndex]);
+                    }
+                }
+            });
+        }
     }
 
     @Override

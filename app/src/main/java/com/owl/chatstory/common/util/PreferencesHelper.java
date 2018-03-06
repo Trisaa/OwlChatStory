@@ -33,6 +33,8 @@ public class PreferencesHelper {
     public static final String KEY_PAID_FOR_VIP = "KEY_PAID_FOR_VIP";
     //是否已经上传过DeviceToken
     public static final String KEY_DEVICE_TOKEN_UPLOADED = "KEY_DEVICE_TOKEN_UPLOADED";
+    //是否展示过了创作引导
+    public static final String KEY_CREATE_GUIDE_SHOWED = "KEY_CREATE_GUIDE_SHOWED";
 
     private final static SharedPreferences mPref = MainApplication.getAppContext().getSharedPreferences(SETTING, Context.MODE_PRIVATE);
     private static PreferencesHelper mInstance = null;
