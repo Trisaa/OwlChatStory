@@ -76,6 +76,8 @@ dependencies {
     compile 'com.google.firebase:firebase-ads:11.6.2'
     //uCrop
     compile 'com.github.yalantis:ucrop:2.2.1'
+    //badge
+    compile 'q.rorbin:badgeview:1.1.3'
     testCompile 'junit:junit:4.12'
 }
 

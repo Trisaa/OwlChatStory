@@ -1,6 +1,7 @@
 package com.owl.chatstory;
 
 import android.support.annotation.NonNull;
+import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -30,6 +31,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
+import q.rorbin.badgeview.Badge;
+import q.rorbin.badgeview.QBadgeView;
 
 import static com.owl.chatstory.common.util.Constants.BASE64_ENCODED_PUBLIC_KEY;
 import static com.owl.chatstory.common.util.Constants.ONE_MONTH_SKU;
@@ -51,6 +54,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     BottomNavigationView mBottomNavigationView;
     private MainContract.Presenter mPresenter;
     private IabHelper mHelper;
+    private Badge mBadge;
 
     @Override
     protected int getContentViewID() {
@@ -99,6 +103,19 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         }
 
         new MainPresenter(this);
+    }
+
+    public void setBadge(boolean show) {
+        if (mBadge == null) {
+            BottomNavigationMenuView menuView = (BottomNavigationMenuView) mBottomNavigationView.getChildAt(0);
+            mBadge = new QBadgeView(this).bindTarget(menuView.getChildAt(2)).setGravityOffset(40, 6, true);
+        } else {
+            if (show) {
+                mBadge.setBadgeText("");
+            } else {
+                mBadge.hide(false);
+            }
+        }
     }
 
     private void checkPurchase() {

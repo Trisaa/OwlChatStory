@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
+import com.owl.chatstory.MainActivity;
 import com.owl.chatstory.R;
 import com.owl.chatstory.base.BaseFragment;
 import com.owl.chatstory.chat.FavoriteActivity;
@@ -233,6 +234,7 @@ public class UserFragment extends BaseFragment implements UserContract.View {
     @Override
     public void showMessageCount(int count) {
         mCountView.setText(count > 99 ? "..." : String.valueOf(count));
+        ((MainActivity) getActivity()).setBadge(count > 0);
     }
 
     @Override
