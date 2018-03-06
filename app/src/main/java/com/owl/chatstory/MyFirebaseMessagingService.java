@@ -59,13 +59,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         try {
             String country = Locale.getDefault().getCountry().toLowerCase();
             String notificationLang;
-            if (language.equals(Constants.LANGUAGE_CHINESE)) {
+            if (Constants.LANGUAGE_CHINESE.equals(language)) {
                 notificationLang = "cn";
             } else {
                 notificationLang = "tw";
             }
             isLanguageSame = country.equals(notificationLang);
         } catch (Exception e) {
+
         }
         if (type.equals(String.valueOf(Constants.MESSAGE_FICTION)) || type.equals(String.valueOf(Constants.MESSAGE_STAR))) {
             //推送小说或者推送收藏更新

@@ -37,7 +37,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
                 @Override
                 public void onError(Throwable e) {
-                    Log.i("Lebron", "MyFirebaseInstanceIDService upload device failed");
+                    Log.i("Lebron", "MyFirebaseInstanceIDService upload device failed "+e.toString());
                     PreferencesHelper.getInstance().setBoolean(PreferencesHelper.KEY_DEVICE_TOKEN_UPLOADED, false);
                 }
 

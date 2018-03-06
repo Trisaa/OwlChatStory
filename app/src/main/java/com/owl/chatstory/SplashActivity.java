@@ -50,13 +50,14 @@ public class SplashActivity extends BaseActivity {
         try {
             String country = Locale.getDefault().getCountry().toLowerCase();
             String notificationLang;
-            if (language.equals(Constants.LANGUAGE_CHINESE)) {
+            if (Constants.LANGUAGE_CHINESE.equals(language)) {
                 notificationLang = "cn";
             } else {
                 notificationLang = "tw";
             }
             isLanguageSame = country.equals(notificationLang);
         } catch (Exception e) {
+            Log.i("Lebron", e.toString());
         }
         Log.i("Lebron", "the key is " + type + " " + fictionId + " " + isLanguageSame);
         if (type != null && fictionId != null && isLanguageSame) {
