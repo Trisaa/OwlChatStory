@@ -33,13 +33,14 @@ public class ChatNextDelegate implements ItemViewDelegate<MessageModel> {
     @Override
     public void convert(ViewHolder holder, final MessageModel messageModel, int position) {
         holder.setVisible(R.id.read_over_layout, messageModel.isEnded());
-        holder.setVisible(R.id.read_next_chapter_layout, !messageModel.isLastChapter());
+        holder.setVisible(R.id.read_next_chapter_layout, false);
         if (!messageModel.isLastChapter() && messageModel.getNextChapterModel() != null) {
             holder.setText(R.id.read_next_fiction_name_txv, messageModel.getFictionName());
             holder.setText(R.id.read_next_chapter_name_txv, MainApplication.getAppContext().getString(R.string.chapter_num,
                     messageModel.getNextChapterModel().getNum(), messageModel.getNextChapterModel().getChapterName()));
+            holder.setVisible(R.id.read_next_chapter_layout, true);
         }
-        holder.setText(R.id.read_over_txv, messageModel.isLastChapter() ? MainApplication.getAppContext().getString(R.string.common_over) : MainApplication.getAppContext().getString(R.string.common_continue));
+        //holder.setText(R.id.read_over_txv, messageModel.isLastChapter() ? MainApplication.getAppContext().getString(R.string.common_over) : MainApplication.getAppContext().getString(R.string.common_continue));
         if (messageModel.isLastChapter()) {
             holder.setText(R.id.read_share_txv, MainApplication.getAppContext().getString(R.string.read_please_update));
         }

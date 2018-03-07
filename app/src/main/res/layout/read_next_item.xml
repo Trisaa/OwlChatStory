@@ -24,7 +24,7 @@
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:paddingTop="3dp"
-            android:text="@string/common_over"
+            android:text="@string/common_continue"
             android:textColor="#99000000"
             android:visibility="visible" />
 
