@@ -6,6 +6,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -82,7 +83,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
     private FictionStatusResponse mFictionStatus;
     private RewardedVideoAd mRewardedVideoAd;
     private String mChapterId;
-    private boolean isRewarded;
+    private boolean isRewarded, isHistoryAdded;
 
     private ChatNextDelegate.OnClickListener mNextListener = new ChatNextDelegate.OnClickListener() {
         @Override
@@ -354,7 +355,10 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
                     }
                     mAdapter.notifyItemChanged(i);
                     mRecyclerView.smoothScrollToPosition(i + 1);
-                    mPresenter.addToHistory(getIntent().getStringExtra(EXTRA_FICTION_ID));
+                    if (!isHistoryAdded) {
+                        mPresenter.addToHistory(getIntent().getStringExtra(EXTRA_FICTION_ID));
+                        isHistoryAdded = true;
+                    }
                 }
             } catch (Exception e) {
             }
@@ -369,7 +373,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
 
     @Override
     public void showFictionData(FictionModel model) {
-        mToolbar.setTitle(mFictionDetailModel.getTitle() + " (" + model.getNum() + ")");
+        mToolbar.setTitle(TextUtils.isEmpty(model.getName()) ? mFictionDetailModel.getTitle() : model.getName());
         mLastChapterId = model.getId();
         mLoadingView.setVisibility(View.GONE);
         mDatas = model.getList();

@@ -158,7 +158,7 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
                 @Override
                 protected void convert(ViewHolder holder, final ChapterModel chapterModel, int position) {
                     try {
-                        holder.setText(R.id.chapter_item_title_txv, getString(R.string.chapter_num, position, chapterModel.getChapterName()));
+                        holder.setText(R.id.chapter_item_title_txv, getString(R.string.chapter_num, chapterModel.getNum(), chapterModel.getChapterName()));
                         holder.setText(R.id.chapter_item_time_txv, TimeUtils.getTimeFormat(chapterModel.getCreateTime()));
                         holder.setVisible(R.id.chapter_item_vip_img, chapterModel.getVip() == 0 ? false : true);
                         holder.getConvertView().setOnClickListener(new View.OnClickListener() {
