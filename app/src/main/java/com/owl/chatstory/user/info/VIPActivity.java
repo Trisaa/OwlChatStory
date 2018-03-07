@@ -88,7 +88,6 @@ public class VIPActivity extends BaseActivity {
             base64EncodedPublicKey.trim();
             // compute your public key and store it in base64EncodedPublicKey
             mHelper = new IabHelper(this, base64EncodedPublicKey);
-            mHelper.enableDebugLogging(false);
             mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
                 @Override
                 public void onIabSetupFinished(IabResult result) {
@@ -148,7 +147,10 @@ public class VIPActivity extends BaseActivity {
     public void onDestroy() {
         super.onDestroy();
         if (mHelper != null) {
-            mHelper.dispose();
+            try {
+                mHelper.dispose();
+            } catch (Exception e) {
+            }
             mHelper = null;
         }
     }

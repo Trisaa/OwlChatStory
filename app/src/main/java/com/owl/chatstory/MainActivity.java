@@ -124,7 +124,6 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             base64EncodedPublicKey.trim();
             // compute your public key and store it in base64EncodedPublicKey
             mHelper = new IabHelper(this, base64EncodedPublicKey);
-            mHelper.enableDebugLogging(false);
             mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
                 @Override
                 public void onIabSetupFinished(IabResult result) {
@@ -194,7 +193,10 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         super.onDestroy();
         mPresenter.unsubscribe();
         if (mHelper != null) {
-            mHelper.dispose();
+            try {
+                mHelper.dispose();
+            } catch (Exception e) {
+            }
             mHelper = null;
         }
     }
