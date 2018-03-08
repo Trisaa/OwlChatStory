@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import com.owl.chatstory.MainApplication;
 import com.owl.chatstory.R;
+import com.owl.chatstory.data.chatsource.model.ChapterModel;
 import com.owl.chatstory.data.chatsource.model.MessageModel;
 import com.zhy.adapter.recyclerview.base.ItemViewDelegate;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -80,7 +81,7 @@ public class ChatNextDelegate implements ItemViewDelegate<MessageModel> {
             @Override
             public void onClick(View v) {
                 if (mListener != null) {
-                    mListener.onNextClick();
+                    mListener.onNextClick(messageModel.getNextChapterModel());
                 }
             }
         });
@@ -93,6 +94,6 @@ public class ChatNextDelegate implements ItemViewDelegate<MessageModel> {
 
         void onLongClick();
 
-        void onNextClick();
+        void onNextClick(ChapterModel chapterModel);
     }
 }

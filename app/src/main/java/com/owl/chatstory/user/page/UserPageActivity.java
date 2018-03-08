@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.owl.chatstory.R;
 import com.owl.chatstory.base.BaseActivity;
+import com.owl.chatstory.chat.DirectoryActivity;
 import com.owl.chatstory.chat.ReadActivity;
 import com.owl.chatstory.common.util.CommonVerticalItemDecoration;
 import com.owl.chatstory.common.util.ImageLoaderUtils;
@@ -109,7 +110,7 @@ public class UserPageActivity extends BaseActivity implements UserPageContract.V
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 if (position < mDatas.size()) {
-                    ReadActivity.start(UserPageActivity.this, mDatas.get(position).getId(), mDatas.get(position).getTitle());
+                    DirectoryActivity.start(UserPageActivity.this, mDatas.get(position).getId());
                 }
             }
 

@@ -2,7 +2,6 @@ package com.owl.chatstory.chat;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.ActionBar;
@@ -37,7 +36,7 @@ import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 import com.zhy.adapter.recyclerview.wrapper.LoadMoreWrapper;
 
-import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,8 +48,7 @@ import butterknife.BindView;
  */
 
 public class DirectoryActivity extends BaseActivity implements DirectoryContract.View, LoadMoreWrapper.OnLoadMoreListener {
-    private static final String EXTRA_FICTION_MODEL = "EXTRA_FICTION_MODEL";
-    private static final String EXTRA_FICTION_STATUS = "EXTRA_FICTION_STATUS";
+    public static final String EXTRA_FICTION_ID = "EXTRA_FICTION_ID";
     private static final int COLLAPSE_STATE_EXPANDED = 0;
     private static final int COLLAPSE_STATE_INTERNEDIATE = 1;
     private static final int COLLAPSE_STATE_COLLAPSED = 2;
@@ -77,6 +75,8 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
     private FictionStatusResponse mFictionStatusResponse;
     private FictionDetailModel fictionDetailModel;
     private int mCollapsingState = COLLAPSE_STATE_EXPANDED;
+    private View mHeaderView;
+    private String mFictionId;
 
     private AppBarLayout.OnOffsetChangedListener onOffsetChangedListener = new AppBarLayout.OnOffsetChangedListener() {
         @Override
@@ -103,12 +103,9 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
         }
     };
 
-    public static void start(Context context, FictionDetailModel model, FictionStatusResponse response) {
+    public static void start(Context context, String fictionId) {
         Intent intent = new Intent(context, DirectoryActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(EXTRA_FICTION_MODEL, model);
-        bundle.putParcelable(EXTRA_FICTION_STATUS, response);
-        intent.putExtras(bundle);
+        intent.putExtra(EXTRA_FICTION_ID, fictionId);
         context.startActivity(intent);
     }
 
@@ -150,77 +147,64 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
 
     @Override
     protected void initViewsAndData() {
-        fictionDetailModel = getIntent().getParcelableExtra(EXTRA_FICTION_MODEL);
-        final List<String> list = PreferencesHelper.getInstance().getFictionProgressList(fictionDetailModel.getId(), fictionDetailModel.getChapters().size());
-        if (fictionDetailModel != null) {
-            mDatas = fictionDetailModel.getChapters();
-            CommonAdapter<ChapterModel> adapter = new CommonAdapter<ChapterModel>(this, R.layout.directory_chapter_item, mDatas) {
-                @Override
-                protected void convert(ViewHolder holder, final ChapterModel chapterModel, int position) {
-                    try {
-                        holder.setText(R.id.chapter_item_title_txv, getString(R.string.chapter_num, chapterModel.getNum(), chapterModel.getChapterName()));
-                        holder.setText(R.id.chapter_item_time_txv, TimeUtils.getTimeFormat(chapterModel.getCreateTime()));
-                        holder.setVisible(R.id.chapter_item_vip_img, chapterModel.getVip() == 0 ? false : true);
-                        holder.getConvertView().setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                EventBus.getDefault().post(chapterModel);
-                                finish();
-                            }
-                        });
-                        if (position - 1 < list.size()) {
-                            holder.setText(R.id.chapter_item_progress_txv, list.get(position - 1) + "%");
-                        } else {
-                            holder.setText(R.id.chapter_item_progress_txv, 0 + "%");
+        mFictionId = getIntent().getStringExtra(EXTRA_FICTION_ID);
+        CommonAdapter<ChapterModel> adapter = new CommonAdapter<ChapterModel>(this, R.layout.directory_chapter_item, mDatas) {
+            @Override
+            protected void convert(ViewHolder holder, final ChapterModel chapterModel, int position) {
+                try {
+                    holder.setText(R.id.chapter_item_title_txv, getString(R.string.chapter_num, chapterModel.getNum(), chapterModel.getChapterName()));
+                    holder.setText(R.id.chapter_item_time_txv, TimeUtils.getTimeFormat(chapterModel.getCreateTime()));
+                    holder.setVisible(R.id.chapter_item_vip_img, chapterModel.getVip() == 0 ? false : true);
+                    holder.getConvertView().setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ReadActivity.start(DirectoryActivity.this, chapterModel, fictionDetailModel, mFictionStatusResponse);
                         }
-                    } catch (Exception e) {
-                    }
+                    });
+                    /*if (position - 1 < list.size()) {
+                        holder.setText(R.id.chapter_item_progress_txv, list.get(position - 1) + "%");
+                    } else {
+                        holder.setText(R.id.chapter_item_progress_txv, 0 + "%");
+                    }*/
+                } catch (Exception e) {
                 }
-            };
-            mTitleView.setText(fictionDetailModel.getTitle());
-            mToolbarTitleView.setText(fictionDetailModel.getTitle());
-            mTagsView.setText(fictionDetailModel.getTags().get(0));
-            ImageLoaderUtils.getInstance().loadImage(this, fictionDetailModel.getCover(), mCoverImage, R.color.colorPrimaryDark);
+            }
+        };
 
-            HeaderAndFooterWrapper<ChapterModel> headerAndFooterWrapper = new HeaderAndFooterWrapper<>(adapter);
-            headerAndFooterWrapper.addHeaderView(getHeaderView(fictionDetailModel));
-            mAdapter = new LoadMoreWrapper<>(headerAndFooterWrapper);
-            mLoadMoreView = LayoutInflater.from(this).inflate(R.layout.common_loading_more_layout, null);
-            mLoadMoreView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
-            mAdapter.setLoadMoreView(mLoadMoreView);
-            mAdapter.setOnLoadMoreListener(this);
+        HeaderAndFooterWrapper<ChapterModel> headerAndFooterWrapper = new HeaderAndFooterWrapper<>(adapter);
+        mHeaderView = getLayoutInflater().inflate(R.layout.directory_chapter_headerview, null);
+        headerAndFooterWrapper.addHeaderView(mHeaderView);
+        mAdapter = new LoadMoreWrapper<>(headerAndFooterWrapper);
+        mLoadMoreView = LayoutInflater.from(this).inflate(R.layout.common_loading_more_layout, null);
+        mLoadMoreView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
+        mAdapter.setLoadMoreView(mLoadMoreView);
+        mAdapter.setOnLoadMoreListener(this);
 
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-            mRecyclerView.setAdapter(mAdapter);
-            mAppBarLayout.addOnOffsetChangedListener(onOffsetChangedListener);
-            new DirectoryPresenter(this);
-        }
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setAdapter(mAdapter);
+        mAppBarLayout.addOnOffsetChangedListener(onOffsetChangedListener);
+        new DirectoryPresenter(this);
     }
 
-    private View getHeaderView(final FictionDetailModel fictionDetailModel) {
-        mFictionStatusResponse = getIntent().getParcelableExtra(EXTRA_FICTION_STATUS);
-        View view = getLayoutInflater().inflate(R.layout.directory_chapter_headerview, null);
-        view.findViewById(R.id.chapter_header_author_layout).setVisibility(View.VISIBLE);
-        view.findViewById(R.id.chapter_header_author_divider).setVisibility(View.VISIBLE);
-        view.findViewById(R.id.chapter_header_status_layout).setVisibility(View.VISIBLE);
-        final ImageView icon = view.findViewById(R.id.chapter_header_author_icon);
-        TextView mWatchesView = view.findViewById(R.id.chapter_header_watches_txv);
-        final TextView mLikesView = view.findViewById(R.id.chapter_header_likes_txv);
-        final TextView mStarsView = view.findViewById(R.id.chapter_header_collects_txv);
-        final ImageView mLikeImage = view.findViewById(R.id.chapter_header_likes_img);
-        final ImageView mStarImage = view.findViewById(R.id.chapter_header_collects_img);
+    private void setHeaderView() {
+        mHeaderView.findViewById(R.id.chapter_header_author_layout).setVisibility(View.VISIBLE);
+        mHeaderView.findViewById(R.id.chapter_header_author_divider).setVisibility(View.VISIBLE);
+        mHeaderView.findViewById(R.id.chapter_header_status_layout).setVisibility(View.VISIBLE);
+        final ImageView icon = mHeaderView.findViewById(R.id.chapter_header_author_icon);
+        TextView mWatchesView = mHeaderView.findViewById(R.id.chapter_header_watches_txv);
+        final TextView mLikesView = mHeaderView.findViewById(R.id.chapter_header_likes_txv);
+        final TextView mStarsView = mHeaderView.findViewById(R.id.chapter_header_collects_txv);
 
         ImageLoaderUtils.getInstance().loadCircleImage(this, fictionDetailModel.getWriter().getIcon(), icon, R.mipmap.user_default_icon);
         String author = TextUtils.isEmpty(fictionDetailModel.getWriter().getName()) ? getString(R.string.app_name) : fictionDetailModel.getWriter().getName();
-        ((TextView) view.findViewById(R.id.chapter_header_author_txv)).setText(author);
-        ((TextView) view.findViewById(R.id.chapter_header_describe_txv)).setText(fictionDetailModel.getSummary());
-        ((TextView) view.findViewById(R.id.chapter_header_chapters_txv)).setText(getString(R.string.common_update_chapter, fictionDetailModel.getUpinfo()));
+        ((TextView) mHeaderView.findViewById(R.id.chapter_header_author_txv)).setText(author);
+        ((TextView) mHeaderView.findViewById(R.id.chapter_header_describe_txv)).setText(fictionDetailModel.getSummary());
+        ((TextView) mHeaderView.findViewById(R.id.chapter_header_chapters_txv)).setText(getString(R.string.common_update_chapter, fictionDetailModel.getUpinfo()));
         mWatchesView.setText(getString(R.string.common_views_format, fictionDetailModel.getViews()));
         mLikesView.setText(getString(R.string.common_likes_format, fictionDetailModel.getLikes()));
         mStarsView.setText(getString(R.string.common_stars_format, fictionDetailModel.getFavorites()));
-        updateFictionStatus(mStarImage, mLikeImage, mFictionStatusResponse);
 
-        view.findViewById(R.id.chapter_header_author_layout).setOnClickListener(new View.OnClickListener() {
+        mHeaderView.findViewById(R.id.chapter_header_author_layout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(DirectoryActivity.this, UserPageActivity.class);
@@ -229,7 +213,15 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
                 startActivity(intent, transitionActivityOptions.toBundle());
             }
         });
-        view.findViewById(R.id.chapter_header_collects_layout).setOnClickListener(new View.OnClickListener() {
+    }
+
+    void setHeaderViewStatus() {
+        final ImageView mLikeImage = mHeaderView.findViewById(R.id.chapter_header_likes_img);
+        final ImageView mStarImage = mHeaderView.findViewById(R.id.chapter_header_collects_img);
+        final TextView mLikesView = mHeaderView.findViewById(R.id.chapter_header_likes_txv);
+        final TextView mStarsView = mHeaderView.findViewById(R.id.chapter_header_collects_txv);
+        updateFictionStatus(mStarImage, mLikeImage, mFictionStatusResponse);
+        mHeaderView.findViewById(R.id.chapter_header_collects_layout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (PreferencesHelper.getInstance().isLogined() && mFictionStatusResponse != null) {
@@ -246,14 +238,12 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
                         fictionDetailModel.setFavorites(fictionDetailModel.getFavorites() - 1 > 0 ? fictionDetailModel.getFavorites() - 1 : 0);
                         mStarsView.setText(getString(R.string.common_stars_format, fictionDetailModel.getFavorites()));
                     }
-                    EventBus.getDefault().post(mFictionStatusResponse);
-                    EventBus.getDefault().post(new FictionEvent(fictionDetailModel.getLikes(), fictionDetailModel.getFavorites()));
                 } else {
                     Toast.makeText(DirectoryActivity.this, R.string.common_login_first, Toast.LENGTH_SHORT).show();
                 }
             }
         });
-        view.findViewById(R.id.chapter_header_likes_layout).setOnClickListener(new View.OnClickListener() {
+        mHeaderView.findViewById(R.id.chapter_header_likes_layout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (PreferencesHelper.getInstance().isLogined() && mFictionStatusResponse != null) {
@@ -270,14 +260,11 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
                         fictionDetailModel.setLikes(fictionDetailModel.getLikes() - 1 > 0 ? fictionDetailModel.getLikes() - 1 : 0);
                         mLikesView.setText(getString(R.string.common_likes_format, fictionDetailModel.getLikes()));
                     }
-                    EventBus.getDefault().post(mFictionStatusResponse);
-                    EventBus.getDefault().post(new FictionEvent(fictionDetailModel.getLikes(), fictionDetailModel.getFavorites()));
                 } else {
                     Toast.makeText(DirectoryActivity.this, R.string.common_login_first, Toast.LENGTH_SHORT).show();
                 }
             }
         });
-        return view;
     }
 
     private void updateFictionStatus(ImageView view1, ImageView view2, FictionStatusResponse response) {
@@ -287,16 +274,36 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
         }
     }
 
+    @Subscribe
+    public void onFictionEvent(FictionEvent event) {
+        if (event != null && mHeaderView != null) {
+            mFictionStatusResponse = event.getResponse();
+            fictionDetailModel.setLikes(event.getLikes());
+            fictionDetailModel.setFavorites(event.getStars());
+            ImageView mLikeImage = mHeaderView.findViewById(R.id.chapter_header_likes_img);
+            ImageView mStarImage = mHeaderView.findViewById(R.id.chapter_header_collects_img);
+            TextView mLikesView = mHeaderView.findViewById(R.id.chapter_header_likes_txv);
+            TextView mStarsView = mHeaderView.findViewById(R.id.chapter_header_collects_txv);
+
+            updateFictionStatus(mStarImage, mLikeImage, mFictionStatusResponse);
+            mLikesView.setText(getString(R.string.common_likes_format, fictionDetailModel.getLikes()));
+            mStarsView.setText(getString(R.string.common_stars_format, fictionDetailModel.getFavorites()));
+        }
+    }
+
     @Override
     public void setPresenter(DirectoryContract.Presenter presenter) {
         mPresenter = presenter;
+        if (!TextUtils.isEmpty(mFictionId)) {
+            mPresenter.getFictionDetail(mFictionId);
+        }
     }
 
     @Override
     public void onLoadMoreRequested() {
-        if (mPresenter != null) {
+        if (mPresenter != null && fictionDetailModel != null) {
             if (mPage != mPrePage) {
-                mPresenter.getChapterList(fictionDetailModel.getId(), mPage);
+                mPresenter.getChapterList(mFictionId, mPage);
                 mPrePage = mPage;
             }
         }
@@ -312,5 +319,29 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
         }
         mDatas.addAll(list);
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showFictionDetail(FictionDetailModel model) {
+        fictionDetailModel = model;
+        if (fictionDetailModel != null) {
+            setHeaderView();
+            mTitleView.setText(fictionDetailModel.getTitle());
+            mToolbarTitleView.setText(fictionDetailModel.getTitle());
+            mTagsView.setText(fictionDetailModel.getTags().get(0));
+            ImageLoaderUtils.getInstance().loadImage(this, fictionDetailModel.getCover(), mCoverImage, R.color.colorPrimaryDark);
+            if (mDatas == null) {
+                mDatas = new ArrayList<>();
+            }
+            mDatas.clear();
+            mDatas.addAll(fictionDetailModel.getChapters());
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void showFictionStatus(FictionStatusResponse response) {
+        mFictionStatusResponse = response;
+        setHeaderViewStatus();
     }
 }

@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 
 import com.owl.chatstory.R;
 import com.owl.chatstory.base.BaseFragment;
+import com.owl.chatstory.chat.DirectoryActivity;
 import com.owl.chatstory.chat.ReadActivity;
 import com.owl.chatstory.common.util.CommonVerticalItemDecoration;
 import com.owl.chatstory.common.util.ImageLoaderUtils;
@@ -80,7 +81,7 @@ public class CategoryFragment extends BaseFragment implements CategoryContract.V
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 try {
-                    ReadActivity.start(getActivity(), mDatas.get(position).getId(), mDatas.get(position).getTitle());
+                    DirectoryActivity.start(getActivity(), mDatas.get(position).getId());
                 } catch (Exception e) {
                 }
             }

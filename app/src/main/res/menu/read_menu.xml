@@ -2,21 +2,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/read_menu_favorite"
+        android:id="@+id/read_menu_star"
         android:icon="@drawable/vector_unstar"
         android:title="@string/common_star"
+        app:showAsAction="ifRoom"></item>
+
+    <item
+        android:id="@+id/read_menu_favorite"
+        android:icon="@drawable/vector_unfavorite"
+        android:title="@string/common_favorite"
         app:showAsAction="ifRoom"></item>
 
     <item
         android:id="@+id/read_menu_share"
         android:icon="@drawable/vector_share"
         android:title="@string/common_share"
-        app:showAsAction="ifRoom"></item>
-
-    <item
-        android:id="@+id/read_menu_directory"
-        android:icon="@drawable/vector_directory"
-        android:title="@string/common_directory"
         app:showAsAction="ifRoom"></item>
 
 </menu>

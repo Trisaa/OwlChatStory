@@ -12,13 +12,12 @@ import com.owl.chatstory.data.chatsource.IHistoryData;
 import com.owl.chatstory.data.chatsource.IHistoryDataImpl;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
-import com.owl.chatstory.data.chatsource.model.FictionStatusResponse;
 
 /**
  * Created by lebron on 2017/9/14.
  */
 
-public class ReadPresenter implements ReadContract.Presenter, IFictionData.OnFictionListener, ICollectData.FictionStatusListener {
+public class ReadPresenter implements ReadContract.Presenter, IFictionData.OnFictionListener {
     private ReadContract.View mView;
     private IFictionData mFictionData;
     private IHistoryData mHistoryData;
@@ -33,18 +32,11 @@ public class ReadPresenter implements ReadContract.Presenter, IFictionData.OnFic
     }
 
     @Override
-    public void getFictionData(String id) {
-        mFictionData.getFictionDetail(id, "", this);
-        mCollectData.isFictionCollected(id, this);
-    }
-
-    @Override
     public void getChapterData(String id, int vip, boolean allow) {
         Log.i("Lebron", " getChapterData " + vip + " " + allow);
         if (allow) {
             mFictionData.getChapterDetail(id, "", this);
         } else {
-            //int random = new Random().nextInt(2);
             if (vip == 0) {
                 mFictionData.getChapterDetail(id, "", this);
             } else {
@@ -74,6 +66,11 @@ public class ReadPresenter implements ReadContract.Presenter, IFictionData.OnFic
     }
 
     @Override
+    public void likeFiction(int status, String id) {
+        mCollectData.likeFiction(status, id);
+    }
+
+    @Override
     public void prayUpdate(String id) {
         mCollectData.prayUpdate(id);
     }
@@ -95,14 +92,5 @@ public class ReadPresenter implements ReadContract.Presenter, IFictionData.OnFic
 
     @Override
     public void onFictionDetail(FictionDetailModel model) {
-        if (model != null && model.getChapters() != null) {
-            mView.showFictionDetailData(model);
-            getChapterData(model.getChapters().get(0).getChapterId(), model.getChapters().get(0).getVip(), false);
-        }
-    }
-
-    @Override
-    public void onStatus(FictionStatusResponse response) {
-        mView.updateFictionStatus(response);
     }
 }

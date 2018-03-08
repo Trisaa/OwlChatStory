@@ -3,6 +3,8 @@ package com.owl.chatstory.chat;
 import com.owl.chatstory.base.BasePresenter;
 import com.owl.chatstory.base.BaseView;
 import com.owl.chatstory.data.chatsource.model.ChapterModel;
+import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
+import com.owl.chatstory.data.chatsource.model.FictionStatusResponse;
 
 import java.util.List;
 
@@ -22,9 +24,15 @@ public interface DirectoryContract {
         void likeFiction(int status, String id);
 
         void getChapterList(String id, int page);
+
+        void getFictionDetail(String id);
     }
 
     interface View extends BaseView<Presenter> {
         void showChapterList(List<ChapterModel> list);
+
+        void showFictionDetail(FictionDetailModel model);
+
+        void showFictionStatus(FictionStatusResponse response);
     }
 }

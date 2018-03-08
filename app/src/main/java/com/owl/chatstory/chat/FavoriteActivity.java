@@ -88,7 +88,7 @@ public class FavoriteActivity extends BaseActivity implements FavoriteContract.V
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 if (position < mDatas.size()) {
-                    ReadActivity.start(FavoriteActivity.this, mDatas.get(position).getId(), mDatas.get(position).getTitle());
+                    DirectoryActivity.start(FavoriteActivity.this, mDatas.get(position).getId());
                 }
             }
 

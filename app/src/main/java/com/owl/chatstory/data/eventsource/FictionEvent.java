@@ -1,17 +1,20 @@
 package com.owl.chatstory.data.eventsource;
 
+import com.owl.chatstory.data.chatsource.model.FictionStatusResponse;
+
 /**
  * Created by lebron on 2018/3/4.
  */
 
 public class FictionEvent {
-
+    private FictionStatusResponse response;
     private int likes;
     private int stars;
 
-    public FictionEvent(int likes, int stars) {
+    public FictionEvent(int likes, int stars, FictionStatusResponse response) {
         this.likes = likes;
         this.stars = stars;
+        this.response = response;
     }
 
     public int getLikes() {
@@ -28,5 +31,13 @@ public class FictionEvent {
 
     public void setStars(int stars) {
         this.stars = stars;
+    }
+
+    public FictionStatusResponse getResponse() {
+        return response;
+    }
+
+    public void setResponse(FictionStatusResponse response) {
+        this.response = response;
     }
 }

@@ -2,6 +2,7 @@ package com.owl.chatstory.chat;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -39,22 +40,22 @@ import com.owl.chatstory.data.eventsource.FictionEvent;
 import com.owl.chatstory.data.homesource.model.ShareModel;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 
-import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import rx.Subscription;
 
 /**
  * Created by lebron on 2017/9/12.
  */
 
 public class ReadActivity extends BaseActivity implements ReadContract.View, RewardedVideoAdListener {
-    public static final String EXTRA_FICTION_ID = "EXTRA_FICTION_ID";
-    public static final String EXTRA_FICTION_NAME = "EXTRA_FICTION_NAME";
+    public static final String EXTRA_CHAPTER_MODEL = "EXTRA_CHAPTER_MODEL";
+    public static final String EXTRA_FICTION_MODEL = "EXTRA_FICTION_MODEL";
+    public static final String EXTRA_FICTION_STATUS = "EXTRA_FICTION_STATUS";
     @BindView(R.id.common_toolbar)
     Toolbar mToolbar;
     @BindView(R.id.read_recyclerview)
@@ -74,21 +75,18 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
     private MultiItemTypeAdapter<MessageModel> mAdapter;
     private List<MessageModel> mDatas;
     private List<MessageModel> mShowDatas = new ArrayList<>();
-    private Subscription mSubscription;
-    private FictionDetailModel mFictionDetailModel;
-    private String mLastChapterId;
-    private int mCurrentChapterIndex;//当前阅读的章节
-    private List<String> mProgressList;//阅读进度
-    private MenuItem mFavoriteMenu;
+    private MenuItem mFavoriteMenu, mStarMenu;
     private FictionStatusResponse mFictionStatus;
+    private FictionDetailModel mFictionDetailModel;
     private RewardedVideoAd mRewardedVideoAd;
     private String mChapterId;
     private boolean isRewarded, isHistoryAdded;
+    private ChapterModel mChapterModel;
+    private FictionModel mFictionModel;
 
     private ChatNextDelegate.OnClickListener mNextListener = new ChatNextDelegate.OnClickListener() {
         @Override
         public void onClick() {
-            stopAutoRead();
             clickNext();
         }
 
@@ -102,10 +100,10 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
             }
             ShareModel shareModel = new ShareModel();
             shareModel.setContent(getString(R.string.share_content));
-            if (mFictionDetailModel.getLanguage() == null || mLastChapterId == null) {
+            if (mFictionModel == null) {
                 shareModel.setUrl(ShareUtils.getShareAppUrl(ReadActivity.this));
             } else {
-                shareModel.setUrl(ShareUtils.getShareChapterUrl(mFictionDetailModel.getLanguage(), mLastChapterId));
+                shareModel.setUrl(ShareUtils.getShareChapterUrl(mFictionModel.getLanguage(), mFictionModel.getId()));
                 shareModel.setImage(mFictionDetailModel.getCover());
             }
             DialogUtils.showShareDialog(ReadActivity.this, shareModel);
@@ -113,34 +111,12 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
 
         @Override
         public void onLongClick() {
-            /*mSubscription = Observable.interval(1, TimeUnit.SECONDS).subscribe(new Subscriber<Long>() {
-                @Override
-                public void onCompleted() {
-
-                }
-
-                @Override
-                public void onError(Throwable e) {
-
-                }
-
-                @Override
-                public void onNext(Long aLong) {
-                    clickNext();
-                }
-            });*/
         }
 
         @Override
-        public void onNextClick() {
-            if (mCurrentChapterIndex < mProgressList.size()) {
-                mProgressList.set(mCurrentChapterIndex, String.valueOf(100));
-                PreferencesHelper.getInstance().setFictionProgressList(mFictionDetailModel.getId(), mProgressList);
-            }
-            mCurrentChapterIndex++;
-            if (mCurrentChapterIndex < mFictionDetailModel.getChapters().size()) {
-                String chapterId = mFictionDetailModel.getChapters().get(mCurrentChapterIndex).getChapterId();
-                mPresenter.getChapterData(chapterId, mFictionDetailModel.getChapters().get(mCurrentChapterIndex).getVip(), false);
+        public void onNextClick(ChapterModel chapterModel) {
+            if (chapterModel != null) {
+                mPresenter.getChapterData(chapterModel.getChapterId(), chapterModel.getVip(), false);
                 if (mShowDatas != null) {
                     mShowDatas.clear();
                 }
@@ -150,10 +126,13 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
         }
     };
 
-    public static void start(Context context, String fictionId, String fictionName) {
+    public static void start(Context context, ChapterModel model, FictionDetailModel fictionDetailModel, FictionStatusResponse response) {
         Intent intent = new Intent(context, ReadActivity.class);
-        intent.putExtra(EXTRA_FICTION_ID, fictionId);
-        intent.putExtra(EXTRA_FICTION_NAME, fictionName);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(EXTRA_CHAPTER_MODEL, model);
+        bundle.putParcelable(EXTRA_FICTION_MODEL, fictionDetailModel);
+        bundle.putParcelable(EXTRA_FICTION_STATUS, response);
+        intent.putExtras(bundle);
         context.startActivity(intent);
     }
 
@@ -165,7 +144,6 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
     @Override
     protected void initToolBar() {
         if (mToolbar != null) {
-            mToolbar.setTitle(getIntent().getStringExtra(EXTRA_FICTION_NAME));
             setSupportActionBar(mToolbar);
             ActionBar ab = getSupportActionBar();
             if (ab != null) {
@@ -176,6 +154,10 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
 
     @Override
     protected void initViewsAndData() {
+        mChapterModel = getIntent().getParcelableExtra(EXTRA_CHAPTER_MODEL);
+        mFictionDetailModel = getIntent().getParcelableExtra(EXTRA_FICTION_MODEL);
+        mFictionStatus = getIntent().getParcelableExtra(EXTRA_FICTION_STATUS);
+
         mClickTipsView.setVisibility(PreferencesHelper.getInstance().getBoolean(PreferencesHelper.KEY_CLICK_TIPS_SHOWED, false) ? View.GONE : View.VISIBLE);
         mAdapter = new MultiItemTypeAdapter<>(this, mShowDatas);
         mAdapter.addItemViewDelegate(new ChatLeftDelegate());
@@ -188,7 +170,6 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
         mRecyclerView.setBlankListener(new SpaceRecyclerView.BlankListener() {
             @Override
             public void onBlankClick() {
-                stopAutoRead();
                 clickNext();
             }
         });
@@ -215,7 +196,6 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
     protected void onDestroy() {
         mRewardedVideoAd.destroy(this);
         super.onDestroy();
-        stopAutoRead();
         mPresenter.unsubscribe();
     }
 
@@ -223,17 +203,6 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
     protected void onPause() {
         mRewardedVideoAd.pause(this);
         super.onPause();
-        try {
-            if (mShowDatas != null && mDatas != null) {
-                int progress = (mShowDatas.size() - 1) * 100 / mDatas.size();
-                if (progress < 0) {
-                    progress = 0;
-                }
-                mProgressList.set(mCurrentChapterIndex, String.valueOf(progress));
-                PreferencesHelper.getInstance().setFictionProgressList(mFictionDetailModel.getId(), mProgressList);
-            }
-        } catch (Exception e) {
-        }
     }
 
     @Override
@@ -245,25 +214,38 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.read_menu_directory:
-                if (mFictionDetailModel != null) {
-                    DirectoryActivity.start(this, mFictionDetailModel, mFictionStatus);
+            case R.id.read_menu_favorite:
+                if (PreferencesHelper.getInstance().isLogined() && mFictionDetailModel != null) {
+                    if (!mFictionStatus.getLiked()) {
+                        mPresenter.likeFiction(1, mFictionDetailModel.getId());
+                        mFictionStatus.setLiked(true);
+                        mFictionDetailModel.setLikes(mFictionDetailModel.getLikes() + 1);
+                        updateFictionStatus(mFictionStatus);
+                    } else {
+                        mPresenter.likeFiction(0, mFictionDetailModel.getId());
+                        mFictionStatus.setLiked(false);
+                        mFictionDetailModel.setLikes(mFictionDetailModel.getLikes() - 1);
+                        updateFictionStatus(mFictionStatus);
+                    }
+                    EventBus.getDefault().post(new FictionEvent(mFictionDetailModel.getLikes(), mFictionDetailModel.getFavorites(), mFictionStatus));
+                } else {
+                    Toast.makeText(this, R.string.common_login_first, Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.read_menu_share:
                 if (mFictionDetailModel != null) {
                     ShareModel shareModel = new ShareModel();
                     shareModel.setContent(getString(R.string.share_content));
-                    if (mFictionDetailModel.getLanguage() == null || mLastChapterId == null) {
+                    if (mFictionModel == null) {
                         shareModel.setUrl(ShareUtils.getShareAppUrl(this));
                     } else {
-                        shareModel.setUrl(ShareUtils.getShareChapterUrl(mFictionDetailModel.getLanguage(), mLastChapterId));
+                        shareModel.setUrl(ShareUtils.getShareChapterUrl(mFictionModel.getLanguage(), mFictionModel.getId()));
                         shareModel.setImage(mFictionDetailModel.getCover());
                     }
                     DialogUtils.showShareDialog(this, shareModel);
                 }
                 break;
-            case R.id.read_menu_favorite:
+            case R.id.read_menu_star:
                 if (PreferencesHelper.getInstance().isLogined() && mFictionDetailModel != null) {
                     if (!mFictionStatus.getCollect()) {
                         mPresenter.collectFiction(mFictionDetailModel.getId());
@@ -276,6 +258,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
                         mFictionDetailModel.setFavorites(mFictionDetailModel.getFavorites() - 1);
                         updateFictionStatus(mFictionStatus);
                     }
+                    EventBus.getDefault().post(new FictionEvent(mFictionDetailModel.getLikes(), mFictionDetailModel.getFavorites(), mFictionStatus));
                 } else {
                     Toast.makeText(this, R.string.common_login_first, Toast.LENGTH_SHORT).show();
                 }
@@ -287,44 +270,9 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         mFavoriteMenu = menu.findItem(R.id.read_menu_favorite);
+        mStarMenu = menu.findItem(R.id.read_menu_star);
         updateFictionStatus(mFictionStatus);
         return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Subscribe
-    public void onEvent(ChapterModel model) {
-        if (model != null) {
-            if (!mLastChapterId.equals(model.getChapterId()) && mPresenter != null) {
-                for (int i = 0; i < mFictionDetailModel.getChapters().size(); i++) {
-                    if (mFictionDetailModel.getChapters().get(i).getChapterId().equals(model.getChapterId())) {
-                        mCurrentChapterIndex = i;
-                        break;
-                    }
-                }
-                mPresenter.getChapterData(model.getChapterId(), model.getVip(), false);
-                if (mShowDatas != null) {
-                    mShowDatas.clear();
-                }
-                mProgressbar.setProgress(0);
-                mAdapter.notifyDataSetChanged();
-                mLoadingView.setVisibility(View.VISIBLE);
-            }
-        }
-    }
-
-    @Subscribe
-    public void onStatusEvent(FictionStatusResponse response) {
-        if (response != null) {
-            updateFictionStatus(response);
-        }
-    }
-
-    @Subscribe
-    public void onFictionEvent(FictionEvent event) {
-        if (event != null) {
-            mFictionDetailModel.setLikes(event.getLikes());
-            mFictionDetailModel.setFavorites(event.getStars());
-        }
     }
 
     @OnClick(R.id.read_click_tips_txv)
@@ -346,17 +294,20 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
                     mAppBarLayout.setExpanded(false);
                 } else {
                     mShowDatas.get(i).setEnded(true);
-                    if (mCurrentChapterIndex + 1 == mFictionDetailModel.getChapters().size()) {
+                    if (mFictionModel.getNum() == mFictionDetailModel.getUpinfo()) {
                         mShowDatas.get(i).setLastChapter(true);
                     } else {
                         mShowDatas.get(i).setLastChapter(false);
-                        mShowDatas.get(i).setNextChapterModel(mFictionDetailModel.getChapters().get(mCurrentChapterIndex + 1));
-                        mShowDatas.get(i).setFictionName(mFictionDetailModel.getTitle());
+                        ChapterModel chapterModel = getNextChapter();
+                        if (chapterModel != null) {
+                            mShowDatas.get(i).setNextChapterModel(chapterModel);
+                            mShowDatas.get(i).setFictionName(mFictionDetailModel.getTitle());
+                        }
                     }
                     mAdapter.notifyItemChanged(i);
                     mRecyclerView.smoothScrollToPosition(i + 1);
                     if (!isHistoryAdded) {
-                        mPresenter.addToHistory(getIntent().getStringExtra(EXTRA_FICTION_ID));
+                        mPresenter.addToHistory(mFictionDetailModel.getId());
                         isHistoryAdded = true;
                     }
                 }
@@ -365,45 +316,54 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
         }
     }
 
-    private void stopAutoRead() {
-        if (mSubscription != null) {
-            mSubscription.unsubscribe();
+    /**
+     * 找出当前章节的下一章信息
+     */
+    private ChapterModel getNextChapter() {
+        if (mFictionDetailModel != null && mFictionModel != null) {
+            List<ChapterModel> list = mFictionDetailModel.getChapters();
+            for (int i = 0; i < list.size(); i++) {
+                if (mFictionModel.getId().equals(list.get(i).getChapterId())) {
+                    if (i + 1 < list.size()) {
+                        return list.get(i + 1);
+                    } else {
+                        return null;
+                    }
+                }
+            }
         }
+        return null;
     }
 
     @Override
     public void showFictionData(FictionModel model) {
+        mFictionModel = model;
         mToolbar.setTitle(TextUtils.isEmpty(model.getName()) ? mFictionDetailModel.getTitle() : model.getName());
-        mLastChapterId = model.getId();
         mLoadingView.setVisibility(View.GONE);
+
         mDatas = model.getList();
         if (mShowDatas != null) {
             mShowDatas.clear();
         }
         MessageModel messageModel = new MessageModel();
         messageModel.setLocation("end");
-        int progress = mDatas.size() * Integer.valueOf(mProgressList.get(mCurrentChapterIndex)) / 100;
+        int progress = 0 / 100;
         mProgressbar.setProgress(progress);
         mShowDatas.addAll(mDatas.subList(0, progress > 0 ? progress : 1));
         mShowDatas.add(messageModel);
         mAdapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void showFictionDetailData(FictionDetailModel model) {
-        mFictionDetailModel = model;
-        mProgressList = PreferencesHelper.getInstance().getFictionProgressList(mFictionDetailModel.getId(), mFictionDetailModel.getChapters().size());
-        mCurrentChapterIndex = 0;
-    }
-
-    @Override
-    public void updateFictionStatus(FictionStatusResponse response) {
+    private void updateFictionStatus(FictionStatusResponse response) {
         if (response == null) {
             return;
         }
         mFictionStatus = response;
+        if (mStarMenu != null) {
+            mStarMenu.setIcon(mFictionStatus.getCollect() ? R.drawable.vector_stared : R.drawable.vector_unstar);
+        }
         if (mFavoriteMenu != null) {
-            mFavoriteMenu.setIcon(mFictionStatus.getCollect() ? R.drawable.vector_stared : R.drawable.vector_unstar);
+            mFavoriteMenu.setIcon(mFictionStatus.getLiked() ? R.drawable.vector_favorited : R.drawable.vector_unfavorite);
         }
     }
 
@@ -433,7 +393,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
     @Override
     public void setPresenter(ReadContract.Presenter presenter) {
         mPresenter = presenter;
-        mPresenter.getFictionData(getIntent().getStringExtra(EXTRA_FICTION_ID));
+        mPresenter.getChapterData(mChapterModel.getChapterId(), mChapterModel.getVip(), false);
     }
 
     @Override

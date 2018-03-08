@@ -12,7 +12,6 @@ import com.owl.chatstory.data.chatsource.model.FictionStatusResponse;
 
 public interface ReadContract {
     interface Presenter extends BasePresenter {
-        void getFictionData(String id);
 
         void getChapterData(String id, int vip, boolean allow);
 
@@ -22,15 +21,13 @@ public interface ReadContract {
 
         void uncollectFiction(String id);
 
+        void likeFiction(int status, String id);
+
         void prayUpdate(String id);
     }
 
     interface View extends BaseView<Presenter> {
         void showFictionData(FictionModel model);
-
-        void showFictionDetailData(FictionDetailModel model);
-
-        void updateFictionStatus(FictionStatusResponse response);
 
         void showWaittingDialog(String chapterId);
     }

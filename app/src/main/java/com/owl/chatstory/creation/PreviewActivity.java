@@ -18,6 +18,7 @@ import com.owl.chatstory.chat.adapter.ChatNextDelegate;
 import com.owl.chatstory.chat.adapter.ChatRightDelegate;
 import com.owl.chatstory.chat.adapter.ReadItemDecoration;
 import com.owl.chatstory.common.view.SpaceRecyclerView;
+import com.owl.chatstory.data.chatsource.model.ChapterModel;
 import com.owl.chatstory.data.chatsource.model.MessageModel;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 
@@ -62,7 +63,7 @@ public class PreviewActivity extends BaseActivity {
         }
 
         @Override
-        public void onNextClick() {
+        public void onNextClick(ChapterModel model) {
         }
     };
 

@@ -5,6 +5,9 @@ import com.owl.chatstory.data.chatsource.ICollectDataImpl;
 import com.owl.chatstory.data.chatsource.IFictionData;
 import com.owl.chatstory.data.chatsource.IFictionDataImpl;
 import com.owl.chatstory.data.chatsource.model.ChapterModel;
+import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
+import com.owl.chatstory.data.chatsource.model.FictionModel;
+import com.owl.chatstory.data.chatsource.model.FictionStatusResponse;
 
 import java.util.List;
 
@@ -12,7 +15,7 @@ import java.util.List;
  * Created by lebron on 2017/10/30.
  */
 
-public class DirectoryPresenter implements DirectoryContract.Presenter, IFictionData.OnChapterListener {
+public class DirectoryPresenter implements DirectoryContract.Presenter, IFictionData.OnChapterListener, IFictionData.OnFictionListener, ICollectData.FictionStatusListener {
     private DirectoryContract.View mView;
     private ICollectData mData;
     private IFictionData mFictionData;
@@ -26,7 +29,6 @@ public class DirectoryPresenter implements DirectoryContract.Presenter, IFiction
 
     @Override
     public void subscribe() {
-
     }
 
     @Override
@@ -54,7 +56,28 @@ public class DirectoryPresenter implements DirectoryContract.Presenter, IFiction
     }
 
     @Override
+    public void getFictionDetail(String id) {
+        mFictionData.getFictionDetail(id, "", this);
+        mData.isFictionCollected(id, this);
+    }
+
+    @Override
     public void onChapterList(List<ChapterModel> list) {
         mView.showChapterList(list);
+    }
+
+    @Override
+    public void onFiction(FictionModel model) {
+
+    }
+
+    @Override
+    public void onFictionDetail(FictionDetailModel model) {
+        mView.showFictionDetail(model);
+    }
+
+    @Override
+    public void onStatus(FictionStatusResponse response) {
+        mView.showFictionStatus(response);
     }
 }

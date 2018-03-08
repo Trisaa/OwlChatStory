@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.owl.chatstory.R;
 import com.owl.chatstory.base.BaseActivity;
+import com.owl.chatstory.chat.DirectoryActivity;
 import com.owl.chatstory.chat.FavoriteActivity;
 import com.owl.chatstory.chat.ReadActivity;
 import com.owl.chatstory.common.util.CommonVerticalItemDecoration;
@@ -103,7 +104,7 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
         mAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                ReadActivity.start(SearchActivity.this, mDatas.get(position).getFictionId(), mDatas.get(position).getTitle());
+                DirectoryActivity.start(SearchActivity.this, mDatas.get(position).getFictionId());
             }
 
             @Override

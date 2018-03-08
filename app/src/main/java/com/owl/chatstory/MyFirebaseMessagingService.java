@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.owl.chatstory.chat.DirectoryActivity;
 import com.owl.chatstory.chat.ReadActivity;
 import com.owl.chatstory.common.util.Constants;
 import com.owl.chatstory.user.message.MessageActivity;
@@ -71,9 +72,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (type.equals(String.valueOf(Constants.MESSAGE_FICTION)) || type.equals(String.valueOf(Constants.MESSAGE_STAR))) {
             //推送小说或者推送收藏更新
             if (isLanguageSame) {
-                intent.setClass(this, ReadActivity.class);
-                intent.putExtra(ReadActivity.EXTRA_FICTION_ID, dataMap.get("ifiction_id"));
-                intent.putExtra(ReadActivity.EXTRA_FICTION_NAME, "Owl");
+                intent.setClass(this, DirectoryActivity.class);
+                intent.putExtra(DirectoryActivity.EXTRA_FICTION_ID, dataMap.get("ifiction_id"));
             } else {
                 intent.setClass(this, MainActivity.class);
             }

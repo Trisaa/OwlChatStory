@@ -117,7 +117,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
         mAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                ReadActivity.start(HistoryActivity.this, mDatas.get(position).getId(), mDatas.get(position).getTitle());
+                DirectoryActivity.start(HistoryActivity.this, mDatas.get(position).getId());
             }
 
             @Override

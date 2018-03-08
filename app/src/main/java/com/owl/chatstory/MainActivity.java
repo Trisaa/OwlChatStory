@@ -16,6 +16,7 @@ import com.owl.chatstory.billing.IabHelper;
 import com.owl.chatstory.billing.IabResult;
 import com.owl.chatstory.billing.Inventory;
 import com.owl.chatstory.billing.Purchase;
+import com.owl.chatstory.chat.DirectoryActivity;
 import com.owl.chatstory.chat.ReadActivity;
 import com.owl.chatstory.common.util.Constants;
 import com.owl.chatstory.common.util.DialogUtils;
@@ -95,7 +96,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             if (fromNotification == Constants.MESSAGE_FICTION || fromNotification == Constants.MESSAGE_STAR) {
                 String fictionId = getIntent().getStringExtra(EXTRA_FICTION_ID);
                 if (fictionId != null) {
-                    ReadActivity.start(this, fictionId, "Owl");
+                    DirectoryActivity.start(this, fictionId);
                 }
             } else {
                 MessageActivity.start(this);
