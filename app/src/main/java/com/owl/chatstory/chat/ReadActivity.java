@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.reward.RewardItem;
@@ -72,6 +73,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
     View mLoadingView;
 
     private ReadContract.Presenter mPresenter;
+    private CallbackManager mCallbackManager;
     private MultiItemTypeAdapter<MessageModel> mAdapter;
     private List<MessageModel> mDatas;
     private List<MessageModel> mShowDatas = new ArrayList<>();
@@ -154,6 +156,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
 
     @Override
     protected void initViewsAndData() {
+        mCallbackManager = CallbackManager.Factory.create();
         mChapterModel = getIntent().getParcelableExtra(EXTRA_CHAPTER_MODEL);
         mFictionDetailModel = getIntent().getParcelableExtra(EXTRA_FICTION_MODEL);
         mFictionStatus = getIntent().getParcelableExtra(EXTRA_FICTION_STATUS);
@@ -179,6 +182,12 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
         loadRewardedVideo();
 
         new ReadPresenter(this);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     private void loadRewardedVideo() {
@@ -387,7 +396,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
                     mRewardedVideoAd.show();
                 }
             }
-        }, mRewardedVideoAd.isLoaded());
+        }, mRewardedVideoAd.isLoaded(), mCallbackManager);
     }
 
     @Override

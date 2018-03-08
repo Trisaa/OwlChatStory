@@ -14,6 +14,7 @@ import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
 import com.owl.chatstory.R;
 import com.owl.chatstory.data.homesource.model.ShareModel;
 import com.owl.chatstory.data.homesource.model.UpdateModel;
@@ -40,7 +41,7 @@ public class DialogUtils {
         dialogView.findViewById(R.id.share_facebook_txv).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShareUtils.shareToFacebook(activity, null, model);
+                ShareUtils.shareToFacebook(activity, null, model, null);
                 alertDialog.dismiss();
             }
         });
@@ -53,7 +54,7 @@ public class DialogUtils {
         });
     }
 
-    public static void showWaittingDialog(final Activity activity, final OnWaittingDialogClickListener listener, boolean isAdLoaded) {
+    public static void showWaittingDialog(final Activity activity, final OnWaittingDialogClickListener listener, boolean isAdLoaded, final CallbackManager callbackManager) {
         if (activity == null || activity.isFinishing()) {
             return;
         }
@@ -85,17 +86,21 @@ public class DialogUtils {
                 ShareModel shareModel = new ShareModel();
                 shareModel.setContent(activity.getString(R.string.share_content));
                 shareModel.setUrl(ShareUtils.getShareAppUrl(activity));
-                //ShareUtils.shareToFacebook(activity, null, shareModel);
-                DialogUtils.showShareDialog(activity, shareModel);
-                new Handler().postDelayed(new Runnable() {
+                ShareUtils.shareToFacebook(activity, callbackManager, shareModel, new ShareUtils.OnShareListener() {
                     @Override
-                    public void run() {
-                        if (listener != null) {
-                            listener.onOK();
+                    public void onShare(boolean success) {
+                        if (success) {
+                            if (listener != null) {
+                                listener.onOK();
+                            }
+                        } else {
+                            if (listener != null) {
+                                listener.onCancel();
+                            }
                         }
+                        alertDialog.dismiss();
                     }
-                }, 5000);
-                alertDialog.dismiss();
+                });
             }
         });
         dialogView.findViewById(R.id.pay_btn).setOnClickListener(new View.OnClickListener() {

@@ -36,23 +36,30 @@ public class ShareUtils {
         return WEB_APP_MARKET_INTENT_DATA + context.getPackageName();
     }
 
-    public static void shareToFacebook(Activity activity, CallbackManager callbackManager, ShareModel shareModel) {
+    public static void shareToFacebook(Activity activity, CallbackManager callbackManager, ShareModel shareModel, final OnShareListener listener) {
         ShareDialog shareDialog = new ShareDialog(activity);
         if (callbackManager != null) {
             shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
                 @Override
                 public void onSuccess(Sharer.Result result) {
-
+                    if (listener != null) {
+                        listener.onShare(true);
+                    }
                 }
 
                 @Override
                 public void onCancel() {
-
+                    if (listener != null) {
+                        listener.onShare(false);
+                    }
                 }
 
                 @Override
                 public void onError(FacebookException error) {
                     Log.i("ShareUtils", " FacebookException " + error.toString());
+                    if (listener != null) {
+                        listener.onShare(false);
+                    }
                 }
             });
         }
@@ -133,10 +140,10 @@ public class ShareUtils {
         }
     }
 
-    *//**
+    */
+
+    /**
      * 系统默认分享
-     *
-     * @param pkgName 需要分享的应用包名
      *//*
     public static void shareByDefault(Context context, String pkgName) {
         Intent intent = new Intent();
@@ -151,5 +158,9 @@ public class ShareUtils {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }*/
+
+    public interface OnShareListener {
+        void onShare(boolean success);
+    }
 
 }
