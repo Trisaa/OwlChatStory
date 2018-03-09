@@ -28,6 +28,7 @@ import com.owl.chatstory.common.util.TimeUtils;
 import com.owl.chatstory.data.chatsource.model.ChapterModel;
 import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionStatusResponse;
+import com.owl.chatstory.data.chatsource.model.ProgressModel;
 import com.owl.chatstory.data.eventsource.FictionEvent;
 import com.owl.chatstory.data.homesource.model.ShareModel;
 import com.owl.chatstory.user.page.UserPageActivity;
@@ -42,6 +43,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+
+import static com.owl.chatstory.chat.ReadActivity.EVENT_UPDATE_PROGRESS;
 
 /**
  * Created by lebron on 2017/10/30.
@@ -72,6 +75,7 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
     private View mLoadMoreView;
     private int mPage = 2, mPrePage;
     private List<ChapterModel> mDatas = new ArrayList<>();
+    private List<ProgressModel> mProgressList;
     private FictionStatusResponse mFictionStatusResponse;
     private FictionDetailModel fictionDetailModel;
     private int mCollapsingState = COLLAPSE_STATE_EXPANDED;
@@ -161,11 +165,7 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
                             ReadActivity.start(DirectoryActivity.this, chapterModel, fictionDetailModel, mFictionStatusResponse);
                         }
                     });
-                    /*if (position - 1 < list.size()) {
-                        holder.setText(R.id.chapter_item_progress_txv, list.get(position - 1) + "%");
-                    } else {
-                        holder.setText(R.id.chapter_item_progress_txv, 0 + "%");
-                    }*/
+                    holder.setText(R.id.chapter_item_progress_txv, chapterModel.getProgress() + "%");
                 } catch (Exception e) {
                 }
             }
@@ -274,6 +274,18 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
         }
     }
 
+    private void updateProgressData() {
+        mProgressList = PreferencesHelper.getInstance().getFictionProgressList(mFictionId);
+        for (ChapterModel chapterModel : mDatas) {
+            for (ProgressModel progressModel : mProgressList) {
+                if (chapterModel.getChapterId().equals(progressModel.getChapterId())) {
+                    chapterModel.setProgress(progressModel.getProgress());
+                    break;
+                }
+            }
+        }
+    }
+
     @Subscribe
     public void onFictionEvent(FictionEvent event) {
         if (event != null && mHeaderView != null) {
@@ -288,6 +300,14 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
             updateFictionStatus(mStarImage, mLikeImage, mFictionStatusResponse);
             mLikesView.setText(getString(R.string.common_likes_format, fictionDetailModel.getLikes()));
             mStarsView.setText(getString(R.string.common_stars_format, fictionDetailModel.getFavorites()));
+        }
+    }
+
+    @Subscribe
+    public void onProgresEvent(String event) {
+        if (EVENT_UPDATE_PROGRESS.equals(event)) {
+            updateProgressData();
+            mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -318,6 +338,8 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
             mLoadMoreView.findViewById(R.id.loading_more_layout).setVisibility(View.GONE);
         }
         mDatas.addAll(list);
+        fictionDetailModel.setChapters(mDatas);
+        updateProgressData();
         mAdapter.notifyDataSetChanged();
     }
 
@@ -335,6 +357,7 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
             }
             mDatas.clear();
             mDatas.addAll(fictionDetailModel.getChapters());
+            updateProgressData();
             mAdapter.notifyDataSetChanged();
         }
     }

@@ -8,9 +8,10 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.owl.chatstory.MainApplication;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
+import com.owl.chatstory.data.chatsource.model.ProgressModel;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -89,46 +90,31 @@ public class PreferencesHelper {
         return !TextUtils.isEmpty(mPref.getString(KEY_USER_ID, ""));
     }
 
-    public void setFictionProgressList(String key, List<String> list) {
-        String string = "";
-        for (int i = 0; i < list.size(); i++) {
-            string += list.get(i);
-            if (i != list.size() - 1) {
-                string += ",";
-            }
-        }
-        mPref.edit().putString(key, string).apply();
+    //设置小说阅读进度
+    public void setFictionProgressList(String key, List<ProgressModel> list) {
+        Type listType = new TypeToken<List<ProgressModel>>() {
+        }.getType();
+        Gson gson = new Gson();
+        String json = gson.toJson(list, listType);
+        mPref.edit().putString(key + "progress", json).apply();
     }
 
     /**
      * 获取小说章节的阅读进度
      *
      * @param fictionId
-     * @param size
      * @return
      */
-    public List<String> getFictionProgressList(String fictionId, int size) {
-        String temp = mPref.getString(fictionId, "");
-        if (!TextUtils.isEmpty(temp)) {
-            List<String> list = Arrays.asList(temp.split(","));
-            int preSize = list.size();
-            //说明章节有更新
-            if (preSize < size) {
-                List<String> newlist = new ArrayList();
-                newlist.addAll(list);
-                for (int i = preSize; i < size; i++) {
-                    newlist.add(String.valueOf(0));
-                }
-                return newlist;
-            }
-            return list;
-        } else {
-            List<String> list = new ArrayList();
-            for (int i = 0; i < size; i++) {
-                list.add(String.valueOf(0));
-            }
-            return list;
+    public List<ProgressModel> getFictionProgressList(String fictionId) {
+        String temp = mPref.getString(fictionId + "progress", "");
+        Type listType = new TypeToken<List<ProgressModel>>() {
+        }.getType();
+        Gson gson = new Gson();
+        List<ProgressModel> target = gson.fromJson(temp, listType);
+        if (target == null) {
+            target = new ArrayList<>();
         }
+        return target;
     }
 
     public List<FictionModel> getLocalChapterList(String key) {

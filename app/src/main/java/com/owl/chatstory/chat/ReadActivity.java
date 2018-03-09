@@ -37,6 +37,7 @@ import com.owl.chatstory.data.chatsource.model.FictionDetailModel;
 import com.owl.chatstory.data.chatsource.model.FictionModel;
 import com.owl.chatstory.data.chatsource.model.FictionStatusResponse;
 import com.owl.chatstory.data.chatsource.model.MessageModel;
+import com.owl.chatstory.data.chatsource.model.ProgressModel;
 import com.owl.chatstory.data.eventsource.FictionEvent;
 import com.owl.chatstory.data.homesource.model.ShareModel;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
@@ -57,6 +58,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
     public static final String EXTRA_CHAPTER_MODEL = "EXTRA_CHAPTER_MODEL";
     public static final String EXTRA_FICTION_MODEL = "EXTRA_FICTION_MODEL";
     public static final String EXTRA_FICTION_STATUS = "EXTRA_FICTION_STATUS";
+    public static final String EVENT_UPDATE_PROGRESS = "EVENT_UPDATE_PROGRESS";
     @BindView(R.id.common_toolbar)
     Toolbar mToolbar;
     @BindView(R.id.read_recyclerview)
@@ -77,6 +79,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
     private MultiItemTypeAdapter<MessageModel> mAdapter;
     private List<MessageModel> mDatas;
     private List<MessageModel> mShowDatas = new ArrayList<>();
+    private List<ProgressModel> mProgressList;
     private MenuItem mFavoriteMenu, mStarMenu;
     private FictionStatusResponse mFictionStatus;
     private FictionDetailModel mFictionDetailModel;
@@ -118,6 +121,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
         @Override
         public void onNextClick(ChapterModel chapterModel) {
             if (chapterModel != null) {
+                saveProgressList(100);
                 mPresenter.getChapterData(chapterModel.getChapterId(), chapterModel.getVip(), false);
                 if (mShowDatas != null) {
                     mShowDatas.clear();
@@ -160,6 +164,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
         mChapterModel = getIntent().getParcelableExtra(EXTRA_CHAPTER_MODEL);
         mFictionDetailModel = getIntent().getParcelableExtra(EXTRA_FICTION_MODEL);
         mFictionStatus = getIntent().getParcelableExtra(EXTRA_FICTION_STATUS);
+        mProgressList = PreferencesHelper.getInstance().getFictionProgressList(mFictionDetailModel.getId());
 
         mClickTipsView.setVisibility(PreferencesHelper.getInstance().getBoolean(PreferencesHelper.KEY_CLICK_TIPS_SHOWED, false) ? View.GONE : View.VISIBLE);
         mAdapter = new MultiItemTypeAdapter<>(this, mShowDatas);
@@ -211,7 +216,38 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
     @Override
     protected void onPause() {
         mRewardedVideoAd.pause(this);
+        //记录当前阅读进度
+        int progress = (mShowDatas.size() - 1) * 100 / mDatas.size();
+        if (progress < 0) {
+            progress = 0;
+        }
+        saveProgressList(progress);
+        EventBus.getDefault().post(EVENT_UPDATE_PROGRESS);
         super.onPause();
+    }
+
+    private void saveProgressList(int progress) {
+        try {
+            if (mProgressList != null && mFictionModel != null) {
+                boolean contained = false;
+                for (int i = 0; i < mProgressList.size(); i++) {
+                    ProgressModel model = mProgressList.get(i);
+                    if (model.getChapterId().equals(mFictionModel.getId())) {
+                        contained = true;
+                        model.setProgress(progress);
+                        break;
+                    }
+                }
+                if (!contained) {
+                    ProgressModel model = new ProgressModel();
+                    model.setChapterId(mFictionModel.getId());
+                    model.setProgress(progress);
+                    mProgressList.add(model);
+                }
+                PreferencesHelper.getInstance().setFictionProgressList(mFictionModel.getIfiction_id(), mProgressList);
+            }
+        } catch (Exception e) {
+        }
     }
 
     @Override
@@ -356,11 +392,19 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
         }
         MessageModel messageModel = new MessageModel();
         messageModel.setLocation("end");
-        int progress = 0 / 100;
+        int progress = 0;
         mProgressbar.setProgress(progress);
+        for (ProgressModel progressModel : mProgressList) {
+            if (progressModel.getChapterId().equals(mFictionModel.getId())) {
+                mProgressbar.setProgress(progressModel.getProgress());
+                progress = mDatas.size() * progressModel.getProgress() / 100;
+                break;
+            }
+        }
         mShowDatas.addAll(mDatas.subList(0, progress > 0 ? progress : 1));
         mShowDatas.add(messageModel);
         mAdapter.notifyDataSetChanged();
+        mRecyclerView.smoothScrollToPosition(mAdapter.getItemCount() - 1);
     }
 
     private void updateFictionStatus(FictionStatusResponse response) {

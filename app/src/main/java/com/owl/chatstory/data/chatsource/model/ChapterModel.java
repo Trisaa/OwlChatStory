@@ -10,6 +10,17 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class ChapterModel implements Parcelable {
+    public static final Creator<ChapterModel> CREATOR = new Creator<ChapterModel>() {
+        @Override
+        public ChapterModel createFromParcel(Parcel source) {
+            return new ChapterModel(source);
+        }
+
+        @Override
+        public ChapterModel[] newArray(int size) {
+            return new ChapterModel[size];
+        }
+    };
     @SerializedName("id")
     private String chapterId;
     @SerializedName("num")
@@ -22,6 +33,20 @@ public class ChapterModel implements Parcelable {
     private long updateTime;
     @SerializedName("createline")
     private long createTime;
+    private int progress = 0;
+
+    public ChapterModel() {
+    }
+
+    protected ChapterModel(Parcel in) {
+        this.chapterId = in.readString();
+        this.num = in.readInt();
+        this.chapterName = in.readString();
+        this.vip = in.readInt();
+        this.updateTime = in.readLong();
+        this.createTime = in.readLong();
+        this.progress = in.readInt();
+    }
 
     public String getChapterId() {
         return chapterId;
@@ -71,7 +96,12 @@ public class ChapterModel implements Parcelable {
         this.createTime = createTime;
     }
 
-    public ChapterModel() {
+    public int getProgress() {
+        return progress;
+    }
+
+    public void setProgress(int progress) {
+        this.progress = progress;
     }
 
     @Override
@@ -87,26 +117,6 @@ public class ChapterModel implements Parcelable {
         dest.writeInt(this.vip);
         dest.writeLong(this.updateTime);
         dest.writeLong(this.createTime);
+        dest.writeInt(this.progress);
     }
-
-    protected ChapterModel(Parcel in) {
-        this.chapterId = in.readString();
-        this.num = in.readInt();
-        this.chapterName = in.readString();
-        this.vip = in.readInt();
-        this.updateTime = in.readLong();
-        this.createTime = in.readLong();
-    }
-
-    public static final Creator<ChapterModel> CREATOR = new Creator<ChapterModel>() {
-        @Override
-        public ChapterModel createFromParcel(Parcel source) {
-            return new ChapterModel(source);
-        }
-
-        @Override
-        public ChapterModel[] newArray(int size) {
-            return new ChapterModel[size];
-        }
-    };
 }
