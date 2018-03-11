@@ -20,7 +20,7 @@ import java.io.File;
 
 public class FirebaseUtil {
     public static void upLoadFile(String path, final OnUploadListener listener) {
-        FirebaseStorage storage = FirebaseStorage.getInstance("gs://owl-android.appspot.com");
+        FirebaseStorage storage = FirebaseStorage.getInstance("gs://owlchat-55f2c.appspot.com");
         StorageReference storageRef = storage.getReference();
         Uri file = Uri.fromFile(new File(path));
         String folder = BuildConfig.DEBUG ? "test/" : "images/";

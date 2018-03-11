@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Owl</string>
+    <string name="app_name" translatable="false">Owl ChatStory</string>
 
     <string name="common_login">Login</string>
     <string name="common_history">History</string>

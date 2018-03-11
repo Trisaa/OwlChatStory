@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "144805300391",
-    "firebase_url": "https://owl-android.firebaseio.com",
-    "project_id": "owl-android",
-    "storage_bucket": "owl-android.appspot.com"
+    "project_number": "1075448376426",
+    "firebase_url": "https://owlchat-55f2c.firebaseio.com",
+    "project_id": "owlchat-55f2c",
+    "storage_bucket": "owlchat-55f2c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:144805300391:android:27ab9ec897a3eaab",
+        "mobilesdk_app_id": "1:1075448376426:android:bbfe9a65f64e20e3",
         "android_client_info": {
-          "package_name": "com.owl.chatstory"
+          "package_name": "com.tap.chatstory"
         }
       },
       "oauth_client": [
         {
-          "client_id": "144805300391-qkp803pdor5c1ueshdmdfcq6vf0u0it6.apps.googleusercontent.com",
+          "client_id": "1075448376426-hrh5ogit6q67vrc7ffgegs8kp5t6ta7m.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBJz8vOFQnk3l2NubZ1kRJdcwy8CkvcOhc"
+          "current_key": "AIzaSyC3mYFDZTM4MOPqAW3aWcfzlko5sdNbKyw"
         }
       ],
       "services": {

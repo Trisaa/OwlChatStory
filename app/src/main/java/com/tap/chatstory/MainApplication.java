@@ -36,7 +36,7 @@ public class MainApplication extends Application {
     private void initTwitter() {
         TwitterConfig config = new TwitterConfig.Builder(this)
                 .logger(new DefaultLogger(Log.DEBUG))
-                .twitterAuthConfig(new TwitterAuthConfig("r8Of5bAlbCoDnrMc7j60JEnFP", "1ON6sa9f2CZx92OjWBn9g2o5RzCpyZ3kwmNjsO4kfWHpHwVbU3"))
+                .twitterAuthConfig(new TwitterAuthConfig("zVm1hidp9aFBYWSOHy2FvcL58", "vt8kre8fhVXJ19ifyPnLZasV1fUyRDA26FKgITwjvC5f0X9D09"))
                 .debug(true)
                 .build();
         Twitter.initialize(config);

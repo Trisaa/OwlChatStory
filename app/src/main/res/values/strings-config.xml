@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="facebook_app_id" translatable="false">154478538623491</string>
-    <string name="fb_login_protocol_scheme" translatable="false">fb154478538623491</string>
+    <string name="facebook_app_id" translatable="false">177997012834171</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb177997012834171</string>
 
     <!--Share elements-->
     <string name="share_user_icon" translatable="false">share_user_icon</string>
