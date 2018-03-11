@@ -118,7 +118,7 @@
                     android:foreground="?android:attr/actionBarItemBackground"
                     android:src="@mipmap/create_left_role" />
 
-                <com.owl.chatstory.common.view.MaxWidthRecyclerView
+                <com.tap.chatstory.common.view.MaxWidthRecyclerView
                     android:id="@+id/create_second_role_recycler"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp" />

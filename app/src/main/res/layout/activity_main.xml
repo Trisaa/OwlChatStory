@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.owl.chatstory.MainActivity">
+    tools:context="com.tap.chatstory.MainActivity">
 
-    <com.owl.chatstory.common.view.UnScrollViewPager
+    <com.tap.chatstory.common.view.UnScrollViewPager
         android:id="@+id/main_viewpager"
         android:layout_width="match_parent"
         android:layout_height="0dp"

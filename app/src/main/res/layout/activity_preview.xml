@@ -20,7 +20,7 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <com.owl.chatstory.common.view.SpaceRecyclerView
+        <com.tap.chatstory.common.view.SpaceRecyclerView
             android:id="@+id/read_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

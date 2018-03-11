@@ -4,7 +4,7 @@ apply plugin: 'io.fabric'
 android {
     compileSdkVersion 26
     defaultConfig {
-        applicationId "com.owl.chatstory"
+        applicationId "com.tap.chatstory"
         minSdkVersion 21
         targetSdkVersion 25
         versionCode 10

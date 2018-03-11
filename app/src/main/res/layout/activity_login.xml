@@ -52,7 +52,7 @@
             android:textColor="@color/colorAccent" />
     </LinearLayout>
 
-    <com.owl.chatstory.common.view.CustomTwitterLoginButton
+    <com.tap.chatstory.common.view.CustomTwitterLoginButton
         android:id="@+id/login_twitter_btn"
         android:layout_width="216dp"
         android:layout_height="wrap_content"

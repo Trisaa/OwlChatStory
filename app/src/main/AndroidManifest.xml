@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.owl.chatstory">
+    package="com.tap.chatstory">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -12,7 +12,7 @@
     <uses-permission android:name="com.android.vending.BILLING" />
 
     <application
-        android:name=".MainApplication"
+        android:name="com.tap.chatstory.MainApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -21,7 +21,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".SplashActivity"
+            android:name="com.tap.chatstory.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,87 +31,87 @@
         </activity>
 
         <activity
-            android:name=".MainActivity"
+            android:name="com.tap.chatstory.MainActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".user.login.LoginActivity"
+            android:name="com.tap.chatstory.user.login.LoginActivity"
             android:label="@string/common_login"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".chat.ReadActivity"
+            android:name="com.tap.chatstory.chat.ReadActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".chat.DirectoryActivity"
+            android:name="com.tap.chatstory.chat.DirectoryActivity"
             android:label="@string/common_directory"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".chat.HistoryActivity"
+            android:name="com.tap.chatstory.chat.HistoryActivity"
             android:label="@string/common_history"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".settings.AboutActivity"
+            android:name="com.tap.chatstory.settings.AboutActivity"
             android:label="@string/common_about"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".settings.SettingsActivity"
+            android:name="com.tap.chatstory.settings.SettingsActivity"
             android:label="@string/common_settings"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".creation.BasicCreateActivity"
+            android:name="com.tap.chatstory.creation.BasicCreateActivity"
             android:label="@string/common_create"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".creation.ChooseCategoryActivity"
+            android:name="com.tap.chatstory.creation.ChooseCategoryActivity"
             android:label="@string/create_choose_category"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".creation.CreateActivity"
+            android:name="com.tap.chatstory.creation.CreateActivity"
             android:label="@string/common_create"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".chat.FavoriteActivity"
+            android:name="com.tap.chatstory.chat.FavoriteActivity"
             android:label="@string/common_star"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".creation.PreviewActivity"
+            android:name="com.tap.chatstory.creation.PreviewActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".creation.CreationDetailActivity"
+            android:name="com.tap.chatstory.creation.CreationDetailActivity"
             android:label="@string/common_detail"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".search.SearchActivity"
+            android:name="com.tap.chatstory.search.SearchActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".user.info.EditUserActivity"
+            android:name="com.tap.chatstory.user.info.EditUserActivity"
             android:label="@string/user_edit_toolbar_title"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".user.info.VIPActivity"
+            android:name="com.tap.chatstory.user.info.VIPActivity"
             android:label="@string/user_vip_toolbar_title"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".user.page.UserPageActivity"
+            android:name="com.tap.chatstory.user.page.UserPageActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".user.message.MessageActivity"
+            android:name="com.tap.chatstory.user.message.MessageActivity"
             android:label="@string/user_message_title"
             android:screenOrientation="portrait" />
 
@@ -166,13 +166,13 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <service android:name=".MyFirebaseMessagingService">
+        <service android:name="com.tap.chatstory.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
-        <service android:name=".MyFirebaseInstanceIDService">
+        <service android:name="com.tap.chatstory.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
