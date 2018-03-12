@@ -35,7 +35,7 @@
 -keep class android.support.** { *; }
 -keep class com.google.** { *; }
 
--keep public class com.owl.chatstory.R$*{
+-keep public class com.tap.chatstory.R$*{
 public static final int *;
 }
 
