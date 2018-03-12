@@ -31,7 +31,7 @@ public class Constants {
     public static final int MESSAGE_STAR = 4;//收藏
     public static final int MESSAGE_PARY_UPDATE = 5;//求更新
 
-    public static final String BASE64_ENCODED_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAigsMDHk9dIIUOBglJ6mGgBHf4R4LqT11r7VGy5v86GiC6uLGJlA9jEeUkxHzvOnAtgmvgZF7iyqJs9w5505ML7NlaCvloRdfT5OI1DW0m5H9bENIr9w7g2IZ+rArZMWnQ+dKN9tYsRJzMW2pgp19om/InDxVBJeqa79gujbf4a+0pAq7IrhMSltn1OEqIePNWy/VSZroCrCts6Yl4EP4UjpCMNKnM1LwNYu2O490U/AaxyrzRZF+nPCkC87y9revx1z0ToO6/opof2ulbLTgIun9mxWhEq65CJyX+gaeQ+mh//TIqqyKcyxJdp+LHNPt2JtkaCvuHdP9NNfaLM5xpwIDAQAB";
+    public static final String BASE64_ENCODED_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgE9eaDJn1L3j8c5EapELV6l06Fl8xwGh2D6H7h6Up7FUh4UjK9UY2AxlGW9wU+sQNN4695AhI/dj96ORAydjVKpexWTckw+MDBZl/xWpiV3nnqPJXiQpzkcrsewnVnBceIyGDrCI43tBbLPv/62+h9r3kll6ihymMSP0LBqOz78WVekE1u4U7JR2GjJC7kDKfYxwDvTAp/w+t6MpK0Vpe0O0I5BDk5KwygmiwVLn9IOdrigGLEL+aIwELtw79Puf1M2T03SzadjVD/HLxZsYYzUJWXJuKDDQAswA/Cecc+DIQ9YRgLiheyq5mXUgJT4CsRI5Wyf/jJDNJrhwk6D5qwIDAQAB";
     public static final String WEEK_SKU = "week_vip1.99";
     public static final String ONE_MONTH_SKU = "month_vip3.99";
     public static final String THREE_MONTHS_SKU = "3months_vip10.99";
@@ -39,8 +39,8 @@ public class Constants {
 
     public static final String RELOAD_DATA_AFTER_LOGINED = "RELOAD_DATA_AFTER_LOGINED";
 
-    public static final String ADMOB_REWARDED_VIDEO_ID = "ca-app-pub-3940256099942544/5224354917";
-    public static final String ADMOB_INTERSTITIAL_ID = "ca-app-pub-3940256099942544/1033173712";
+    public static final String ADMOB_REWARDED_VIDEO_ID = "ca-app-pub-8805953710729771/1560215991";
+    public static final String ADMOB_INTERSTITIAL_ID = "ca-app-pub-8805953710729771/8714094930";
 
     public static String getStatus(int status) {
         switch (status) {

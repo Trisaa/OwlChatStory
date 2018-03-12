@@ -67,7 +67,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     @Override
     protected void initViewsAndData() {
-        MobileAds.initialize(this, "ca-app-pub-8805953710729771/6340985560");
+        MobileAds.initialize(this, "ca-app-pub-8805953710729771~1901274570");
         checkPurchase();
         mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override

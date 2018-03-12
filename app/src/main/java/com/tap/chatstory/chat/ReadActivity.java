@@ -268,12 +268,14 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
     protected void onPause() {
         mRewardedVideoAd.pause(this);
         //记录当前阅读进度
-        int progress = (mShowDatas.size() - 1) * 100 / mDatas.size();
-        if (progress < 0) {
-            progress = 0;
+        if (mShowDatas != null && mDatas != null) {
+            int progress = (mShowDatas.size() - 1) * 100 / mDatas.size();
+            if (progress < 0) {
+                progress = 0;
+            }
+            saveProgressList(progress);
+            EventBus.getDefault().post(EVENT_UPDATE_PROGRESS);
         }
-        saveProgressList(progress);
-        EventBus.getDefault().post(EVENT_UPDATE_PROGRESS);
         super.onPause();
     }
 
@@ -539,6 +541,6 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
 
     @Override
     public void onRewardedVideoAdFailedToLoad(int i) {
-        Log.i("Lebron", "onRewardedVideoAdFailedToLoad");
+        Log.i("Lebron", "onRewardedVideoAdFailedToLoad " + i);
     }
 }
