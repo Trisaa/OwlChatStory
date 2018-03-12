@@ -111,7 +111,7 @@
     <string name="common_female">女</string>
     <string name="common_likes_format">%1$d 讚</string>
     <string name="common_stars_format">%1$d 收藏</string>
-    <string name="common_views_format">%1$d 閱讀</string>
+    <string name="common_views_format">%1$s 閱讀</string>
     <string name="common_likes">讚</string>
     <string name="common_stars">收藏</string>
     <string name="common_views">閱讀</string>

@@ -13,4 +13,14 @@ public class TimeUtils {
         String t = format.format(new Date(time * 1000L));
         return t;
     }
+
+    public static String getNumFormat(int num) {
+        if (num >= 1000) {
+            int hundred = num / 100;
+            float result = (float) hundred / 10.0f;
+            return result + "k";
+        } else {
+            return String.valueOf(num);
+        }
+    }
 }

@@ -114,7 +114,7 @@
     <string name="common_female">Female</string>
     <string name="common_likes_format">%1$d LIKES</string>
     <string name="common_stars_format">%1$d STARS</string>
-    <string name="common_views_format">%1$d VIEWS</string>
+    <string name="common_views_format">%1$s VIEWS</string>
     <string name="common_likes">LIKES</string>
     <string name="common_stars">STARS</string>
     <string name="common_views">VIEWS</string>

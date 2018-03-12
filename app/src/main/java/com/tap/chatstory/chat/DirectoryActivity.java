@@ -200,7 +200,7 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
         ((TextView) mHeaderView.findViewById(R.id.chapter_header_author_txv)).setText(author);
         ((TextView) mHeaderView.findViewById(R.id.chapter_header_describe_txv)).setText(fictionDetailModel.getSummary());
         ((TextView) mHeaderView.findViewById(R.id.chapter_header_chapters_txv)).setText(getString(R.string.common_update_chapter, fictionDetailModel.getUpinfo()));
-        mWatchesView.setText(getString(R.string.common_views_format, fictionDetailModel.getViews()));
+        mWatchesView.setText(getString(R.string.common_views_format, TimeUtils.getNumFormat(fictionDetailModel.getViews())));
         mLikesView.setText(getString(R.string.common_likes_format, fictionDetailModel.getLikes()));
         mStarsView.setText(getString(R.string.common_stars_format, fictionDetailModel.getFavorites()));
 

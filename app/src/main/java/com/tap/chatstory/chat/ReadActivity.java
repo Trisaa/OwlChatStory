@@ -16,7 +16,9 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.reward.RewardItem;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
@@ -28,6 +30,7 @@ import com.tap.chatstory.chat.adapter.ChatLeftDelegate;
 import com.tap.chatstory.chat.adapter.ChatNextDelegate;
 import com.tap.chatstory.chat.adapter.ChatRightDelegate;
 import com.tap.chatstory.chat.adapter.ReadItemDecoration;
+import com.tap.chatstory.common.util.Constants;
 import com.tap.chatstory.common.util.DialogUtils;
 import com.tap.chatstory.common.util.PreferencesHelper;
 import com.tap.chatstory.common.util.ShareUtils;
@@ -84,6 +87,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
     private FictionStatusResponse mFictionStatus;
     private FictionDetailModel mFictionDetailModel;
     private RewardedVideoAd mRewardedVideoAd;
+    private InterstitialAd mInterstitialAd;
     private String mChapterId;
     private boolean isRewarded, isHistoryAdded;
     private ChapterModel mChapterModel;
@@ -128,6 +132,9 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
                 }
                 mAdapter.notifyDataSetChanged();
                 mLoadingView.setVisibility(View.VISIBLE);
+            }
+            if (mInterstitialAd != null && mInterstitialAd.isLoaded()) {
+                mInterstitialAd.show();
             }
         }
     };
@@ -184,8 +191,48 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
 
         mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this);
         mRewardedVideoAd.setRewardedVideoAdListener(this);
-        loadRewardedVideo();
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(Constants.ADMOB_INTERSTITIAL_ID);
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                super.onAdClosed();
+                Log.i("Lebron", "onAdClosed");
+                loadInterstitial();
+            }
 
+            @Override
+            public void onAdFailedToLoad(int i) {
+                super.onAdFailedToLoad(i);
+                Log.i("Lebron", "onAdFailedToLoad");
+            }
+
+            @Override
+            public void onAdOpened() {
+                super.onAdOpened();
+                Log.i("Lebron", "onAdOpened");
+            }
+
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                Log.i("Lebron", "onAdLoaded");
+            }
+
+            @Override
+            public void onAdClicked() {
+                super.onAdClicked();
+                Log.i("Lebron", "onAdClicked");
+            }
+
+            @Override
+            public void onAdImpression() {
+                super.onAdImpression();
+                Log.i("Lebron", "onAdImpression");
+            }
+        });
+        loadRewardedVideo();
+        loadInterstitial();
         new ReadPresenter(this);
     }
 
@@ -196,8 +243,12 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
     }
 
     private void loadRewardedVideo() {
-        mRewardedVideoAd.loadAd("ca-app-pub-8805953710729771/6340985560",
+        mRewardedVideoAd.loadAd(Constants.ADMOB_REWARDED_VIDEO_ID,
                 new AdRequest.Builder().build());
+    }
+
+    private void loadInterstitial() {
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
     }
 
     @Override

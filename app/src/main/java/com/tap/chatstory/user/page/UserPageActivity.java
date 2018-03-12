@@ -20,6 +20,7 @@ import com.tap.chatstory.base.BaseActivity;
 import com.tap.chatstory.chat.DirectoryActivity;
 import com.tap.chatstory.common.util.CommonVerticalItemDecoration;
 import com.tap.chatstory.common.util.ImageLoaderUtils;
+import com.tap.chatstory.common.util.TimeUtils;
 import com.tap.chatstory.data.chatsource.model.FictionDetailModel;
 import com.tap.chatstory.data.usersource.model.UserPageModel;
 import com.zhy.adapter.recyclerview.CommonAdapter;
@@ -100,7 +101,7 @@ public class UserPageActivity extends BaseActivity implements UserPageContract.V
                 ImageLoaderUtils.getInstance().loadImage(UserPageActivity.this, fictionModel.getCover(), (ImageView) holder.getView(R.id.category_item_cover_img), R.color.colorPrimaryDark);
                 holder.setText(R.id.category_item_title_txv, fictionModel.getTitle());
                 holder.setText(R.id.category_item_description_txv, fictionModel.getSummary());
-                holder.setText(R.id.category_item_watchers_txv, fictionModel.getViews() + "");
+                holder.setText(R.id.category_item_watchers_txv, TimeUtils.getNumFormat(fictionModel.getViews()));
                 holder.setText(R.id.category_upinfo_txv, getString(R.string.common_update_chapter, fictionModel.getUpinfo()));
                 holder.setVisible(R.id.category_item_vip_img, fictionModel.getVip() == 0 ? false : true);
             }
@@ -147,7 +148,7 @@ public class UserPageActivity extends BaseActivity implements UserPageContract.V
             mNameView.setText(model.getName());
             mDescribeView.setText(model.getName());
             mLikesView.setText(String.valueOf(model.getLikes()));
-            mWatchesView.setText(String.valueOf(model.getWatches()));
+            mWatchesView.setText(String.valueOf(TimeUtils.getNumFormat(model.getWatches())));
             mCollectsView.setText(String.valueOf(model.getFavorites()));
 
             if (model.getList() != null && model.getList().size() > 0) {

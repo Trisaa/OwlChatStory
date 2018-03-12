@@ -39,6 +39,9 @@ public class Constants {
 
     public static final String RELOAD_DATA_AFTER_LOGINED = "RELOAD_DATA_AFTER_LOGINED";
 
+    public static final String ADMOB_REWARDED_VIDEO_ID = "ca-app-pub-3940256099942544/5224354917";
+    public static final String ADMOB_INTERSTITIAL_ID = "ca-app-pub-3940256099942544/1033173712";
+
     public static String getStatus(int status) {
         switch (status) {
             case STATUS_REVIEWING:

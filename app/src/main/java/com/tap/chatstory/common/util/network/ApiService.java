@@ -40,7 +40,7 @@ public interface ApiService {
      *
      * @return
      */
-    @GET("version/config")
+    @GET("version/info")
     Observable<BaseResponse<UpdateModel>> checkUpdate();
 
     /**

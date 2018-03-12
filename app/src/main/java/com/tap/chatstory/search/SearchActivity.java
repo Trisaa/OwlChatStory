@@ -20,6 +20,7 @@ import com.tap.chatstory.chat.DirectoryActivity;
 import com.tap.chatstory.common.util.CommonVerticalItemDecoration;
 import com.tap.chatstory.common.util.ImageLoaderUtils;
 import com.tap.chatstory.common.util.KeyboardUtils;
+import com.tap.chatstory.common.util.TimeUtils;
 import com.tap.chatstory.data.searchsource.SearchDetailModel;
 import com.tap.chatstory.data.searchsource.SearchModel;
 import com.zhy.adapter.recyclerview.CommonAdapter;
@@ -94,7 +95,7 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
                 ImageLoaderUtils.getInstance().loadImage(SearchActivity.this, searchDetailModel.getCover(), (ImageView) holder.getView(R.id.category_item_cover_img), R.color.colorPrimaryDark);
                 holder.setText(R.id.category_item_title_txv, searchDetailModel.getTitle());
                 holder.setText(R.id.category_item_description_txv, searchDetailModel.getSummary());
-                holder.setText(R.id.category_item_watchers_txv, searchDetailModel.getViews() + "");
+                holder.setText(R.id.category_item_watchers_txv, TimeUtils.getNumFormat(searchDetailModel.getViews()));
                 holder.setVisible(R.id.category_upinfo_txv, false);
                 holder.setVisible(R.id.category_item_vip_img, searchDetailModel.getVip() == 0 ? false : true);
             }
