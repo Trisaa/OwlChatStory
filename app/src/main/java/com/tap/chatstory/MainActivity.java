@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -60,6 +61,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     private MainContract.Presenter mPresenter;
     private IabHelper mHelper;
     private Badge mBadge;
+    private long mClickTime = 0;
 
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
 
@@ -247,6 +249,16 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                         PreferencesHelper.getInstance().setInt(PreferencesHelper.KEY_CHAPTER_ADS_INTERVAL, (int) mFirebaseRemoteConfig.getLong(CHAPTER_FINISHED_ADS_INTERVAL));
                     }
                 });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if ((System.currentTimeMillis() - mClickTime) > 3000) {
+            Toast.makeText(getApplicationContext(), R.string.main_exit_confirm, Toast.LENGTH_SHORT).show();
+            mClickTime = System.currentTimeMillis();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     private class MainPagerAdapter extends FragmentStatePagerAdapter {

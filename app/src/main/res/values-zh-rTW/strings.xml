@@ -29,6 +29,7 @@
 
     <string name="main_tab_home">首頁</string>
     <string name="main_tab_account">我</string>
+    <string name="main_exit_confirm">再按一次退出</string>
 
     <string name="user_info_title">我</string>
     <string name="user_vip">VIP暢讀</string>
