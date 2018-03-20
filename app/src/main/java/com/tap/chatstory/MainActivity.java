@@ -11,6 +11,10 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.tap.chatstory.base.BaseActivity;
 import com.tap.chatstory.billing.IabHelper;
 import com.tap.chatstory.billing.IabResult;
@@ -43,6 +47,7 @@ import static com.tap.chatstory.common.util.Constants.YEAR_SKU;
 public class MainActivity extends BaseActivity implements MainContract.View {
     public static final String EXTRA_FROM_NOTIFICATION = "EXTRA_FROM_NOTIFICATION";
     public static final String EXTRA_FICTION_ID = "EXTRA_FICTION_ID";
+    private static final String CHAPTER_FINISHED_ADS_INTERVAL = "chapter_finished_ads_interval";
     private static final int[] HOME_TOOLBAR_TITLE = {
             R.string.main_tab_home,
             R.string.common_create,
@@ -55,6 +60,8 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     private MainContract.Presenter mPresenter;
     private IabHelper mHelper;
     private Badge mBadge;
+
+    private FirebaseRemoteConfig mFirebaseRemoteConfig;
 
     @Override
     protected int getContentViewID() {
@@ -69,6 +76,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     protected void initViewsAndData() {
         MobileAds.initialize(this, "ca-app-pub-8805953710729771~1901274570");
         checkPurchase();
+        initFirebaseConfig();
         mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -210,6 +218,31 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     public void setPresenter(MainContract.Presenter presenter) {
         mPresenter = presenter;
         mPresenter.subscribe();
+    }
+
+    private void initFirebaseConfig() {
+        mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+        FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
+                .setDeveloperModeEnabled(BuildConfig.DEBUG)
+                .build();
+        mFirebaseRemoteConfig.setConfigSettings(configSettings);
+        mFirebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults);
+
+        long cacheExpiration = 60 * 60 * 12;
+        if (mFirebaseRemoteConfig.getInfo().getConfigSettings().isDeveloperModeEnabled()) {
+            cacheExpiration = 0;
+        }
+        mFirebaseRemoteConfig.fetch(cacheExpiration)
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            mFirebaseRemoteConfig.activateFetched();
+                            Log.i("Lebron", " remote config " + mFirebaseRemoteConfig.getLong(CHAPTER_FINISHED_ADS_INTERVAL));
+                        }
+                        PreferencesHelper.getInstance().setInt(PreferencesHelper.KEY_CHAPTER_ADS_INTERVAL, (int) mFirebaseRemoteConfig.getLong(CHAPTER_FINISHED_ADS_INTERVAL));
+                    }
+                });
     }
 
     private class MainPagerAdapter extends FragmentStatePagerAdapter {

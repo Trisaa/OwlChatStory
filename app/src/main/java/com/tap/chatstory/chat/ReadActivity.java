@@ -92,6 +92,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
     private boolean isRewarded, isHistoryAdded;
     private ChapterModel mChapterModel;
     private FictionModel mFictionModel;
+    private int mReadedCount = 0;
 
     private ChatNextDelegate.OnClickListener mNextListener = new ChatNextDelegate.OnClickListener() {
         @Override
@@ -125,6 +126,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
         @Override
         public void onNextClick(ChapterModel chapterModel) {
             if (chapterModel != null) {
+                mReadedCount++;
                 saveProgressList(100);
                 mPresenter.getChapterData(chapterModel.getChapterId(), chapterModel.getVip(), false);
                 if (mShowDatas != null) {
@@ -133,7 +135,10 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
                 mAdapter.notifyDataSetChanged();
                 mLoadingView.setVisibility(View.VISIBLE);
             }
-            if (mInterstitialAd != null && mInterstitialAd.isLoaded()) {
+            shouldLoadAd();
+            boolean showAds = PreferencesHelper.getInstance().getInt(PreferencesHelper.KEY_CHAPTER_ADS_INTERVAL, 3) <= mReadedCount;
+            if (showAds && mInterstitialAd != null && mInterstitialAd.isLoaded()) {
+                mReadedCount = 0;
                 mInterstitialAd.show();
             }
         }
@@ -231,8 +236,10 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
                 Log.i("Lebron", "onAdImpression");
             }
         });
-        loadRewardedVideo();
-        loadInterstitial();
+        if (mFictionDetailModel != null && mFictionDetailModel.getVip() == 1) {
+            loadRewardedVideo();
+        }
+        shouldLoadAd();
         new ReadPresenter(this);
     }
 
@@ -243,12 +250,36 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
     }
 
     private void loadRewardedVideo() {
-        mRewardedVideoAd.loadAd(Constants.ADMOB_REWARDED_VIDEO_ID,
-                new AdRequest.Builder().build());
+        String skuID = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_PAID_FOR_VIP, null);
+        if (!TextUtils.isEmpty(skuID)) {
+            return;
+        }
+        if (mRewardedVideoAd != null && !mRewardedVideoAd.isLoaded()) {
+            Log.i("Lebron", " start load video");
+            mRewardedVideoAd.loadAd(Constants.ADMOB_REWARDED_VIDEO_ID,
+                    new AdRequest.Builder().build());
+        }
     }
 
     private void loadInterstitial() {
-        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+        String skuID = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_PAID_FOR_VIP, null);
+        if (!TextUtils.isEmpty(skuID)) {
+            return;
+        }
+        if (mInterstitialAd != null && !mInterstitialAd.isLoaded() && !mInterstitialAd.isLoading()) {
+            Log.i("Lebron", " start load interstitial");
+            mInterstitialAd.loadAd(new AdRequest.Builder().build());
+        }
+    }
+
+    /**
+     * 检查是否需要加载广告，提前一章加载广告
+     */
+    private void shouldLoadAd() {
+        int adsInterval = PreferencesHelper.getInstance().getInt(PreferencesHelper.KEY_CHAPTER_ADS_INTERVAL, 3);
+        if (Math.abs(mReadedCount - adsInterval) < 2) {
+            loadInterstitial();
+        }
     }
 
     @Override

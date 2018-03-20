@@ -36,6 +36,8 @@ public class PreferencesHelper {
     public static final String KEY_DEVICE_TOKEN_UPLOADED = "KEY_DEVICE_TOKEN_UPLOADED";
     //是否展示过了创作引导
     public static final String KEY_CREATE_GUIDE_SHOWED = "KEY_CREATE_GUIDE_SHOWED";
+    //章节过关后弹出广告间隔章节数
+    public static final String KEY_CHAPTER_ADS_INTERVAL = "KEY_CHAPTER_ADS_INTERVAL";
 
     private final static SharedPreferences mPref = MainApplication.getAppContext().getSharedPreferences(SETTING, Context.MODE_PRIVATE);
     private static PreferencesHelper mInstance = null;
