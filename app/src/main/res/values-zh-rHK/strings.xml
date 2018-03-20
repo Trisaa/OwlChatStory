@@ -138,6 +138,9 @@
     <string name="user_vip_1month">1個月VIP套餐（免廣告）</string>
     <string name="user_vip_3months">3個月VIP套餐（免廣告）</string>
     <string name="user_vip_year">1年VIP套餐（免廣告）</string>
+    <string name="user_vip_features">VIP特權</string>
+    <string name="user_vip_features_detail">1.免廣告 2.原創優質小說</string>
+    <string name="user_vip_features_open">馬上開通</string>
 
     <string name="search_key_word">輸入關鍵字</string>
 

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/guide_vip_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:background="@color/common_toolbar_color"
+    android:paddingBottom="6dp"
+    android:paddingTop="6dp">
+
+    <ImageView
+        android:id="@+id/guide_vip_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:background="@mipmap/ic_vip_big" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="6dp"
+        android:layout_toRightOf="@id/guide_vip_icon"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/user_vip_features"
+            android:textColor="#ffffff" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="@string/user_vip_features_detail"
+            android:textColor="#ffffff"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/guide_vip_ok_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/common_red_rectangle_bg"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:paddingBottom="3dp"
+        android:paddingEnd="6dp"
+        android:paddingStart="6dp"
+        android:paddingTop="3dp"
+        android:text="@string/user_vip_features_open"
+        android:textColor="@color/common_red" />
+
+</RelativeLayout>

@@ -140,6 +140,9 @@
     <string name="user_vip_1month">VIP for 1 month(no ads)</string>
     <string name="user_vip_3months">VIP for 3 months(no ads)</string>
     <string name="user_vip_year">VIP for 1 year(no ads)</string>
+    <string name="user_vip_features">VIP features</string>
+    <string name="user_vip_features_detail">1.No ads 2.Read all</string>
+    <string name="user_vip_features_open">Open Now</string>
 
     <string name="search_key_word">Input key word</string>
 

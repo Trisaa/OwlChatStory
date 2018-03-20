@@ -1,8 +1,11 @@
 package com.tap.chatstory.chat;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,6 +34,7 @@ import com.tap.chatstory.data.chatsource.model.FictionStatusResponse;
 import com.tap.chatstory.data.chatsource.model.ProgressModel;
 import com.tap.chatstory.data.eventsource.FictionEvent;
 import com.tap.chatstory.data.homesource.model.ShareModel;
+import com.tap.chatstory.user.info.VIPActivity;
 import com.tap.chatstory.user.page.UserPageActivity;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -43,6 +47,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 import static com.tap.chatstory.chat.ReadActivity.EVENT_UPDATE_PROGRESS;
 
@@ -69,6 +74,10 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
     TextView mToolbarTitleView;
     @BindView(R.id.userpage_appbar_layout)
     AppBarLayout mAppBarLayout;
+    @BindView(R.id.coordinatorlayout)
+    CoordinatorLayout mCoordinatorLayout;
+    @BindView(R.id.guide_vip_layout)
+    View mGuideViewLayout;
 
     private DirectoryContract.Presenter mPresenter;
     private LoadMoreWrapper<FictionDetailModel> mAdapter;
@@ -184,6 +193,7 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
         mRecyclerView.setAdapter(mAdapter);
         mAppBarLayout.addOnOffsetChangedListener(onOffsetChangedListener);
         new DirectoryPresenter(this);
+        startVipAnim();
     }
 
     private void setHeaderView() {
@@ -366,5 +376,70 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
     public void showFictionStatus(FictionStatusResponse response) {
         mFictionStatusResponse = response;
         setHeaderViewStatus();
+    }
+
+    private void startVipAnim() {
+        String skuID = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_PAID_FOR_VIP, null);
+        if (!TextUtils.isEmpty(skuID)) {
+            return;
+        }
+        ObjectAnimator animator = ObjectAnimator.ofFloat(mGuideViewLayout, "translationY", 400, 0);
+        animator.setStartDelay(500);
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+                mGuideViewLayout.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                endVipAnim(3000);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+        animator.setDuration(1500);
+        animator.start();
+    }
+
+    private void endVipAnim(long time) {
+        ObjectAnimator animator = ObjectAnimator.ofFloat(mGuideViewLayout, "translationY", 0, 400);
+        animator.setStartDelay(time);
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                mGuideViewLayout.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+        animator.setDuration(1500);
+        animator.start();
+    }
+
+    @OnClick(R.id.guide_vip_ok_btn)
+    public void gotoVip() {
+        VIPActivity.start(this);
+        endVipAnim(0);
     }
 }

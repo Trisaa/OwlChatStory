@@ -140,6 +140,9 @@
     <string name="user_vip_1month">1个月VIP套餐（免广告）</string>
     <string name="user_vip_3months">3个月VIP套餐（免广告）</string>
     <string name="user_vip_year">1年VIP套餐（免广告）</string>
+    <string name="user_vip_features">VIP特权</string>
+    <string name="user_vip_features_detail">1.免广告 2.原创优质小说</string>
+    <string name="user_vip_features_open">马上开通</string>
 
     <string name="search_key_word">输入关键字</string>
 
