@@ -22,7 +22,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="16dp"
                 android:gravity="center_vertical"
-                android:text="7天VIP套餐"
+                android:text="@string/user_vip_week"
                 android:textColor="@color/common_text_color" />
 
             <TextView
@@ -58,7 +58,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="16dp"
                 android:gravity="center_vertical"
-                android:text="1个月VIP套餐"
+                android:text="@string/user_vip_1month"
                 android:textColor="@color/common_text_color" />
 
             <TextView
@@ -95,7 +95,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="16dp"
                 android:gravity="center_vertical"
-                android:text="3个月VIP套餐"
+                android:text="@string/user_vip_3months"
                 android:textColor="@color/common_text_color" />
 
             <TextView
@@ -131,7 +131,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="16dp"
                 android:gravity="center_vertical"
-                android:text="1年VIP套餐"
+                android:text="@string/user_vip_year"
                 android:textColor="@color/common_text_color" />
 
             <TextView

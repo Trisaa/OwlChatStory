@@ -135,6 +135,10 @@
     <string name="user_vip_facebook_page">Or visit us</string>
     <string name="user_page_title">User Page</string>
     <string name="user_message_title">Message</string>
+    <string name="user_vip_week">VIP for 1 week</string>
+    <string name="user_vip_1month">VIP for 1 month(no ads)</string>
+    <string name="user_vip_3months">VIP for 3 months(no ads)</string>
+    <string name="user_vip_year">VIP for 1 year(no ads)</string>
 
     <string name="search_key_word">Input key word</string>
 

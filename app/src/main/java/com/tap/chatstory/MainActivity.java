@@ -153,6 +153,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                                     Log.i("IabHelper", WEEK_SKU + " is available~~~~");
                                     hasPaid = true;
                                     PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase.getSku());
+                                    PreferencesHelper.getInstance().setBoolean(PreferencesHelper.KEY_NO_ADS_VIP, false);
                                 } else {
                                     Log.i("IabHelper", WEEK_SKU + " is not available~~~~");
                                 }
@@ -162,6 +163,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                                     Log.i("IabHelper", ONE_MONTH_SKU + " is available~~~~");
                                     hasPaid = true;
                                     PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase1.getSku());
+                                    PreferencesHelper.getInstance().setBoolean(PreferencesHelper.KEY_NO_ADS_VIP, true);
                                 } else {
                                     Log.i("IabHelper", ONE_MONTH_SKU + " is not available~~~~");
                                 }
@@ -171,6 +173,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                                     Log.i("IabHelper", THREE_MONTHS_SKU + " is available~~~~");
                                     hasPaid = true;
                                     PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase2.getSku());
+                                    PreferencesHelper.getInstance().setBoolean(PreferencesHelper.KEY_NO_ADS_VIP, true);
                                 } else {
                                     Log.i("IabHelper", THREE_MONTHS_SKU + " is not available~~~~");
                                 }
@@ -180,6 +183,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                                     Log.i("IabHelper", YEAR_SKU + " is available~~~~");
                                     hasPaid = true;
                                     PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase3.getSku());
+                                    PreferencesHelper.getInstance().setBoolean(PreferencesHelper.KEY_NO_ADS_VIP, true);
                                 } else {
                                     Log.i("IabHelper", YEAR_SKU + " is not available~~~~");
                                 }

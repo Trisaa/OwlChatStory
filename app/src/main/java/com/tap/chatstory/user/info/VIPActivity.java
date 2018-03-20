@@ -44,6 +44,11 @@ public class VIPActivity extends BaseActivity {
             }
             Log.i("Lebron", "Purchase successful." + purchase.getSku());
             PreferencesHelper.getInstance().setString(PreferencesHelper.KEY_PAID_FOR_VIP, purchase.getSku());
+            if (WEEK_SKU.equals(purchase.getSku())) {
+                PreferencesHelper.getInstance().setBoolean(PreferencesHelper.KEY_NO_ADS_VIP, false);
+            } else {
+                PreferencesHelper.getInstance().setBoolean(PreferencesHelper.KEY_NO_ADS_VIP, true);
+            }
             EventBus.getDefault().post(EVENT_PAID_FOR_VIP);
             finish();
         }

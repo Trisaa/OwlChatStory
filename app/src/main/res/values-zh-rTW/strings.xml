@@ -133,6 +133,10 @@
     <string name="user_vip_facebook_page">或訪問我們的主頁</string>
     <string name="user_page_title">我的主頁</string>
     <string name="user_message_title">消息</string>
+    <string name="user_vip_week">7天VIP套餐</string>
+    <string name="user_vip_1month">1個月VIP套餐（免廣告）</string>
+    <string name="user_vip_3months">3個月VIP套餐（免廣告）</string>
+    <string name="user_vip_year">1年VIP套餐（免廣告）</string>
 
     <string name="search_key_word">輸入關鍵字</string>
 

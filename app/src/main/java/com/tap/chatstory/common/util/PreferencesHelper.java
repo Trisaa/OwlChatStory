@@ -38,6 +38,8 @@ public class PreferencesHelper {
     public static final String KEY_CREATE_GUIDE_SHOWED = "KEY_CREATE_GUIDE_SHOWED";
     //章节过关后弹出广告间隔章节数
     public static final String KEY_CHAPTER_ADS_INTERVAL = "KEY_CHAPTER_ADS_INTERVAL";
+    //是否是免广告的VIP
+    public static final String KEY_NO_ADS_VIP = "KEY_NO_ADS_VIP";
 
     private final static SharedPreferences mPref = MainApplication.getAppContext().getSharedPreferences(SETTING, Context.MODE_PRIVATE);
     private static PreferencesHelper mInstance = null;

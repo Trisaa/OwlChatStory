@@ -250,8 +250,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
     }
 
     private void loadRewardedVideo() {
-        String skuID = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_PAID_FOR_VIP, null);
-        if (!TextUtils.isEmpty(skuID)) {
+        if (PreferencesHelper.getInstance().getBoolean(PreferencesHelper.KEY_NO_ADS_VIP, false)) {
             return;
         }
         if (mRewardedVideoAd != null && !mRewardedVideoAd.isLoaded()) {
@@ -262,8 +261,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
     }
 
     private void loadInterstitial() {
-        String skuID = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_PAID_FOR_VIP, null);
-        if (!TextUtils.isEmpty(skuID)) {
+        if (PreferencesHelper.getInstance().getBoolean(PreferencesHelper.KEY_NO_ADS_VIP, false)) {
             return;
         }
         if (mInterstitialAd != null && !mInterstitialAd.isLoaded() && !mInterstitialAd.isLoading()) {
