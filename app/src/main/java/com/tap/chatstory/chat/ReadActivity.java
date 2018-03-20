@@ -343,7 +343,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
         switch (item.getItemId()) {
             case R.id.read_menu_favorite:
                 if (PreferencesHelper.getInstance().isLogined() && mFictionDetailModel != null) {
-                    if (!mFictionStatus.getLiked()) {
+                    if (mFictionStatus != null && !mFictionStatus.getLiked()) {
                         mPresenter.likeFiction(1, mFictionDetailModel.getId());
                         mFictionStatus.setLiked(true);
                         mFictionDetailModel.setLikes(mFictionDetailModel.getLikes() + 1);
@@ -374,7 +374,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
                 break;
             case R.id.read_menu_star:
                 if (PreferencesHelper.getInstance().isLogined() && mFictionDetailModel != null) {
-                    if (!mFictionStatus.getCollect()) {
+                    if (mFictionStatus != null && !mFictionStatus.getCollect()) {
                         mPresenter.collectFiction(mFictionDetailModel.getId());
                         mFictionStatus.setCollect(true);
                         mFictionDetailModel.setFavorites(mFictionDetailModel.getFavorites() + 1);

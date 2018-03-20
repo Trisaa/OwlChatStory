@@ -135,6 +135,9 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 mMessageDetailView.setVisibility(View.VISIBLE);
+                if (position >= mDatas.size()) {
+                    return;
+                }
                 MessagesModel model = mDatas.get(position);
                 switch (model.getType()) {
                     case Constants.MESSAGE_LIKE:
