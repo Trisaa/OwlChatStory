@@ -1,29 +1,81 @@
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
+/**
+ * 获取当前打包keystore的密码
+ */
+def keystoreFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystoreFile))
+
 android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.tap.chatstory"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 11
-        versionName "1.3.1"
+        versionCode 12
+        versionName "1.3.2debug"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    lintOptions {
+        abortOnError false
+    }
+
+
+    signingConfigs {
+        debug {
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+        }
+
+        release {
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            applicationVariants.all { variant ->
+                variant.outputs.all { output ->
+                    outputFileName = "Owl_" + releaseTime() + "_v" +
+                            defaultConfig.versionName + "_" + buildType.name + ".apk"
+                }
+            }
         }
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+            applicationVariants.all { variant ->
+                variant.outputs.all { output ->
+                    outputFileName = "Owl_" + releaseTime() + "_v" +
+                            defaultConfig.versionName + "_" + buildType.name + ".apk"
+                }
+            }
         }
     }
 }
+
+/**
+ * 获取当前系统时间
+ * @return
+ */
+def releaseTime() {
+    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+}
+
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
