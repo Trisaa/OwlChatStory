@@ -15,9 +15,11 @@ import com.tap.chatstory.data.homesource.model.CategoryModel;
 import com.tap.chatstory.data.homesource.model.UpdateModel;
 import com.tap.chatstory.data.searchsource.SearchModel;
 import com.tap.chatstory.data.usersource.model.MessagesModel;
+import com.tap.chatstory.data.usersource.model.TaskModel;
 import com.tap.chatstory.data.usersource.model.UserModel;
 import com.tap.chatstory.data.usersource.model.UserPageModel;
 import com.tap.chatstory.data.usersource.model.UserResponse;
+import com.tap.chatstory.data.usersource.model.WalletModel;
 
 import java.util.Map;
 
@@ -243,4 +245,20 @@ public interface ApiService {
 
     @GET("messages/read")
     Observable<BaseResponse> readMessage(@Query("id") String messageId);
+
+    //完成任务，获取奖励
+    @GET("task/reward")
+    Observable<BaseResponse> getRewards(@Query("op") String source);
+
+    //获取用户金币数
+    @GET("user/getmcoin")
+    Observable<BaseResponse<WalletModel>> getUserCoins();
+
+    //填写邀请码
+    @GET("user/invite")
+    Observable<BaseResponse> inputInviteCode(@Query("code") String code);
+
+    //获取任务列表
+    @GET("task/list")
+    Observable<BaseResponse<TaskModel>> getTaskList();
 }

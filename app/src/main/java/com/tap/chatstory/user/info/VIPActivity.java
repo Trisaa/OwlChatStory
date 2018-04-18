@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.tap.chatstory.R;
 import com.tap.chatstory.base.BaseActivity;
@@ -35,7 +38,16 @@ public class VIPActivity extends BaseActivity {
     public static final String EVENT_PAID_FOR_VIP = "EVENT_PAID_FOR_VIP";
     @BindView(R.id.common_toolbar)
     Toolbar mToolbar;
+    @BindView(R.id.week_subscribe_btn)
+    Button mWeekBtn;
+    @BindView(R.id.one_month_subscribe_btn)
+    Button m1MonthBtn;
+    @BindView(R.id.three_months_subscribe_btn)
+    Button m3MonthsBtn;
+    @BindView(R.id.year_subscribe_btn)
+    Button mYearBtn;
     private IabHelper mHelper;
+
     IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
         public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
             if (mHelper == null || result.isFailure()) {
@@ -107,6 +119,31 @@ public class VIPActivity extends BaseActivity {
                 }
             });
         } catch (Exception e) {
+        }
+        updateVipInfo();
+    }
+
+    private void updateVipInfo() {
+        String sku = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_PAID_FOR_VIP, null);
+        if (!TextUtils.isEmpty(sku)) {
+            switch (sku) {
+                case WEEK_SKU:
+                    mWeekBtn.setEnabled(false);
+                    mWeekBtn.setText(R.string.common_purchased);
+                    break;
+                case ONE_MONTH_SKU:
+                    mWeekBtn.setEnabled(false);
+                    mWeekBtn.setText(R.string.common_purchased);
+                    break;
+                case THREE_MONTHS_SKU:
+                    mWeekBtn.setEnabled(false);
+                    mWeekBtn.setText(R.string.common_purchased);
+                    break;
+                case YEAR_SKU:
+                    mWeekBtn.setEnabled(false);
+                    mWeekBtn.setText(R.string.common_purchased);
+                    break;
+            }
         }
     }
 

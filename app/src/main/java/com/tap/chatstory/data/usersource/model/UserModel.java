@@ -39,6 +39,12 @@ public class UserModel implements Parcelable {
     private String email;
     @SerializedName("device_token")
     private String deviceToken;
+    @SerializedName("mcoin")//金币数
+    private int coins;
+    @SerializedName("code")
+    private String inviteCode;
+    @SerializedName("is_invite")
+    private String hasInvited;
 
     public UserModel() {
     }
@@ -53,6 +59,9 @@ public class UserModel implements Parcelable {
         this.summary = in.readString();
         this.email = in.readString();
         this.deviceToken = in.readString();
+        this.coins = in.readInt();
+        this.inviteCode = in.readString();
+        this.hasInvited = in.readString();
     }
 
     public String getId() {
@@ -127,6 +136,30 @@ public class UserModel implements Parcelable {
         this.deviceToken = deviceToken;
     }
 
+    public int getCoins() {
+        return coins;
+    }
+
+    public void setCoins(int coins) {
+        this.coins = coins;
+    }
+
+    public String getInviteCode() {
+        return inviteCode;
+    }
+
+    public void setInviteCode(String inviteCode) {
+        this.inviteCode = inviteCode;
+    }
+
+    public String getHasInvited() {
+        return hasInvited;
+    }
+
+    public void setHasInvited(String hasInvited) {
+        this.hasInvited = hasInvited;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -143,5 +176,8 @@ public class UserModel implements Parcelable {
         dest.writeString(this.summary);
         dest.writeString(this.email);
         dest.writeString(this.deviceToken);
+        dest.writeInt(this.coins);
+        dest.writeString(this.inviteCode);
+        dest.writeString(this.hasInvited);
     }
 }

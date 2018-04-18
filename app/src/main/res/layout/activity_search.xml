@@ -64,9 +64,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <include
-            layout="@layout/common_empty_layout"
-            android:visibility="gone" />
+        <ViewStub
+            android:id="@+id/empty_stub"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout="@layout/common_empty_layout"/>
 
         <include layout="@layout/common_loading_layout" />
 

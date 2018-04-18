@@ -90,6 +90,7 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
     private int mCollapsingState = COLLAPSE_STATE_EXPANDED;
     private View mHeaderView;
     private String mFictionId;
+    private ObjectAnimator mSlideInAnim, mSlideOutAnim;
 
     private AppBarLayout.OnOffsetChangedListener onOffsetChangedListener = new AppBarLayout.OnOffsetChangedListener() {
         @Override
@@ -383,9 +384,9 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
         if (!TextUtils.isEmpty(skuID)) {
             return;
         }
-        ObjectAnimator animator = ObjectAnimator.ofFloat(mGuideViewLayout, "translationY", 400, 0);
-        animator.setStartDelay(500);
-        animator.addListener(new Animator.AnimatorListener() {
+        mSlideInAnim = ObjectAnimator.ofFloat(mGuideViewLayout, "translationY", 400, 0);
+        mSlideInAnim.setStartDelay(500);
+        mSlideInAnim.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animator) {
                 mGuideViewLayout.setVisibility(View.VISIBLE);
@@ -406,14 +407,14 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
 
             }
         });
-        animator.setDuration(1500);
-        animator.start();
+        mSlideInAnim.setDuration(1500);
+        mSlideInAnim.start();
     }
 
     private void endVipAnim(long time) {
-        ObjectAnimator animator = ObjectAnimator.ofFloat(mGuideViewLayout, "translationY", 0, 400);
-        animator.setStartDelay(time);
-        animator.addListener(new Animator.AnimatorListener() {
+        mSlideOutAnim = ObjectAnimator.ofFloat(mGuideViewLayout, "translationY", 0, 400);
+        mSlideOutAnim.setStartDelay(time);
+        mSlideOutAnim.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animator) {
             }
@@ -433,13 +434,26 @@ public class DirectoryActivity extends BaseActivity implements DirectoryContract
 
             }
         });
-        animator.setDuration(1500);
-        animator.start();
+        mSlideOutAnim.setDuration(1500);
+        mSlideOutAnim.start();
     }
 
     @OnClick(R.id.guide_vip_ok_btn)
     public void gotoVip() {
         VIPActivity.start(this);
         endVipAnim(0);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mSlideOutAnim != null && mSlideOutAnim.isRunning()) {
+            mSlideOutAnim.cancel();
+            mSlideOutAnim = null;
+        }
+        if (mSlideInAnim != null && mSlideInAnim.isRunning()) {
+            mSlideInAnim.cancel();
+            mSlideInAnim = null;
+        }
     }
 }

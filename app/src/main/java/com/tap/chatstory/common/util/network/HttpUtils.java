@@ -24,9 +24,11 @@ import com.tap.chatstory.data.homesource.model.CategoryModel;
 import com.tap.chatstory.data.homesource.model.UpdateModel;
 import com.tap.chatstory.data.searchsource.SearchModel;
 import com.tap.chatstory.data.usersource.model.MessagesModel;
+import com.tap.chatstory.data.usersource.model.TaskModel;
 import com.tap.chatstory.data.usersource.model.UserModel;
 import com.tap.chatstory.data.usersource.model.UserPageModel;
 import com.tap.chatstory.data.usersource.model.UserResponse;
+import com.tap.chatstory.data.usersource.model.WalletModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -521,6 +523,46 @@ public class HttpUtils {
     public Subscription readMessage(Subscriber subscriber, String messageId) {
         Subscription subscription = mApiService.readMessage(messageId)
                 .map(new BaseResponseFunc())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return subscription;
+    }
+
+    public Subscription getUserCoins(Subscriber<WalletModel> subscriber) {
+        Subscription subscription = mApiService.getUserCoins()
+                .map(new BaseResponseFunc<WalletModel>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return subscription;
+    }
+
+    public Subscription getRewards(Subscriber subscriber, String source) {
+        Subscription subscription = mApiService.getRewards(source)
+                .map(new BaseResponseFunc())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return subscription;
+    }
+
+    public Subscription inputInviteCode(Subscriber subscriber, String code) {
+        Subscription subscription = mApiService.inputInviteCode(code)
+                .map(new BaseResponseFunc())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return subscription;
+    }
+
+    public Subscription getTaskList(Subscriber<TaskModel> subscriber) {
+        Subscription subscription = mApiService.getTaskList()
+                .map(new BaseResponseFunc<TaskModel>())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

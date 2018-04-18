@@ -115,6 +115,20 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".user.info.WalletActivity"
+            android:label="@string/common_withdraw"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".user.info.InviteFriendsActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".user.info.DailyTaskActivity"
+            android:label="@string/user_daily_task"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait" />
 

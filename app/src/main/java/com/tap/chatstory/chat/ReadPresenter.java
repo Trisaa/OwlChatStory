@@ -12,22 +12,26 @@ import com.tap.chatstory.data.chatsource.IHistoryData;
 import com.tap.chatstory.data.chatsource.IHistoryDataImpl;
 import com.tap.chatstory.data.chatsource.model.FictionDetailModel;
 import com.tap.chatstory.data.chatsource.model.FictionModel;
+import com.tap.chatstory.data.usersource.ICoinData;
+import com.tap.chatstory.data.usersource.ICoinDataImpl;
 
 /**
  * Created by lebron on 2017/9/14.
  */
 
-public class ReadPresenter implements ReadContract.Presenter, IFictionData.OnFictionListener {
+public class ReadPresenter implements ReadContract.Presenter, IFictionData.OnFictionListener, ICoinData.OnRewardedListener {
     private ReadContract.View mView;
     private IFictionData mFictionData;
     private IHistoryData mHistoryData;
     private ICollectData mCollectData;
+    private ICoinData mCoinData;
 
     public ReadPresenter(ReadContract.View view) {
         mView = view;
         mFictionData = new IFictionDataImpl();
         mHistoryData = new IHistoryDataImpl();
         mCollectData = new ICollectDataImpl();
+        mCoinData = new ICoinDataImpl();
         mView.setPresenter(this);
     }
 
@@ -76,6 +80,11 @@ public class ReadPresenter implements ReadContract.Presenter, IFictionData.OnFic
     }
 
     @Override
+    public void getRewards(String source) {
+        mCoinData.getRewards(source, this);
+    }
+
+    @Override
     public void subscribe() {
 
     }
@@ -92,5 +101,10 @@ public class ReadPresenter implements ReadContract.Presenter, IFictionData.OnFic
 
     @Override
     public void onFictionDetail(FictionDetailModel model) {
+    }
+
+    @Override
+    public void onRewarded() {
+        mView.showRewards();
     }
 }

@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -255,6 +257,48 @@ public class DialogUtils {
         builder.create().show();
     }
 
+    public static void showInputInviteCodeDialog(Activity activity, String code, final OnInviteCodeListener listener) {
+        if (activity == null || activity.isFinishing()) {
+            return;
+        }
+        View dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_input_invite_code, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setView(dialogView);
+        final AlertDialog alertDialog = builder.create();
+        final EditText editText = dialogView.findViewById(R.id.waiting_count_txv);
+        if (!TextUtils.isEmpty(code)) {
+            editText.setText(code);
+            editText.setEnabled(false);
+            dialogView.findViewById(R.id.pay_btn).setEnabled(false);
+        } else {
+            dialogView.findViewById(R.id.pay_btn).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (listener != null) {
+                        String code = editText.getText().toString();
+                        if (!TextUtils.isEmpty(code)) {
+                            listener.onCode(code);
+                            alertDialog.dismiss();
+                        }
+                    }
+                }
+            });
+        }
+        dialogView.findViewById(R.id.pay_close_layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+        dialogView.findViewById(R.id.cancel_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.show();
+    }
+
     public interface OnDialogClickListener {
         void onOK();
 
@@ -275,5 +319,9 @@ public class DialogUtils {
 
     public interface OnGenderChooseListener {
         void onChoose(int gender);
+    }
+
+    public interface OnInviteCodeListener {
+        void onCode(String code);
     }
 }

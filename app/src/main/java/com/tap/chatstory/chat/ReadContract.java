@@ -22,11 +22,15 @@ public interface ReadContract {
         void likeFiction(int status, String id);
 
         void prayUpdate(String id);
+
+        void getRewards(String source);
     }
 
     interface View extends BaseView<Presenter> {
         void showFictionData(FictionModel model);
 
         void showWaittingDialog(String chapterId);
+
+        void showRewards();
     }
 }

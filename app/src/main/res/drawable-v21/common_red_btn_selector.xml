@@ -10,4 +10,10 @@
             </item>
         </ripple>
     </item>
+    <item android:state_enabled="false">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/common_text_color" />
+            <corners android:radius="20dp"/>
+        </shape>
+    </item>
 </selector>

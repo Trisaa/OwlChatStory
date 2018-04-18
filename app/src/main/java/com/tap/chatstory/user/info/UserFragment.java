@@ -1,6 +1,7 @@
 package com.tap.chatstory.user.info;
 
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,7 @@ import com.tap.chatstory.R;
 import com.tap.chatstory.base.BaseFragment;
 import com.tap.chatstory.chat.FavoriteActivity;
 import com.tap.chatstory.chat.HistoryActivity;
+import com.tap.chatstory.common.util.DialogUtils;
 import com.tap.chatstory.common.util.ImageLoaderUtils;
 import com.tap.chatstory.common.util.JumpUtils;
 import com.tap.chatstory.common.util.PreferencesHelper;
@@ -33,11 +35,6 @@ import org.greenrobot.eventbus.Subscribe;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-import static com.tap.chatstory.common.util.Constants.ONE_MONTH_SKU;
-import static com.tap.chatstory.common.util.Constants.THREE_MONTHS_SKU;
-import static com.tap.chatstory.common.util.Constants.WEEK_SKU;
-import static com.tap.chatstory.common.util.Constants.YEAR_SKU;
-
 /**
  * Created by lebron on 2017/9/11.
  */
@@ -49,8 +46,8 @@ public class UserFragment extends BaseFragment implements UserContract.View {
     ImageView mUserIcon;
     @BindView(R.id.user_name_txv)
     TextView mNameView;
-    @BindView(R.id.user_settings_vip_type)
-    TextView mVipView;
+    @BindView(R.id.user_vip_sign)
+    ImageView mVipView;
     @BindView(R.id.user_settings_message_count_txv)
     TextView mCountView;
 
@@ -95,28 +92,6 @@ public class UserFragment extends BaseFragment implements UserContract.View {
         }
     }
 
-    private void updateVipInfo() {
-        String sku = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_PAID_FOR_VIP, null);
-        if (TextUtils.isEmpty(sku)) {
-            mVipView.setText(R.string.user_vip_not_paid);
-        } else {
-            switch (sku) {
-                case WEEK_SKU:
-                    mVipView.setText(getString(R.string.user_vip_days, 7));
-                    break;
-                case ONE_MONTH_SKU:
-                    mVipView.setText(getString(R.string.user_vip_days, 30));
-                    break;
-                case THREE_MONTHS_SKU:
-                    mVipView.setText(getString(R.string.user_vip_days, 90));
-                    break;
-                case YEAR_SKU:
-                    mVipView.setText(getString(R.string.user_vip_days, 365));
-                    break;
-            }
-        }
-    }
-
     private void initToolbar() {
         if (mToolbar != null) {
             ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
@@ -125,6 +100,15 @@ public class UserFragment extends BaseFragment implements UserContract.View {
                 ab.setDisplayHomeAsUpEnabled(false);
                 ab.setDisplayShowTitleEnabled(false);
             }
+        }
+    }
+
+    private void updateVipInfo() {
+        String sku = PreferencesHelper.getInstance().getString(PreferencesHelper.KEY_PAID_FOR_VIP, null);
+        if (!TextUtils.isEmpty(sku)) {
+            mVipView.setVisibility(View.VISIBLE);
+        } else {
+            mVipView.setVisibility(View.GONE);
         }
     }
 
@@ -195,6 +179,47 @@ public class UserFragment extends BaseFragment implements UserContract.View {
         JumpUtils.jumpToBrowser("https://d.eqxiu.com/s/G5q5drtz");
     }
 
+    @OnClick(R.id.user_settings_wallet_layout)
+    public void clickWallet() {
+        if (PreferencesHelper.getInstance().isLogined()) {
+            WalletActivity.start(getActivity());
+        } else {
+            Toast.makeText(getActivity(), R.string.common_login_first, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @OnClick(R.id.user_settings_tasks_layout)
+    public void clickDailyTask() {
+        if (PreferencesHelper.getInstance().isLogined()) {
+            DailyTaskActivity.start(getActivity());
+        } else {
+            Toast.makeText(getActivity(), R.string.common_login_first, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @OnClick(R.id.user_settings_invite_layout)
+    public void clickInvite() {
+        if (mUserModel != null) {
+            InviteFriendsActivity.start(getActivity(), mUserModel);
+        } else {
+            Toast.makeText(getActivity(), R.string.common_login_first, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @OnClick(R.id.user_settings_invite_code_layout)
+    public void inputInviteCode() {
+        if (mUserModel != null) {
+            DialogUtils.showInputInviteCodeDialog(getActivity(), mUserModel.getHasInvited(), new DialogUtils.OnInviteCodeListener() {
+                @Override
+                public void onCode(String code) {
+                    mPresenter.inputInviteCode(code);
+                }
+            });
+        } else {
+            Toast.makeText(getActivity(), R.string.common_login_first, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @Subscribe
     public void loginEvent(UserModel event) {
         mUserModel = event;
@@ -235,6 +260,15 @@ public class UserFragment extends BaseFragment implements UserContract.View {
     public void showMessageCount(int count) {
         mCountView.setText(count > 99 ? "..." : String.valueOf(count));
         ((MainActivity) getActivity()).setBadge(count > 0);
+    }
+
+    @Override
+    public void showRewarded() {
+        Snackbar.make(mNameView, R.string.coin_getted, Snackbar.LENGTH_LONG).setAction("OK", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        }).show();
     }
 
     @Override

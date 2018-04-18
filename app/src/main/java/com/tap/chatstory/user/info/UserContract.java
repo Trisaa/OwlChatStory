@@ -13,12 +13,16 @@ public interface UserContract {
         void uploadDeviceToken(String token);
 
         void getUnreadCount();
+
+        void inputInviteCode(String inviteCode);
     }
 
     interface View extends BaseView<Presenter> {
         void showUserInfo(UserModel userModel);
 
         void showMessageCount(int count);
+
+        void showRewarded();
     }
 
 }

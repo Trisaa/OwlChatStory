@@ -23,6 +23,9 @@
     <string name="common_preview">Preview</string>
     <string name="common_update">Update</string>
     <string name="common_star">Stared</string>
+    <string name="common_purchased">Purchased</string>
+    <string name="common_withdraw">Withdraw</string>
+    <string name="common_finished">Finished</string>
 
     <string name="feedback_app_version">Version V%1$s</string>
     <string name="feedback_message">"DeviceModel:%1$s\r\nSystemVersion:%2$s\r\n-------------------\r\n"</string>
@@ -143,6 +146,13 @@
     <string name="user_vip_features">VIP features</string>
     <string name="user_vip_features_detail">1.No ads 2.Read all</string>
     <string name="user_vip_features_open">Open Now</string>
+    <string name="user_wallet">Wallet</string>
+    <string name="user_invite_friends">Invite friends</string>
+    <string name="user_invite_code">Invite code</string>
+    <string name="user_about_me">About me</string>
+    <string name="user_about_read">About read</string>
+    <string name="user_about_other">About other</string>
+    <string name="user_daily_task">Daily task</string>
 
     <string name="search_key_word">Input key word</string>
 
@@ -151,4 +161,28 @@
     <string name="message_pray_update">%1$s asked you to update《%2$s》.</string>
     <string name="message_rejected">Your《%1$s》No.%2$d %3$s has been rejected because of %4$s.</string>
     <string name="message_online">Your《%1$s》No.%2$d %3$s passed.</string>
+
+    <string name="coin_exchange_question">什么是金币</string>
+    <string name="coin_exchange_introduce1">1.金币是平台为了奖励用户推出的一种虚拟货币，用户可通过创作小说、分享文章、邀请好友等途径获得</string>
+    <string name="coin_exchange_introduce2">2.金币积累到一定额度可向平台申请兑换成等价货币，可提现</string>
+    <string name="coin_exchange_introduce3">3.100金币＝1美金，提现金额不小于100美金。</string>
+    <string name="coin_getted">您有金币到账啦</string>
+
+    <string name="invite_friend_content1">邀请好友下载Owl ChatStory，登录后填写你的邀请码，你就可以获得50金币喔</string>
+    <string name="invite_friend_content2">额，邀请码怎么填写啊</string>
+    <string name="invite_friend_content3">下载APP，登录后去"我的"页面，"填写邀请码"模块进行填写即可喔</string>
+    <string name="invite_friend_content4">填了有什么好处么</string>
+    <string name="invite_friend_content5">填写之后你和被邀请好友均可获得相应的金币奖励，可提现的喔</string>
+    <string name="invite_now">Invite now</string>
+    <string name="invite_my_code">My invite code</string>
+    <string name="invite_input_code_hint">Input invite code, get O-coins</string>
+    <string name="invite_code_hint">Input invite code</string>
+    <string name="invite_input_code_ok">OK</string>
+    <string name="invite_input_code_cancel">Cancel</string>
+    <string name="invite_input_code_error">No such invite code</string>
+
+    <string name="daily_task_login">每日登录，打开APP领取</string>
+    <string name="daily_task_create">每日创作，创作一章小说并审核通过</string>
+    <string name="daily_task_share">每日分享，分享APP给你的好友</string>
+    <string name="daily_task_read">每日阅读，连续阅读5章小说</string>
 </resources>

@@ -38,6 +38,7 @@ public class Constants {
     public static final String YEAR_SKU = "1year_vip32.99";
 
     public static final String RELOAD_DATA_AFTER_LOGINED = "RELOAD_DATA_AFTER_LOGINED";
+    public static final String EVENT_GOTO_READACTIVITY = "EVENT_GOTO_READACTIVITY";
 
     public static final String ADMOB_REWARDED_VIDEO_ID = "ca-app-pub-8805953710729771/1560215991";
     public static final String ADMOB_INTERSTITIAL_ID = "ca-app-pub-8805953710729771/8714094930";

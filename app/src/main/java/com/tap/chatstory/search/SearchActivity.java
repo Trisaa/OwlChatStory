@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewStub;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -42,8 +43,8 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
     Toolbar mToolbar;
     @BindView(R.id.search_recyclerview)
     RecyclerView mRecyclerView;
-    @BindView(R.id.empty_layout)
-    View mEmptyView;
+    @BindView(R.id.empty_stub)
+    ViewStub mEmptyView;
     @BindView(R.id.common_progressbar_layout)
     View mLoadingView;
     @BindView(R.id.search_edt)

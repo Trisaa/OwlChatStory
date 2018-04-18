@@ -1,5 +1,7 @@
 package com.tap.chatstory.user.info;
 
+import com.tap.chatstory.data.usersource.ICoinData;
+import com.tap.chatstory.data.usersource.ICoinDataImpl;
 import com.tap.chatstory.data.usersource.IMessageData;
 import com.tap.chatstory.data.usersource.IMessageDataImpl;
 import com.tap.chatstory.data.usersource.IUserData;
@@ -13,15 +15,17 @@ import java.util.List;
  * Created by lebron on 2018/1/30.
  */
 
-public class UserPresenter implements UserContract.Presenter, IUserData.OnUserInfoListener, IMessageData.OnMessageListListener {
+public class UserPresenter implements UserContract.Presenter, IUserData.OnUserInfoListener, IMessageData.OnMessageListListener, ICoinData.OnRewardedListener {
     private UserContract.View mView;
     private IUserData mData;
     private IMessageData mMessageData;
+    private ICoinData mCoinData;
 
     public UserPresenter(UserContract.View view) {
         mView = view;
         mData = new IUserDataImpl();
         mMessageData = new IMessageDataImpl();
+        mCoinData = new ICoinDataImpl();
         mView.setPresenter(this);
     }
 
@@ -52,6 +56,11 @@ public class UserPresenter implements UserContract.Presenter, IUserData.OnUserIn
     }
 
     @Override
+    public void inputInviteCode(String inviteCode) {
+        mCoinData.inputInviteCode(inviteCode, this);
+    }
+
+    @Override
     public void onMessageList(List<MessagesModel> list) {
 
     }
@@ -59,5 +68,10 @@ public class UserPresenter implements UserContract.Presenter, IUserData.OnUserIn
     @Override
     public void onMessageCount(int count) {
         mView.showMessageCount(count);
+    }
+
+    @Override
+    public void onRewarded() {
+        mView.showRewarded();
     }
 }

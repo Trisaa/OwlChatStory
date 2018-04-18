@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -43,6 +44,7 @@ import com.tap.chatstory.data.chatsource.model.MessageModel;
 import com.tap.chatstory.data.chatsource.model.ProgressModel;
 import com.tap.chatstory.data.eventsource.FictionEvent;
 import com.tap.chatstory.data.homesource.model.ShareModel;
+import com.tap.chatstory.data.usersource.ICoinDataImpl;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 
 import org.greenrobot.eventbus.EventBus;
@@ -92,7 +94,8 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
     private boolean isRewarded, isHistoryAdded;
     private ChapterModel mChapterModel;
     private FictionModel mFictionModel;
-    private int mReadedCount = 0;
+    private int mReadedCount = 0;//连续阅读章数，用于控制广告弹出
+    private int mHasReadedCount = 0;//连续阅读章数，用于金币奖励
 
     private ChatNextDelegate.OnClickListener mNextListener = new ChatNextDelegate.OnClickListener() {
         @Override
@@ -127,6 +130,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
         public void onNextClick(ChapterModel chapterModel) {
             if (chapterModel != null) {
                 mReadedCount++;
+                mHasReadedCount++;
                 saveProgressList(100);
                 mPresenter.getChapterData(chapterModel.getChapterId(), chapterModel.getVip(), false);
                 if (mShowDatas != null) {
@@ -140,6 +144,11 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
             if (showAds && mInterstitialAd != null && mInterstitialAd.isLoaded()) {
                 mReadedCount = 0;
                 mInterstitialAd.show();
+            }
+
+            if (mHasReadedCount > 5) {
+                mPresenter.getRewards(ICoinDataImpl.REWARDS_READED);
+                mHasReadedCount = 0;
             }
         }
     };
@@ -166,6 +175,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
             ActionBar ab = getSupportActionBar();
             if (ab != null) {
                 ab.setDisplayHomeAsUpEnabled(true);
+                ab.setDisplayShowTitleEnabled(false);
             }
         }
     }
@@ -465,6 +475,10 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
     @Override
     public void showFictionData(FictionModel model) {
         mFictionModel = model;
+        ActionBar ab = getSupportActionBar();
+        if (ab != null) {
+            ab.setDisplayShowTitleEnabled(true);
+        }
         mToolbar.setTitle(TextUtils.isEmpty(model.getName()) ? mFictionDetailModel.getTitle() : model.getName());
         mLoadingView.setVisibility(View.GONE);
 
@@ -523,6 +537,15 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
                 }
             }
         }, mRewardedVideoAd.isLoaded(), mCallbackManager);
+    }
+
+    @Override
+    public void showRewards() {
+        Snackbar.make(mRecyclerView, R.string.coin_getted, Snackbar.LENGTH_LONG).setAction("OK", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        }).show();
     }
 
     @Override

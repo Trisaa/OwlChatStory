@@ -14,8 +14,8 @@ android {
         applicationId "com.tap.chatstory"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 12
-        versionName "1.3.2"
+        versionCode 13
+        versionName "1.3.3debug"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

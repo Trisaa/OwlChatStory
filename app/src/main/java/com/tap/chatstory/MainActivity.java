@@ -32,6 +32,8 @@ import com.tap.chatstory.home.HomeFragment;
 import com.tap.chatstory.user.info.UserFragment;
 import com.tap.chatstory.user.message.MessageActivity;
 
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -125,6 +127,13 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             } else {
                 mBadge.hide(false);
             }
+        }
+    }
+
+    @Subscribe
+    public void gotoReadActivity(String event) {
+        if (Constants.EVENT_GOTO_READACTIVITY.equals(event)) {
+            mBottomNavigationView.setSelectedItemId(R.id.main_bottom_nav_home);
         }
     }
 
