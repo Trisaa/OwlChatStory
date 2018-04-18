@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -541,11 +540,7 @@ public class ReadActivity extends BaseActivity implements ReadContract.View, Rew
 
     @Override
     public void showRewards() {
-        Snackbar.make(mRecyclerView, R.string.coin_getted, Snackbar.LENGTH_LONG).setAction("OK", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        }).show();
+        DialogUtils.showGetCoinsDialog(this, getString(R.string.coin_getted));
     }
 
     @Override

@@ -212,6 +212,31 @@ public class DialogUtils {
         alertDialog.show();
     }
 
+    public static void showGetCoinsDialog(final Activity activity, String text) {
+        if (activity == null || activity.isFinishing()) {
+            return;
+        }
+        View dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_getcoins_layout, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.NoBackGroundDialog);
+        builder.setView(dialogView);
+        final AlertDialog alertDialog = builder.create();
+        TextView textView = dialogView.findViewById(R.id.get_coins_txv);
+        textView.setText(text);
+        dialogView.findViewById(R.id.get_coins_ok).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+        dialogView.findViewById(R.id.pay_close_layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.show();
+    }
+
     public static void showLanguageDialog(final Activity activity, final OnLanguageChooseListener listener, String language) {
         if (activity == null || activity.isFinishing()) {
             return;

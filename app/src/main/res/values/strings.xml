@@ -167,6 +167,7 @@
     <string name="coin_exchange_introduce2">2.金币积累到一定额度可向平台申请兑换成等价货币，可提现</string>
     <string name="coin_exchange_introduce3">3.100金币＝1美金，提现金额不小于100美金。</string>
     <string name="coin_getted">您有金币到账啦</string>
+    <string name="coin_add_format">+%1$d金币</string>
 
     <string name="invite_friend_content1">邀请好友下载Owl ChatStory，登录后填写你的邀请码，你就可以获得50金币喔</string>
     <string name="invite_friend_content2">额，邀请码怎么填写啊</string>
